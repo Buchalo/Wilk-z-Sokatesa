@@ -1,5 +1,4 @@
 # Wilk-z-Sokatesa
-Wyjadacz rynkowy
 import os
 import time
 import urllib.request
