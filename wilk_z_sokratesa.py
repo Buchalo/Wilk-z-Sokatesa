@@ -63,7 +63,7 @@ def analizuj_z_gemini(ticker, newsy):
     for proba in range(3):
         try:
             response = client.models.generate_content(
-                model='gemini-2.5-flash',
+                model='gemini-2.0-flash',
                 contents=prompt
             )
             return response.text
