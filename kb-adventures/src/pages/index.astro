@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BlogCard from '../components/BlogCard.astro';
 
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
 const latestPosts = [
   {
     title: 'Puglia — droga którą warto zgubić się',
@@ -38,12 +40,13 @@ const latestPosts = [
   <section class="relative h-screen flex items-center justify-center overflow-hidden bg-dark">
     <video
       class="absolute inset-0 w-full h-full object-cover opacity-50"
-      src="/videos/hero.mp4"
+      src={`${base}/videos/hero.mp4`}
       autoplay
       muted
       loop
       playsinline
       preload="auto"
+      transition:name="hero-video"
     ></video>
     <div class="absolute inset-0 bg-gradient-to-br from-dark via-[#0d1a10] to-[#0a1020] opacity-70"></div>
     <div class="absolute inset-0 bg-gradient-to-t from-dark/80 via-transparent to-dark/30"></div>
@@ -58,12 +61,12 @@ const latestPosts = [
       <p class="text-xl md:text-2xl text-white/75 font-light mb-10 animate-[fadeUp_1s_ease_0.6s_both]">
         Podróże które warto przeżyć
       </p>
-      <div class="animate-[fadeUp_1s_ease_0.9s_both]">
-        <a href="/blog" class="inline-block border-2 border-gold text-gold hover:bg-gold hover:text-dark px-10 py-4 rounded-full font-medium tracking-wider uppercase text-sm transition-all duration-300 mr-4">
+      <div class="animate-[fadeUp_1s_ease_0.9s_both] flex flex-wrap gap-4 justify-center">
+        <a href={`${base}/blog`} class="inline-block border-2 border-gold text-gold hover:bg-gold hover:text-dark px-10 py-4 rounded-full font-medium tracking-wider uppercase text-sm transition-all duration-300">
           Odkryj trasy
         </a>
-        <a href="/mapa" class="inline-block border-2 border-white/40 text-white/80 hover:border-white hover:text-white px-10 py-4 rounded-full font-medium tracking-wider uppercase text-sm transition-all duration-300">
-          Mapa
+        <a href={`${base}/apulia`} class="inline-block bg-[#D4552A] hover:bg-[#B8451E] text-white px-10 py-4 rounded-full font-medium tracking-wider uppercase text-sm transition-all duration-300 shadow-lg shadow-[#D4552A]/30">
+          🇮🇹 Apulia 8 dni
         </a>
       </div>
     </div>
@@ -72,6 +75,70 @@ const latestPosts = [
       <svg class="w-6 h-6 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
       </svg>
+    </div>
+  </section>
+
+  <!-- FEATURED — WŁOCHY / APULIA -->
+  <section class="relative overflow-hidden bg-dark">
+    <div class="absolute inset-0">
+      <img
+        src="https://d8j0ntlcm91z4.cloudfront.net/user_30EqZOFYJDlJHINvYw0ajQQPBWj/hf_20260611_180127_c56b6731-e5c4-40ac-9338-b284bb5dd038.png"
+        alt="Trani Apulia"
+        class="w-full h-full object-cover opacity-30"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-dark via-dark/80 to-transparent"></div>
+    </div>
+    <div class="relative z-10 container mx-auto max-w-6xl px-6 py-28 grid md:grid-cols-2 gap-16 items-center">
+      <div class="fade-up">
+        <p class="text-[#D4552A] text-xs uppercase tracking-[0.4em] mb-3 font-semibold">Aktualna wyprawa · Włochy</p>
+        <h2 class="font-serif text-5xl md:text-6xl text-white font-bold leading-tight mb-5">
+          8 dni<br /><span class="text-[#E8A020] italic">w słońcu Apulii</span>
+        </h2>
+        <p class="text-white/65 text-lg leading-relaxed mb-4 max-w-lg">
+          Barokowe Lecce, trulli Alberobello, klify Polignano, jaskinie Castellana i katedra w Trani stojąca kilka metrów od fal Adriatyku.
+        </p>
+        <ul class="flex flex-wrap gap-2 mb-8">
+          {['8 dni', 'Brindisi → Lecce → Matera → Monopoli', '~950 km', 'Interaktywna mapa'].map(t => (
+            <li class="text-xs bg-white/10 border border-white/15 text-white/70 px-3 py-1 rounded-full">{t}</li>
+          ))}
+        </ul>
+        <div class="flex flex-wrap gap-4">
+          <a
+            href={`${base}/apulia`}
+            class="inline-flex items-center gap-2 bg-[#D4552A] hover:bg-[#B8451E] text-white px-8 py-4 rounded-full font-medium uppercase text-sm tracking-wider transition-all duration-300 shadow-lg shadow-[#D4552A]/30"
+          >
+            Poznaj trasę
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+          <a
+            href={`${base}/blog/puglia-droga-ktora-warto-zgubic-sie`}
+            class="inline-flex items-center gap-2 border-2 border-white/30 text-white/80 hover:border-white hover:text-white px-8 py-4 rounded-full font-medium uppercase text-sm tracking-wider transition-all duration-300"
+          >
+            Czytaj blog
+          </a>
+        </div>
+      </div>
+
+      <!-- MINIATURY DNA -->
+      <div class="hidden md:grid grid-cols-2 gap-3 fade-in">
+        {[
+          { img: 'https://d8j0ntlcm91z4.cloudfront.net/user_30EqZOFYJDlJHINvYw0ajQQPBWj/hf_20260611_172415_13a198cf-4fe6-41db-9462-ffe6f5d5b35d.jpeg', label: 'Brindisi', day: 1 },
+          { img: 'https://d8j0ntlcm91z4.cloudfront.net/user_30EqZOFYJDlJHINvYw0ajQQPBWj/hf_20260611_172422_6f98d093-3761-4b60-a8a0-194e8f6307aa.png', label: 'Lecce', day: 2 },
+          { img: 'https://d8j0ntlcm91z4.cloudfront.net/user_30EqZOFYJDlJHINvYw0ajQQPBWj/hf_20260611_172420_e5d4d30e-efa9-4e3c-9d65-27f2ae98fff1.png', label: 'Matera', day: 4 },
+          { img: 'https://d8j0ntlcm91z4.cloudfront.net/user_30EqZOFYJDlJHINvYw0ajQQPBWj/hf_20260611_172423_2721e107-ebf7-4c18-829c-3bb9411d7624.png', label: 'Alberobello', day: 6 },
+        ].map(({ img, label, day }) => (
+          <a href={`${base}/apulia`} class="relative group rounded-xl overflow-hidden aspect-square block">
+            <img src={img} alt={label} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+            <div class="absolute bottom-2 left-3">
+              <span class="text-[10px] text-[#E8A020] font-bold uppercase tracking-wider">Dzień {day}</span>
+              <p class="text-white text-xs font-semibold">{label}</p>
+            </div>
+          </a>
+        ))}
+      </div>
     </div>
   </section>
 
@@ -91,7 +158,7 @@ const latestPosts = [
         ))}
       </div>
       <div class="text-center mt-12 fade-up">
-        <a href="/blog" class="inline-block bg-dark hover:bg-forest text-white px-10 py-4 rounded-full font-medium tracking-wider uppercase text-sm transition-colors duration-300">
+        <a href={`${base}/blog`} class="inline-block bg-dark hover:bg-forest text-white px-10 py-4 rounded-full font-medium tracking-wider uppercase text-sm transition-colors duration-300">
           Wszystkie wyprawy
         </a>
       </div>
@@ -110,7 +177,7 @@ const latestPosts = [
           <p class="text-white/60 text-lg leading-relaxed mb-8">
             Każda podróż zostawia ślad. Interaktywna mapa wszystkich moich wypraw — kliknij pin, żeby przeczytać historię.
           </p>
-          <a href="/mapa" class="inline-flex items-center gap-3 text-gold hover:gap-5 transition-all font-medium uppercase text-sm tracking-widest">
+          <a href={`${base}/mapa`} class="inline-flex items-center gap-3 text-gold hover:gap-5 transition-all font-medium uppercase text-sm tracking-widest">
             Otwórz mapę
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -136,7 +203,7 @@ const latestPosts = [
         Podróżuję od kiedy pamiętam. KB Adventures to nie tylko blog — to archiwum tras, emocji i widoków,
         które chcę przekazać dalej. Każda droga ma swoją historię.
       </p>
-      <a href="/o-mnie" class="inline-block border-2 border-forest text-forest hover:bg-forest hover:text-white px-8 py-3 rounded-full font-medium tracking-wider uppercase text-sm transition-all duration-300">
+      <a href={`${base}/o-mnie`} class="inline-block border-2 border-forest text-forest hover:bg-forest hover:text-white px-8 py-3 rounded-full font-medium tracking-wider uppercase text-sm transition-all duration-300">
         Poznaj moją historię
       </a>
     </div>
