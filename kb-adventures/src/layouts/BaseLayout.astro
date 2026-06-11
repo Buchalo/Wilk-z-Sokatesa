@@ -12,6 +12,7 @@ const {
   description = 'Blog podróżniczy Krzysztofa Buchały. Drogi, miasta, natura — historia każdej trasy.',
   image = '/images/og-default.jpg',
 } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <!doctype html>
@@ -29,13 +30,13 @@ const {
   <body>
     <nav class="fixed top-0 left-0 right-0 z-50 mix-blend-normal" id="navbar">
       <div class="container mx-auto px-6 py-4 flex items-center justify-between">
-        <a href="/" class="font-serif text-2xl text-white drop-shadow-lg tracking-wide hover:text-gold transition-colors">
+        <a href={`${base}/`} class="font-serif text-2xl text-white drop-shadow-lg tracking-wide hover:text-gold transition-colors">
           KB <span class="text-gold">Adventures</span>
         </a>
         <div class="flex items-center gap-8">
-          <a href="/blog" class="nav-link text-white/90 hover:text-gold transition-colors text-sm uppercase tracking-widest font-medium">Blog</a>
-          <a href="/mapa" class="nav-link text-white/90 hover:text-gold transition-colors text-sm uppercase tracking-widest font-medium">Mapa</a>
-          <a href="/o-mnie" class="nav-link text-white/90 hover:text-gold transition-colors text-sm uppercase tracking-widest font-medium">O mnie</a>
+          <a href={`${base}/blog`} class="nav-link text-white/90 hover:text-gold transition-colors text-sm uppercase tracking-widest font-medium">Blog</a>
+          <a href={`${base}/mapa`} class="nav-link text-white/90 hover:text-gold transition-colors text-sm uppercase tracking-widest font-medium">Mapa</a>
+          <a href={`${base}/o-mnie`} class="nav-link text-white/90 hover:text-gold transition-colors text-sm uppercase tracking-widest font-medium">O mnie</a>
         </div>
       </div>
     </nav>
@@ -49,9 +50,9 @@ const {
         <p class="font-serif text-gold text-xl mb-2">KB Adventures</p>
         <p class="text-sm">© {new Date().getFullYear()} Krzysztof Buchała — wszystkie prawa zastrzeżone</p>
         <div class="flex justify-center gap-6 mt-4 text-xs uppercase tracking-widest">
-          <a href="/blog" class="hover:text-gold transition-colors">Blog</a>
-          <a href="/mapa" class="hover:text-gold transition-colors">Mapa</a>
-          <a href="/o-mnie" class="hover:text-gold transition-colors">O mnie</a>
+          <a href={`${base}/blog`} class="hover:text-gold transition-colors">Blog</a>
+          <a href={`${base}/mapa`} class="hover:text-gold transition-colors">Mapa</a>
+          <a href={`${base}/o-mnie`} class="hover:text-gold transition-colors">O mnie</a>
         </div>
       </div>
     </footer>
