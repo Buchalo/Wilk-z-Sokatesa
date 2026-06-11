@@ -1,6 +1,6 @@
 ---
 // Apulia Trip — interaktywna strona wyprawy ze scrollytelling mapą
-// Wygenerowane zdjęcia AI: Higgsfield nano_banana_2
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <!DOCTYPE html>
@@ -353,7 +353,7 @@ a    { color: inherit; text-decoration: none; }
 
   <!-- NAV -->
   <nav id="nav">
-    <a href="/" class="nav-logo">
+    <a href={`${base}/`} class="nav-logo">
       <svg width="28" height="28" viewBox="0 0 28 28" fill="none" style="vertical-align:middle;margin-right:6px;flex-shrink:0" aria-hidden="true">
         <polygon points="14,2 26,22 2,22" fill="#E8A020" opacity=".9"/>
         <polygon points="14,7 22,22 6,22" fill="#D4552A" opacity=".85"/>
@@ -362,8 +362,8 @@ a    { color: inherit; text-decoration: none; }
       KB<span>&nbsp;Adventures</span>
     </a>
     <div class="nav-right">
-      <a href="/blog" style="font-size:.82rem;font-weight:600;color:rgba(255,245,230,.65);margin-right:.25rem;">Blog</a>
-      <a href="/o-mnie" style="font-size:.82rem;font-weight:600;color:rgba(255,245,230,.65);margin-right:.25rem;">O&nbsp;mnie</a>
+      <a href={`${base}/blog`} style="font-size:.82rem;font-weight:600;color:rgba(255,245,230,.65);margin-right:.25rem;">Blog</a>
+      <a href={`${base}/o-mnie`} style="font-size:.82rem;font-weight:600;color:rgba(255,245,230,.65);margin-right:.25rem;">O&nbsp;mnie</a>
       <a class="btn btn-terra" href="#cta-section">Zarezerwuj</a>
     </div>
   </nav>
@@ -432,7 +432,7 @@ a    { color: inherit; text-decoration: none; }
             <p class="day-desc">Brindisi wita cię zapachem soli i sosen pinii. Tu kończyła się Via Appia — najdłuższa droga starożytnego Rzymu. Na nabrzeżu stoi kolumna, przy której krzyżowcy żegnali Europę przed wyprawą do Ziemi Świętej. Dziś to spokojne portowe miasto, które większość turystów mija tranzytem. Nie popełniaj tego błędu — zostań choć dwie godziny.</p>
             <div class="card-foot">
               <div class="sleep-badge">🏨 Nocleg w Lecce</div>
-              <a href="/blog" class="read-link disabled">Blog wkrótce ↗</a>
+              <a href={`${base}/blog`} class="read-link disabled">Blog wkrótce ↗</a>
             </div>
           </div>
         </div>
@@ -459,7 +459,7 @@ a    { color: inherit; text-decoration: none; }
             <p class="day-desc">Lecce to barok bez kompleksów — miasto rzeźbione w miękkim piaskowcu pietra leccese, który daje się obrabiać jak masło. Każda fasada, każdy balkon to osobna historia. Wieczorem jedź do Otranto — tu Adriatyk jest tak turkusowy, że wygląda jak efekt Photoshopa. W katedrze mozaika posadzkowa z XII wieku zajmuje całą nawę i opowiada historię świata od Adama po króla Artura.</p>
             <div class="card-foot">
               <div class="sleep-badge">🏨 Nocleg w Lecce</div>
-              <a href="/blog/puglia-droga-ktora-warto-zgubic-sie" class="read-link">Czytaj relację ↗</a>
+              <a href={`${base}/blog/puglia-droga-ktora-warto-zgubic-sie`} class="read-link">Czytaj relację ↗</a>
             </div>
           </div>
         </div>
@@ -487,7 +487,7 @@ a    { color: inherit; text-decoration: none; }
             <p class="day-desc">Ostuni widać z daleka — biała plama na zielonym wzgórzu wśród gajów oliwnych. W południe mury lśnią tak mocno, że musisz zmrużyć oczy. Wejdź wąskimi schodami do starego miasta przed dziesiątą rano, kiedy jeszcze nie ma autokarów. W Bari Vecchia czas zwalnia — babcie siedzą przed domami i toczą makaron, który potem znajdziesz na talerzu wieczorem.</p>
             <div class="card-foot">
               <div class="sleep-badge">🏨 Nocleg w Bari</div>
-              <a href="/blog" class="read-link disabled">Blog wkrótce ↗</a>
+              <a href={`${base}/blog`} class="read-link disabled">Blog wkrótce ↗</a>
             </div>
           </div>
         </div>
@@ -514,7 +514,7 @@ a    { color: inherit; text-decoration: none; }
             <p class="day-desc">Matera to doświadczenie, które zmienia perspektywę. Sassi — dzielnice wykute w wapiennych zboczach wąwozu — były zamieszkane nieprzerwanie od neolitu aż do lat 50., kiedy rząd wysiedlił mieszkańców uznając je za wstyd narodu. Dziś to UNESCO i najmodniejsze miejsce na świecie do filmowania historycznych dramatów. Idź tam o zachodzie słońca i zostań na noc — miasto w ciemności jest jeszcze bardziej surrealistyczne.</p>
             <div class="card-foot">
               <div class="sleep-badge">🏨 Nocleg w Bari</div>
-              <a href="/blog" class="read-link disabled">Blog wkrótce ↗</a>
+              <a href={`${base}/blog`} class="read-link disabled">Blog wkrótce ↗</a>
             </div>
           </div>
         </div>
@@ -542,7 +542,7 @@ a    { color: inherit; text-decoration: none; }
             <p class="day-desc">Katedra San Nicola Pellegrino w Trani stoi dosłownie na krawędzi morza — romański gotyk z różowego wapienia, zbudowany tak, że o przypływie fale uderzają w mury fundamentów. Jedno z najpiękniejszych ujęć, jakie możesz zrobić w Apulii. Po południu Polignano — miasto, gdzie domy stoją na klifach, a pod nimi turkusowa zatoka. Wsłuchaj się w napisy na ścianach — to wiersze Domenica Modugno, autora „Volare".</p>
             <div class="card-foot">
               <div class="sleep-badge">🏨 Nocleg w Monopoli</div>
-              <a href="/blog" class="read-link disabled">Blog wkrótce ↗</a>
+              <a href={`${base}/blog`} class="read-link disabled">Blog wkrótce ↗</a>
             </div>
           </div>
         </div>
@@ -570,7 +570,7 @@ a    { color: inherit; text-decoration: none; }
             <p class="day-desc">Trulli to domy budowane bez zaprawy — celowo, żeby można je było szybko rozebrać gdy przychodził poborca podatkowy. Historia mówi sama za siebie. Wejdź do Rione Monti przed ósmą rano, gdy nie ma jeszcze autokarów. Cisternino to punkt obowiązkowy dla mięsożerców — u lokalnego rzeźnika zamawiasz surowe bombette, on je piecze i podaje na papierze. Prościej i lepiej już nie będzie.</p>
             <div class="card-foot">
               <div class="sleep-badge">🏨 Nocleg w Monopoli</div>
-              <a href="/blog" class="read-link disabled">Blog wkrótce ↗</a>
+              <a href={`${base}/blog`} class="read-link disabled">Blog wkrótce ↗</a>
             </div>
           </div>
         </div>
@@ -598,7 +598,7 @@ a    { color: inherit; text-decoration: none; }
             <p class="day-desc">Grotte di Castellana odkryto przypadkowo w 1938 roku — robotnik wpadł do otworu w ziemi i znalazł się w podziemnym świecie długim na 3 kilometry. Na końcu trasy czeka Grotta Bianca — komora z alabastrowymi stalaktytami tak białymi, że wyglądają jak z cukru pudru. Różnica temperatur między jaskinią a słońcem na zewnątrz to ok. 20°C — wyjście jest równie dramatyczne jak wejście.</p>
             <div class="card-foot">
               <div class="sleep-badge">🏨 Nocleg w Monopoli</div>
-              <a href="/blog" class="read-link disabled">Blog wkrótce ↗</a>
+              <a href={`${base}/blog`} class="read-link disabled">Blog wkrótce ↗</a>
             </div>
           </div>
         </div>
@@ -626,7 +626,7 @@ a    { color: inherit; text-decoration: none; }
             <p class="day-desc">Grottaglie to miasto garncarzy — warsztaty mieszczą się w jaskiniowych kamienicach przy Quartiere delle Ceramiche, gdzie można dosłownie wejść do środka wzgórza i zobaczyć jak artysta toczy glinę. Pumo — ceramiczna szyszka — to apulijski symbol szczęścia; znajdziesz je na każdych drzwiach. Ostatni lunch w Ceglie, ostatnia kawa, ostatnie spojrzenie na równinę pokrytą gajami oliwnymi. Do zobaczenia, Apulio.</p>
             <div class="card-foot">
               <div class="sleep-badge">✈️ Wylot z Brindisi</div>
-              <a href="/blog" class="read-link disabled">Blog wkrótce ↗</a>
+              <a href={`${base}/blog`} class="read-link disabled">Blog wkrótce ↗</a>
             </div>
           </div>
         </div>
@@ -638,7 +638,7 @@ a    { color: inherit; text-decoration: none; }
           <div class="outro-emoji">🫒</div>
           <h3>~950 km · 8 dni · bezkres wspomnień</h3>
           <p>Apulia to nie jest tylko destynacja — to stan ducha.</p>
-          <a href="/blog" style="display:inline-block;margin-top:1.2rem;background:var(--terra);color:#fff;padding:.65rem 1.6rem;border-radius:10px;font-weight:600;font-size:.85rem;">
+          <a href={`${base}/blog`} style="display:inline-block;margin-top:1.2rem;background:var(--terra);color:#fff;padding:.65rem 1.6rem;border-radius:10px;font-weight:600;font-size:.85rem;">
             Czytaj wpisy z trasy →
           </a>
         </div>
@@ -813,10 +813,10 @@ a    { color: inherit; text-decoration: none; }
       KB<span>&nbsp;Adventures</span>
     </div>
     <div class="footer-links">
-      <a href="/">Strona główna</a>
-      <a href="/blog">Blog</a>
-      <a href="/mapa">Mapa tras</a>
-      <a href="/o-mnie">O mnie</a>
+      <a href={`${base}/`}>Strona główna</a>
+      <a href={`${base}/blog`}>Blog</a>
+      <a href={`${base}/mapa`}>Mapa tras</a>
+      <a href={`${base}/o-mnie`}>O mnie</a>
       <a href="tel:+48604740968">604 740 968</a>
     </div>
     <p class="footer-copy">© 2026 KB Adventures · Wszelkie prawa zastrzeżone</p>
