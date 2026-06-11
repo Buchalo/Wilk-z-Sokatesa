@@ -209,7 +209,8 @@ a    { color: inherit; text-decoration: none; }
 .day-loc { display: flex; align-items: center; gap: .3rem; margin-bottom: .85rem; font-size: .72rem; color: var(--map-muted); }
 .loc-dot { width: 5px; height: 5px; background: var(--terra); border-radius: 50%; flex-shrink: 0; }
 .divider-map { height: 1px; background: linear-gradient(90deg, rgba(232,160,32,.22), transparent); margin: 0 0 .85rem; }
-.highlights { display: flex; flex-direction: column; gap: .52rem; margin-bottom: 1rem; }
+.highlights { display: flex; flex-direction: column; gap: .52rem; margin-bottom: .85rem; }
+.day-desc { font-size: .78rem; color: rgba(255,245,230,.52); line-height: 1.65; margin-bottom: .95rem; border-left: 2px solid rgba(232,160,32,.25); padding-left: .75rem; font-style: italic; }
 .hl { display: flex; align-items: flex-start; gap: .58rem; }
 .hl-icon { font-size: .9rem; flex-shrink: 0; margin-top: .05rem; line-height: 1.4; }
 .hl-text { font-size: .8rem; color: var(--map-muted); line-height: 1.52; }
@@ -428,6 +429,7 @@ a    { color: inherit; text-decoration: none; }
               <div class="hl"><span class="hl-icon">⚓</span><div class="hl-text"><strong>Nabrzeże i port</strong> — spacer, klimat i ten sam wiatr co krzyżowcy odpływający na podbój Wschodu</div></div>
               <div class="hl"><span class="hl-icon">🍷</span><div class="hl-text"><strong>Nocny przejazd do Lecce</strong> — orecchiette al ragù i Primitivo na dobry początek</div></div>
             </div>
+            <p class="day-desc">Brindisi wita cię zapachem soli i sosen pinii. Tu kończyła się Via Appia — najdłuższa droga starożytnego Rzymu. Na nabrzeżu stoi kolumna, przy której krzyżowcy żegnali Europę przed wyprawą do Ziemi Świętej. Dziś to spokojne portowe miasto, które większość turystów mija tranzytem. Nie popełniaj tego błędu — zostań choć dwie godziny.</p>
             <div class="card-foot">
               <div class="sleep-badge">🏨 Nocleg w Lecce</div>
               <a href="/blog" class="read-link disabled">Blog wkrótce ↗</a>
@@ -454,6 +456,7 @@ a    { color: inherit; text-decoration: none; }
               <div class="hl"><span class="hl-icon">🏊</span><div class="hl-text"><strong>Grotta della Poesia</strong> — naturalne zapadlisko w klifie; skoki z kilkumetrowych wapiennych ścian</div></div>
               <div class="hl"><span class="hl-icon">💎</span><div class="hl-text"><strong>Otranto</strong> — Drzewo Życia w posadzce katedry, kaplica 800 czaszek i szmaragdowa Cava di Bauxite</div></div>
             </div>
+            <p class="day-desc">Lecce to barok bez kompleksów — miasto rzeźbione w miękkim piaskowcu pietra leccese, który daje się obrabiać jak masło. Każda fasada, każdy balkon to osobna historia. Wieczorem jedź do Otranto — tu Adriatyk jest tak turkusowy, że wygląda jak efekt Photoshopa. W katedrze mozaika posadzkowa z XII wieku zajmuje całą nawę i opowiada historię świata od Adama po króla Artura.</p>
             <div class="card-foot">
               <div class="sleep-badge">🏨 Nocleg w Lecce</div>
               <a href="/blog/puglia-droga-ktora-warto-zgubic-sie" class="read-link">Czytaj relację ↗</a>
@@ -481,6 +484,7 @@ a    { color: inherit; text-decoration: none; }
               <div class="hl"><span class="hl-icon">👵</span><div class="hl-text"><strong>Bari Vecchia</strong> — lokalne mammy lepią orecchiette w drzwiach kamienic; autentyczne i genialne</div></div>
               <div class="hl"><span class="hl-icon">🐙</span><div class="hl-text"><strong>Kolacja na Lungomare</strong> — crudi di mare i polpo alla brace z widokiem na port</div></div>
             </div>
+            <p class="day-desc">Ostuni widać z daleka — biała plama na zielonym wzgórzu wśród gajów oliwnych. W południe mury lśnią tak mocno, że musisz zmrużyć oczy. Wejdź wąskimi schodami do starego miasta przed dziesiątą rano, kiedy jeszcze nie ma autokarów. W Bari Vecchia czas zwalnia — babcie siedzą przed domami i toczą makaron, który potem znajdziesz na talerzu wieczorem.</p>
             <div class="card-foot">
               <div class="sleep-badge">🏨 Nocleg w Bari</div>
               <a href="/blog" class="read-link disabled">Blog wkrótce ↗</a>
@@ -507,6 +511,7 @@ a    { color: inherit; text-decoration: none; }
               <div class="hl"><span class="hl-icon">🪨</span><div class="hl-text"><strong>Matera — I Sassi UNESCO</strong> — jedno z najstarszych miast świata; tu kręcono <em>Pasję</em> i Bonda</div></div>
               <div class="hl"><span class="hl-icon">🌉</span><div class="hl-text"><strong>Gravina in Puglia</strong> — most Jamesa Bonda nad wąwozem, kościół skalny z kośćmi Saracenów</div></div>
             </div>
+            <p class="day-desc">Matera to doświadczenie, które zmienia perspektywę. Sassi — dzielnice wykute w wapiennych zboczach wąwozu — były zamieszkane nieprzerwanie od neolitu aż do lat 50., kiedy rząd wysiedlił mieszkańców uznając je za wstyd narodu. Dziś to UNESCO i najmodniejsze miejsce na świecie do filmowania historycznych dramatów. Idź tam o zachodzie słońca i zostań na noc — miasto w ciemności jest jeszcze bardziej surrealistyczne.</p>
             <div class="card-foot">
               <div class="sleep-badge">🏨 Nocleg w Bari</div>
               <a href="/blog" class="read-link disabled">Blog wkrótce ↗</a>
@@ -530,9 +535,11 @@ a    { color: inherit; text-decoration: none; }
             <div class="divider-map"></div>
             <div class="highlights">
               <div class="hl"><span class="hl-icon">⛪</span><div class="hl-text"><strong>Trani — Perła Adriatyku</strong> — katedra romańska kilka metrów od fal; morze i niebo w jednym kadrze</div></div>
+              <div class="hl"><span class="hl-icon">🏰</span><div class="hl-text"><strong>Castel del Monte</strong> — ośmiokątna twierdza Fryderyka II, symbol na 1-eurocentówce; UNESCO od 1996</div></div>
               <div class="hl"><span class="hl-icon">🌊</span><div class="hl-text"><strong>Polignano a Mare</strong> — miasto na pionowych klifach; zatoczka Lama Monachile i poezja na ścianach</div></div>
               <div class="hl"><span class="hl-icon">⛵</span><div class="hl-text"><strong>Monopoli</strong> — romantyczny port z niebieskimi łódkami; owoce morza i baza na 2 noce</div></div>
             </div>
+            <p class="day-desc">Katedra San Nicola Pellegrino w Trani stoi dosłownie na krawędzi morza — romański gotyk z różowego wapienia, zbudowany tak, że o przypływie fale uderzają w mury fundamentów. Jedno z najpiękniejszych ujęć, jakie możesz zrobić w Apulii. Po południu Polignano — miasto, gdzie domy stoją na klifach, a pod nimi turkusowa zatoka. Wsłuchaj się w napisy na ścianach — to wiersze Domenica Modugno, autora „Volare".</p>
             <div class="card-foot">
               <div class="sleep-badge">🏨 Nocleg w Monopoli</div>
               <a href="/blog" class="read-link disabled">Blog wkrótce ↗</a>
@@ -557,8 +564,10 @@ a    { color: inherit; text-decoration: none; }
             <div class="highlights">
               <div class="hl"><span class="hl-icon">🏚️</span><div class="hl-text"><strong>Alberobello — trulli UNESCO</strong> — 1500 stożkowych domków bez zaprawy; krajobraz jak z bajki</div></div>
               <div class="hl"><span class="hl-icon">⭕</span><div class="hl-text"><strong>Locorotondo</strong> — okrągłe białe miasteczko; Locorotondo DOC z widokiem na dolinę</div></div>
+              <div class="hl"><span class="hl-icon">🎭</span><div class="hl-text"><strong>Martina Franca</strong> — pałace jak torty weselne, capocollo DOP i poranne espresso na piazzie</div></div>
               <div class="hl"><span class="hl-icon">🔥</span><div class="hl-text"><strong>Cisternino — Fornelli Pronti</strong> — bombette wieprzowe z pieca u rzeźnika; klimat 10/10</div></div>
             </div>
+            <p class="day-desc">Trulli to domy budowane bez zaprawy — celowo, żeby można je było szybko rozebrać gdy przychodził poborca podatkowy. Historia mówi sama za siebie. Wejdź do Rione Monti przed ósmą rano, gdy nie ma jeszcze autokarów. Cisternino to punkt obowiązkowy dla mięsożerców — u lokalnego rzeźnika zamawiasz surowe bombette, on je piecze i podaje na papierze. Prościej i lepiej już nie będzie.</p>
             <div class="card-foot">
               <div class="sleep-badge">🏨 Nocleg w Monopoli</div>
               <a href="/blog" class="read-link disabled">Blog wkrótce ↗</a>
@@ -586,6 +595,7 @@ a    { color: inherit; text-decoration: none; }
               <div class="hl"><span class="hl-icon">🌡️</span><div class="hl-text"><strong>Szok termiczny</strong> — wewnątrz 15°C, na zewnątrz 35°C; sweter obowiązkowy!</div></div>
               <div class="hl"><span class="hl-icon">⛵</span><div class="hl-text"><strong>Plaże Capitolo</strong> — zasłużony relaks; aperol spritz o zachodzie słońca</div></div>
             </div>
+            <p class="day-desc">Grotte di Castellana odkryto przypadkowo w 1938 roku — robotnik wpadł do otworu w ziemi i znalazł się w podziemnym świecie długim na 3 kilometry. Na końcu trasy czeka Grotta Bianca — komora z alabastrowymi stalaktytami tak białymi, że wyglądają jak z cukru pudru. Różnica temperatur między jaskinią a słońcem na zewnątrz to ok. 20°C — wyjście jest równie dramatyczne jak wejście.</p>
             <div class="card-foot">
               <div class="sleep-badge">🏨 Nocleg w Monopoli</div>
               <a href="/blog" class="read-link disabled">Blog wkrótce ↗</a>
@@ -613,6 +623,7 @@ a    { color: inherit; text-decoration: none; }
               <div class="hl"><span class="hl-icon">🍪</span><div class="hl-text"><strong>Ceglie Messapica</strong> — stolica kulinarna regionu; migdałowe biscotto z wiśniową marmoladą</div></div>
               <div class="hl"><span class="hl-icon">✈️</span><div class="hl-text"><strong>Wylot z Brindisi</strong> — w bagażu pumo, Negramaro i wspomnienia na całe życie</div></div>
             </div>
+            <p class="day-desc">Grottaglie to miasto garncarzy — warsztaty mieszczą się w jaskiniowych kamienicach przy Quartiere delle Ceramiche, gdzie można dosłownie wejść do środka wzgórza i zobaczyć jak artysta toczy glinę. Pumo — ceramiczna szyszka — to apulijski symbol szczęścia; znajdziesz je na każdych drzwiach. Ostatni lunch w Ceglie, ostatnia kawa, ostatnie spojrzenie na równinę pokrytą gajami oliwnymi. Do zobaczenia, Apulio.</p>
             <div class="card-foot">
               <div class="sleep-badge">✈️ Wylot z Brindisi</div>
               <a href="/blog" class="read-link disabled">Blog wkrótce ↗</a>
