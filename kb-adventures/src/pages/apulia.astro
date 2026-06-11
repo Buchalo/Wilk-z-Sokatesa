@@ -1,0 +1,937 @@
+---
+// Apulia Trip — interaktywna strona wyprawy ze scrollytelling mapą
+// Wygenerowane zdjęcia AI: Higgsfield nano_banana_2
+---
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Apulia 8 Dni — Wycieczka Objazdowa | KB Adventures</title>
+<meta name="description" content="8 dni w słońcu Apulii — barokowe miasteczka, Matera, trulli, Adriatyk. Szczegółowy dzień po dniu z interaktywną mapą." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&family=Inter:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --terra:      #D4552A;
+  --terra-h:    #B8451E;
+  --gold:       #E8A020;
+  --cream:      #FBF4EC;
+  --cream2:     #F5EDE0;
+  --white:      #FFFFFF;
+  --dark:       #1C110A;
+  --dark2:      #2E1A0F;
+  --mid:        #7A5840;
+  --trust-bg:   #251508;
+  --card-map:   rgba(16,8,2,.90);
+  --card-bdr:   rgba(232,160,32,.22);
+  --map-text:   #FFF5E6;
+  --map-muted:  rgba(255,245,230,.58);
+  --ff-head:    'Poppins', sans-serif;
+  --ff-body:    'Inter', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: var(--ff-body); background: var(--cream); color: var(--dark); overflow-x: hidden; }
+img  { display: block; max-width: 100%; }
+a    { color: inherit; text-decoration: none; }
+
+/* MAP fixed */
+#map {
+  position: fixed; inset: 0;
+  width: 100vw; height: 100vh;
+  z-index: 0;
+}
+.leaflet-tile-pane {
+  filter: sepia(.42) saturate(1.35) hue-rotate(-6deg) brightness(.88) contrast(1.06);
+}
+.leaflet-control-zoom,
+.leaflet-control-attribution { display: none !important; }
+
+#page { position: relative; z-index: 1; }
+.solid   { background: var(--cream); }
+.solid-w { background: var(--white); }
+.solid-d { background: var(--dark2); }
+.solid-t { background: var(--trust-bg); }
+
+/* PROGRESS */
+#progress {
+  position: fixed; top: 0; left: 0;
+  height: 3px; width: 0%;
+  background: linear-gradient(90deg, var(--gold), var(--terra));
+  z-index: 2000; transition: width .1s linear;
+}
+
+/* NAV */
+#nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  padding: 0 1.5rem; height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: background .35s, box-shadow .35s;
+}
+#nav.scrolled {
+  background: rgba(16,8,2,.96);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 2px 16px rgba(0,0,0,.4);
+}
+.nav-logo {
+  font-family: var(--ff-head); font-size: 1.05rem; font-weight: 900;
+  color: var(--map-text); letter-spacing: -.02em;
+  display: flex; align-items: center;
+}
+.nav-logo span { color: var(--gold); }
+.nav-right { display: flex; align-items: center; gap: 1.25rem; }
+.btn { display: inline-flex; align-items: center; justify-content: center; border: none; cursor: pointer; border-radius: 8px; font-family: var(--ff-body); font-weight: 600; transition: background .2s, transform .15s; }
+.btn:hover { transform: translateY(-1px); }
+.btn-terra { background: var(--terra); color: #fff; padding: .55rem 1.25rem; font-size: .82rem; box-shadow: 0 4px 14px rgba(212,85,42,.38); }
+.btn-terra:hover { background: var(--terra-h); }
+.btn-terra-lg { background: var(--terra); color: #fff; padding: .85rem 2.2rem; font-size: 1rem; border-radius: 10px; box-shadow: 0 6px 20px rgba(212,85,42,.42); }
+.btn-terra-lg:hover { background: var(--terra-h); }
+.btn-outline-w { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,.55); padding: .82rem 1.8rem; font-size: .95rem; border-radius: 10px; }
+.btn-outline-w:hover { border-color: #fff; background: rgba(255,255,255,.1); }
+
+/* DAY PILL */
+#day-pill {
+  position: fixed; top: 4.8rem; right: 1rem;
+  background: rgba(16,8,2,.9); backdrop-filter: blur(12px);
+  border: 1px solid var(--card-bdr); border-radius: 100px;
+  padding: .38rem 1rem; font-size: .74rem; font-weight: 700;
+  color: var(--gold); letter-spacing: .03em;
+  z-index: 200; opacity: 0; transition: opacity .4s; pointer-events: none;
+}
+
+/* HERO */
+#hero {
+  position: relative; height: 100vh; min-height: 580px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 6rem 1.5rem 3rem; text-align: center; background: transparent; overflow: hidden;
+}
+#hero-overlay {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 65% at 50% 46%, rgba(5,2,0,.92) 0%, rgba(5,2,0,.72) 55%, transparent 100%),
+    linear-gradient(180deg, rgba(10,5,0,.80) 0%, rgba(10,5,0,.90) 50%, rgba(10,5,0,.97) 100%);
+  z-index: 0;
+}
+#hero > *:not(#hero-overlay) { position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: .45rem;
+  background: rgba(232,160,32,.18); border: 1px solid rgba(232,160,32,.4);
+  color: var(--gold); padding: .38rem 1rem; border-radius: 100px;
+  font-size: .75rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 1.4rem;
+}
+.hero-title {
+  font-family: var(--ff-head); font-size: clamp(2.6rem, 8vw, 4.4rem); font-weight: 900;
+  color: var(--map-text); letter-spacing: -.03em; line-height: 1.0; margin-bottom: .65rem;
+  text-shadow: 0 2px 16px rgba(0,0,0,.65);
+}
+.hero-title em { color: var(--gold); font-style: normal; display: block; }
+.hero-sub { font-size: clamp(.9rem, 2.5vw, 1.05rem); color: rgba(255,245,230,.92); line-height: 1.65; max-width: 520px; margin: 0 auto 2rem; text-shadow: 0 1px 10px rgba(0,0,0,.7); }
+.hero-ctas { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; }
+.hero-tags { display: flex; gap: .5rem; justify-content: center; flex-wrap: wrap; }
+.htag { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); color: rgba(255,245,230,.8); padding: .28rem .8rem; border-radius: 100px; font-size: .74rem; font-weight: 500; }
+.hero-scroll { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: .4rem; color: var(--map-muted); font-size: .74rem; animation: bob 2.2s ease-in-out infinite; z-index: 1; }
+.scroll-arrow { width: 18px; height: 18px; border-right: 2px solid var(--gold); border-bottom: 2px solid var(--gold); transform: rotate(45deg); opacity: .7; }
+@keyframes bob { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(7px)} }
+
+/* TRUST BAR */
+#trust { background: var(--trust-bg); padding: 1.1rem 1.5rem; overflow-x: auto; scrollbar-width: none; }
+#trust::-webkit-scrollbar { display: none; }
+.trust-inner { display: flex; gap: 0; min-width: max-content; margin: 0 auto; justify-content: center; }
+.trust-item { display: flex; align-items: center; gap: .6rem; padding: 0 1.5rem; border-right: 1px solid rgba(255,255,255,.1); white-space: nowrap; }
+.trust-item:last-child { border-right: none; }
+.trust-icon { font-size: 1.2rem; }
+.trust-text { font-size: .78rem; font-weight: 600; color: rgba(255,245,230,.85); }
+
+/* SECTION HEADERS */
+.sec-head { text-align: center; padding: 4rem 1.5rem 3rem; }
+.sec-tag { display: inline-block; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .14em; color: var(--terra); background: rgba(212,85,42,.1); padding: .28rem .9rem; border-radius: 100px; margin-bottom: .9rem; }
+.sec-title { font-family: var(--ff-head); font-size: clamp(1.7rem, 5vw, 2.5rem); font-weight: 900; color: var(--dark); letter-spacing: -.03em; line-height: 1.1; margin-bottom: .65rem; }
+.sec-sub { font-size: .95rem; color: var(--mid); max-width: 540px; margin: 0 auto; line-height: 1.65; }
+
+/* SCROLLYTELLING */
+#trasa-section { background: transparent; padding-bottom: 0; }
+.days { padding: 0 1rem 0; }
+.day-section { min-height: 100vh; display: flex; align-items: center; justify-content: flex-start; padding: 3rem 0; }
+
+/* DAY CARD — with photo */
+.day-card {
+  max-width: 400px; width: 100%;
+  background: var(--card-map);
+  backdrop-filter: blur(28px) saturate(1.8);
+  border: 1px solid var(--card-bdr);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 16px 52px rgba(0,0,0,.55);
+  opacity: 0; transform: translateX(-20px);
+  transition: opacity .5s ease, transform .5s ease, border-color .4s, box-shadow .4s;
+}
+.day-card.visible { opacity: 1; transform: translateX(0); }
+.day-card.active { border-color: rgba(232,160,32,.5); box-shadow: 0 16px 52px rgba(0,0,0,.55), 0 0 32px rgba(232,160,32,.1); }
+
+/* Photo header */
+.card-photo {
+  position: relative; width: 100%; height: 180px; overflow: hidden;
+}
+.card-photo img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .6s ease;
+}
+.day-card:hover .card-photo img { transform: scale(1.04); }
+.card-photo-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,.1) 0%, rgba(16,8,2,.65) 100%);
+}
+.card-photo-num {
+  position: absolute; top: 12px; left: 14px;
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, var(--gold), var(--terra));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ff-head); font-size: 1.05rem; font-weight: 900; color: #fff;
+  box-shadow: 0 4px 14px rgba(232,160,32,.38);
+}
+.card-photo-title {
+  position: absolute; bottom: 12px; left: 14px; right: 14px;
+  font-family: var(--ff-head); font-size: .95rem; font-weight: 700;
+  color: var(--map-text); line-height: 1.2;
+  text-shadow: 0 1px 8px rgba(0,0,0,.8);
+}
+
+/* Card body */
+.card-body { padding: 1.2rem 1.4rem 1.4rem; }
+.day-label { font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--gold); margin-bottom: .3rem; }
+.day-loc { display: flex; align-items: center; gap: .3rem; margin-bottom: .85rem; font-size: .72rem; color: var(--map-muted); }
+.loc-dot { width: 5px; height: 5px; background: var(--terra); border-radius: 50%; flex-shrink: 0; }
+.divider-map { height: 1px; background: linear-gradient(90deg, rgba(232,160,32,.22), transparent); margin: 0 0 .85rem; }
+.highlights { display: flex; flex-direction: column; gap: .52rem; margin-bottom: 1rem; }
+.hl { display: flex; align-items: flex-start; gap: .58rem; }
+.hl-icon { font-size: .9rem; flex-shrink: 0; margin-top: .05rem; line-height: 1.4; }
+.hl-text { font-size: .8rem; color: var(--map-muted); line-height: 1.52; }
+.hl-text strong { color: var(--map-text); font-weight: 600; }
+.card-foot { padding-top: .85rem; border-top: 1px solid rgba(232,160,32,.1); display: flex; align-items: center; justify-content: space-between; gap: .5rem; flex-wrap: wrap; }
+.sleep-badge { background: rgba(44,95,138,.22); border: 1px solid rgba(44,95,138,.38); color: #7ec8e3; padding: .26rem .75rem; border-radius: 100px; font-size: .68rem; font-weight: 600; }
+.km-badge { font-size: .68rem; color: var(--map-muted); }
+.read-link {
+  display: inline-flex; align-items: center; gap: .3rem;
+  font-size: .72rem; font-weight: 600; color: var(--gold);
+  border: 1px solid rgba(232,160,32,.35); padding: .28rem .75rem; border-radius: 100px;
+  transition: background .2s, color .2s;
+  white-space: nowrap;
+}
+.read-link:hover { background: var(--gold); color: var(--dark); }
+.read-link.disabled { color: var(--map-muted); border-color: rgba(255,255,255,.1); pointer-events: none; }
+
+/* OUTRO */
+.outro-map-card {
+  background: var(--card-map); backdrop-filter: blur(28px);
+  border: 1px solid var(--card-bdr); border-radius: 20px;
+  padding: 2.5rem 2rem; max-width: 400px; width: 100%; text-align: center;
+  box-shadow: 0 16px 52px rgba(0,0,0,.55);
+  opacity: 0; transform: translateY(18px); transition: opacity .55s, transform .55s;
+}
+.outro-map-card.visible { opacity: 1; transform: translateY(0); }
+.outro-map-card .outro-emoji { font-size: 2.5rem; margin-bottom: .8rem; }
+.outro-map-card h3 { font-family: var(--ff-head); font-size: 1.6rem; font-weight: 900; color: var(--map-text); margin-bottom: .5rem; }
+.outro-map-card p { font-size: .85rem; color: var(--map-muted); line-height: 1.6; }
+
+/* DAY PINS */
+.day-pin {
+  width: 28px; height: 28px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+  background: var(--gold); border: 2.5px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,.45);
+  display: flex; align-items: center; justify-content: center; transition: background .3s;
+}
+.day-pin span { transform: rotate(45deg); font-size: 9px; font-weight: 800; color: #fff; }
+.day-pin.active { background: var(--terra); animation: pinPulse 1.8s ease-in-out infinite; }
+@keyframes pinPulse {
+  0%,100% { box-shadow: 0 2px 8px rgba(212,85,42,.5), 0 0 0 0 rgba(212,85,42,.5); }
+  55%      { box-shadow: 0 2px 8px rgba(212,85,42,.5), 0 0 0 13px rgba(212,85,42,0); }
+}
+.car-wrap { font-size: 1.5rem; line-height: 1; filter: drop-shadow(0 2px 5px rgba(0,0,0,.7)); pointer-events: none; }
+
+/* PRICES */
+#prices { background: var(--white); padding: 0 1.5rem 5rem; }
+.price-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); max-width: 640px; margin: 0 auto; gap: 1.25rem; }
+.price-card { border: 2px solid var(--cream2); border-radius: 16px; padding: 1.5rem; position: relative; transition: border-color .25s, box-shadow .25s; }
+.price-card:hover { border-color: var(--terra); box-shadow: 0 8px 28px rgba(212,85,42,.14); }
+.price-card.promo { border-color: var(--terra); }
+.promo-label { position: absolute; top: -.75rem; left: 50%; transform: translateX(-50%); background: var(--terra); color: #fff; font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; padding: .22rem .85rem; border-radius: 100px; white-space: nowrap; }
+.pc-date { font-size: .78rem; font-weight: 700; color: var(--mid); text-transform: uppercase; letter-spacing: .06em; margin-bottom: .4rem; }
+.pc-range { font-family: var(--ff-head); font-size: 1.05rem; font-weight: 700; color: var(--dark); margin-bottom: .75rem; }
+.pc-price-row { display: flex; align-items: baseline; gap: .35rem; margin-bottom: .5rem; }
+.pc-from { font-size: .75rem; color: var(--mid); }
+.pc-num { font-family: var(--ff-head); font-size: 1.7rem; font-weight: 900; color: var(--dark); letter-spacing: -.03em; }
+.pc-pln { font-size: .85rem; font-weight: 600; color: var(--mid); }
+.pc-avail { display: inline-flex; align-items: center; gap: .35rem; font-size: .72rem; font-weight: 600; padding: .22rem .7rem; border-radius: 100px; margin-bottom: 1rem; }
+.avail-few  { background: rgba(212,85,42,.1); color: var(--terra); }
+.avail-ok   { background: rgba(34,139,34,.1); color: #228b22; }
+.avail-sold { background: rgba(120,60,20,.1); color: #7a3a12; }
+.avail-soon { background: rgba(232,160,32,.12); color: #8a6200; }
+.pc-btn { width: 100%; padding: .7rem; border-radius: 9px; font-size: .82rem; background: var(--terra); color: #fff; border: none; cursor: pointer; font-family: var(--ff-body); font-weight: 600; transition: background .2s; }
+.pc-btn:hover { background: var(--terra-h); }
+
+/* INCLUDED */
+#included { background: var(--cream); padding: 0 1.5rem 5rem; }
+.incl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; max-width: 780px; margin: 0 auto; }
+@media (max-width: 600px) { .incl-grid { grid-template-columns: 1fr; } }
+.incl-box { border-radius: 16px; padding: 1.75rem; }
+.incl-yes { background: var(--white); border: 2px solid rgba(34,139,34,.18); }
+.incl-no  { background: var(--white); border: 2px solid rgba(212,85,42,.15); }
+.incl-heading { font-family: var(--ff-head); font-size: .88rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 1.1rem; }
+.incl-yes .incl-heading { color: #228b22; }
+.incl-no  .incl-heading { color: var(--terra); }
+.incl-list { list-style: none; display: flex; flex-direction: column; gap: .65rem; }
+.incl-list li { display: flex; align-items: flex-start; gap: .65rem; font-size: .85rem; color: var(--mid); line-height: 1.5; }
+.incl-list li::before { font-size: 1rem; flex-shrink: 0; margin-top: .02rem; }
+.incl-yes .incl-list li::before { content: '✅'; }
+.incl-no  .incl-list li::before { content: '❌'; }
+
+/* TESTIMONIALS */
+#testimonials { background: var(--white); padding: 0 1.5rem 5rem; }
+.testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; max-width: 960px; margin: 0 auto; }
+.testi-card { background: var(--cream); border-radius: 16px; padding: 1.6rem; border: 1px solid var(--cream2); transition: box-shadow .25s; }
+.testi-card:hover { box-shadow: 0 8px 28px rgba(0,0,0,.08); }
+.testi-stars { color: var(--gold); font-size: .95rem; margin-bottom: .75rem; }
+.testi-text { font-size: .875rem; color: var(--dark); line-height: 1.65; margin-bottom: 1.1rem; font-style: italic; }
+.testi-author { display: flex; align-items: center; gap: .7rem; }
+.testi-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--terra)); display: flex; align-items: center; justify-content: center; font-family: var(--ff-head); font-size: .85rem; font-weight: 900; color: #fff; flex-shrink: 0; }
+.testi-name { font-size: .82rem; font-weight: 600; color: var(--dark); }
+.testi-city { font-size: .72rem; color: var(--mid); }
+
+/* FAQ */
+#faq { background: var(--cream); padding: 0 1.5rem 5rem; }
+.faq-list { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: .75rem; }
+.faq-item { background: var(--white); border-radius: 12px; border: 1px solid var(--cream2); overflow: hidden; }
+.faq-q { width: 100%; background: none; border: none; text-align: left; padding: 1.1rem 1.3rem; font-family: var(--ff-body); font-size: .9rem; font-weight: 600; color: var(--dark); cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+.faq-q::after { content: '+'; font-size: 1.3rem; color: var(--terra); flex-shrink: 0; transition: transform .25s; }
+.faq-item.open .faq-q::after { transform: rotate(45deg); }
+.faq-a { max-height: 0; overflow: hidden; padding: 0 1.3rem; font-size: .85rem; color: var(--mid); line-height: 1.7; transition: max-height .35s ease, padding .25s; }
+.faq-item.open .faq-a { max-height: 300px; padding: 0 1.3rem 1.2rem; }
+
+/* CTA */
+#cta-section { background: var(--dark2); padding: 5rem 1.5rem; text-align: center; }
+#cta-section .sec-title { color: var(--map-text); }
+#cta-section .sec-sub { color: var(--map-muted); margin-bottom: 2.5rem; }
+.cta-form { max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: .9rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+@media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
+.form-field { display: flex; flex-direction: column; gap: .3rem; text-align: left; }
+.form-field label { font-size: .74rem; font-weight: 600; color: var(--map-muted); text-transform: uppercase; letter-spacing: .08em; }
+.form-field input, .form-field select { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18); border-radius: 8px; padding: .7rem .9rem; font-size: .88rem; font-family: var(--ff-body); color: var(--map-text); outline: none; transition: border-color .2s; -webkit-appearance: none; }
+.form-field input::placeholder { color: rgba(255,245,230,.3); }
+.form-field input:focus, .form-field select:focus { border-color: var(--gold); }
+.form-field select option { background: var(--dark2); color: var(--map-text); }
+.form-note { font-size: .72rem; color: rgba(255,245,230,.35); text-align: center; line-height: 1.6; }
+
+/* FOOTER */
+#footer { background: #120A02; padding: 2.5rem 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; text-align: center; }
+.footer-logo { font-family: var(--ff-head); font-size: 1rem; font-weight: 900; color: var(--map-text); display: flex; align-items: center; gap: 7px; justify-content: center; }
+.footer-logo span { color: var(--gold); }
+.footer-links { display: flex; gap: 1.25rem; flex-wrap: wrap; justify-content: center; }
+.footer-links a { font-size: .78rem; color: rgba(255,245,230,.45); transition: color .2s; }
+.footer-links a:hover { color: var(--map-muted); }
+.footer-copy { font-size: .72rem; color: rgba(255,245,230,.3); }
+
+@media (max-width: 680px) { .day-section { justify-content: center; } }
+@media (min-width: 681px) { .day-card { margin-left: 2rem; } }
+@media (min-width: 1024px) { .day-card { margin-left: 4rem; max-width: 390px; } }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div id="day-pill"></div>
+<div id="map"></div>
+
+<div id="page">
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="/" class="nav-logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" style="vertical-align:middle;margin-right:6px;flex-shrink:0" aria-hidden="true">
+        <polygon points="14,2 26,22 2,22" fill="#E8A020" opacity=".9"/>
+        <polygon points="14,7 22,22 6,22" fill="#D4552A" opacity=".85"/>
+        <circle cx="14" cy="22" r="2.5" fill="#FFF5E6" opacity=".7"/>
+      </svg>
+      KB<span>&nbsp;Adventures</span>
+    </a>
+    <div class="nav-right">
+      <a href="/blog" style="font-size:.82rem;font-weight:600;color:rgba(255,245,230,.65);margin-right:.25rem;">Blog</a>
+      <a href="/o-mnie" style="font-size:.82rem;font-weight:600;color:rgba(255,245,230,.65);margin-right:.25rem;">O&nbsp;mnie</a>
+      <a class="btn btn-terra" href="#cta-section">Zarezerwuj</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div id="hero-overlay"></div>
+    <div class="hero-badge">🏔️ Wycieczka objazdowa dla Aktywnych · 2026</div>
+    <h1 class="hero-title">8 dni<em>w słońcu Apulii</em></h1>
+    <p class="hero-sub">Barokowe miasteczka, jaskiniowe miasta, trullowe wioski i Adriatyk w kolorze akwamaryny. Jeden pilot, zero stresu.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-terra-lg" href="#cta-section">Zarezerwuj miejsce</a>
+      <a class="btn btn-outline-w" href="#prices">Zobacz terminy</a>
+    </div>
+    <div class="hero-tags">
+      <span class="htag">✈️ Przelot WAW</span>
+      <span class="htag">🏨 7 noclegów ★★★</span>
+      <span class="htag">🍳 Śniadania</span>
+      <span class="htag">🚌 Transport</span>
+      <span class="htag">🇵🇱 Pilot PL</span>
+    </div>
+    <div class="hero-scroll"><span>Poznaj trasę</span><div class="scroll-arrow"></div></div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <div id="trust" class="solid-t">
+    <div class="trust-inner">
+      <div class="trust-item"><span class="trust-icon">✈️</span><span class="trust-text">Przelot z Warszawy</span></div>
+      <div class="trust-item"><span class="trust-icon">🏨</span><span class="trust-text">7 noclegów Hotel ★★★</span></div>
+      <div class="trust-item"><span class="trust-icon">🍳</span><span class="trust-text">Śniadania w cenie</span></div>
+      <div class="trust-item"><span class="trust-icon">🚗</span><span class="trust-text">Transport samochodem</span></div>
+      <div class="trust-item"><span class="trust-icon">🇵🇱</span><span class="trust-text">Pilot przez całą trasę</span></div>
+      <div class="trust-item"><span class="trust-icon">🔒</span><span class="trust-text">Ubezpieczenie w opcji</span></div>
+    </div>
+  </div>
+
+  <!-- SCROLLYTELLING -->
+  <div style="background:transparent; padding:5rem 1.5rem 1rem; text-align:center;">
+    <div class="sec-tag" style="color:var(--gold);background:rgba(232,160,32,.12);">Program wycieczki</div>
+    <h2 class="sec-title" style="color:var(--map-text);">Dzień po dniu</h2>
+    <p class="sec-sub" style="color:var(--map-muted);">Przewiń, aby odkryć każdy przystanek. Mapa podąża za trasą.</p>
+  </div>
+
+  <section id="trasa-section">
+    <div class="days">
+
+      <!-- DZIEŃ 1 — Brindisi -->
+      <div class="day-section" id="section-0">
+        <div class="day-card" id="card-0">
+          <div class="card-photo">
+            <img src="https://d8j0ntlcm91z4.cloudfront.net/user_30EqZOFYJDlJHINvYw0ajQQPBWj/hf_20260611_172415_13a198cf-4fe6-41db-9462-ffe6f5d5b35d.jpeg" alt="Brindisi port" loading="lazy" />
+            <div class="card-photo-overlay"></div>
+            <div class="card-photo-num">1</div>
+            <div class="card-photo-title">Desant w Brindisi</div>
+          </div>
+          <div class="card-body">
+            <div class="day-label">Dzień pierwszy · ~35 km</div>
+            <div class="day-loc"><div class="loc-dot"></div>Brindisi → Lecce</div>
+            <div class="divider-map"></div>
+            <div class="highlights">
+              <div class="hl"><span class="hl-icon">✈️</span><div class="hl-text"><strong>Przylot i start</strong> — lotnisko Papola Casale, odbiór auta, pierwszy oddech apulijskiego powietrza</div></div>
+              <div class="hl"><span class="hl-icon">🚪</span><div class="hl-text"><strong>Brama do Wschodu</strong> — tu kończyła się Via Appia; Kolumna Brindyzyjska nad antycznym portem</div></div>
+              <div class="hl"><span class="hl-icon">⚓</span><div class="hl-text"><strong>Nabrzeże i port</strong> — spacer, klimat i ten sam wiatr co krzyżowcy odpływający na podbój Wschodu</div></div>
+              <div class="hl"><span class="hl-icon">🍷</span><div class="hl-text"><strong>Nocny przejazd do Lecce</strong> — orecchiette al ragù i Primitivo na dobry początek</div></div>
+            </div>
+            <div class="card-foot">
+              <div class="sleep-badge">🏨 Nocleg w Lecce</div>
+              <a href="/blog" class="read-link disabled">Blog wkrótce ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DZIEŃ 2 — Lecce / Otranto -->
+      <div class="day-section" id="section-1">
+        <div class="day-card" id="card-1">
+          <div class="card-photo">
+            <img src="https://d8j0ntlcm91z4.cloudfront.net/user_30EqZOFYJDlJHINvYw0ajQQPBWj/hf_20260611_172422_6f98d093-3761-4b60-a8a0-194e8f6307aa.png" alt="Lecce barok" loading="lazy" />
+            <div class="card-photo-overlay"></div>
+            <div class="card-photo-num">2</div>
+            <div class="card-photo-title">Barok i Południe</div>
+          </div>
+          <div class="card-body">
+            <div class="day-label">Dzień drugi · ~80 km</div>
+            <div class="day-loc"><div class="loc-dot"></div>Lecce → Otranto</div>
+            <div class="divider-map"></div>
+            <div class="highlights">
+              <div class="hl"><span class="hl-icon">✨</span><div class="hl-text"><strong>Lecce — Florencja Południa</strong> — barokowe fasady tak bogate jak scenografia do opery; Amfiteatr z I w. n.e.</div></div>
+              <div class="hl"><span class="hl-icon">🏊</span><div class="hl-text"><strong>Grotta della Poesia</strong> — naturalne zapadlisko w klifie; skoki z kilkumetrowych wapiennych ścian</div></div>
+              <div class="hl"><span class="hl-icon">💎</span><div class="hl-text"><strong>Otranto</strong> — Drzewo Życia w posadzce katedry, kaplica 800 czaszek i szmaragdowa Cava di Bauxite</div></div>
+            </div>
+            <div class="card-foot">
+              <div class="sleep-badge">🏨 Nocleg w Lecce</div>
+              <a href="/blog/puglia-droga-ktora-warto-zgubic-sie" class="read-link">Czytaj relację ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DZIEŃ 3 — Ostuni / Bari -->
+      <div class="day-section" id="section-2">
+        <div class="day-card" id="card-2">
+          <div class="card-photo">
+            <img src="https://d8j0ntlcm91z4.cloudfront.net/user_30EqZOFYJDlJHINvYw0ajQQPBWj/hf_20260611_172417_9151a7a6-ca00-4505-9124-e77db9ae0bf7.png" alt="Ostuni białe miasto" loading="lazy" />
+            <div class="card-photo-overlay"></div>
+            <div class="card-photo-num">3</div>
+            <div class="card-photo-title">Białe Miasto i Bari</div>
+          </div>
+          <div class="card-body">
+            <div class="day-label">Dzień trzeci · ~120 km</div>
+            <div class="day-loc"><div class="loc-dot"></div>Ostuni → Bari</div>
+            <div class="divider-map"></div>
+            <div class="highlights">
+              <div class="hl"><span class="hl-icon">🤍</span><div class="hl-text"><strong>Ostuni — Białe Miasto</strong> — oślepiające uliczki kaskadowo spływające ze wzgórza; widok na Adriatyk</div></div>
+              <div class="hl"><span class="hl-icon">🧀</span><div class="hl-text"><strong>Wytwórnia burraty</strong> — świeża burrata prosto z caseificio; kremowa, ciepła — rewelacja</div></div>
+              <div class="hl"><span class="hl-icon">👵</span><div class="hl-text"><strong>Bari Vecchia</strong> — lokalne mammy lepią orecchiette w drzwiach kamienic; autentyczne i genialne</div></div>
+              <div class="hl"><span class="hl-icon">🐙</span><div class="hl-text"><strong>Kolacja na Lungomare</strong> — crudi di mare i polpo alla brace z widokiem na port</div></div>
+            </div>
+            <div class="card-foot">
+              <div class="sleep-badge">🏨 Nocleg w Bari</div>
+              <a href="/blog" class="read-link disabled">Blog wkrótce ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DZIEŃ 4 — Matera -->
+      <div class="day-section" id="section-3">
+        <div class="day-card" id="card-3">
+          <div class="card-photo">
+            <img src="https://d8j0ntlcm91z4.cloudfront.net/user_30EqZOFYJDlJHINvYw0ajQQPBWj/hf_20260611_172420_e5d4d30e-efa9-4e3c-9d65-27f2ae98fff1.png" alt="Matera Sassi" loading="lazy" />
+            <div class="card-photo-overlay"></div>
+            <div class="card-photo-num">4</div>
+            <div class="card-photo-title">Trójkąt Cudów</div>
+          </div>
+          <div class="card-body">
+            <div class="day-label">Dzień czwarty · ~154 km</div>
+            <div class="day-loc"><div class="loc-dot"></div>Altamura → Matera → Gravina</div>
+            <div class="divider-map"></div>
+            <div class="highlights">
+              <div class="hl"><span class="hl-icon">🍞</span><div class="hl-text"><strong>Altamura</strong> — Pane di Altamura DOP i focaccia altamurana; piekarnia nieprzerwanie od 1423 r.</div></div>
+              <div class="hl"><span class="hl-icon">🪨</span><div class="hl-text"><strong>Matera — I Sassi UNESCO</strong> — jedno z najstarszych miast świata; tu kręcono <em>Pasję</em> i Bonda</div></div>
+              <div class="hl"><span class="hl-icon">🌉</span><div class="hl-text"><strong>Gravina in Puglia</strong> — most Jamesa Bonda nad wąwozem, kościół skalny z kośćmi Saracenów</div></div>
+            </div>
+            <div class="card-foot">
+              <div class="sleep-badge">🏨 Nocleg w Bari</div>
+              <a href="/blog" class="read-link disabled">Blog wkrótce ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DZIEŃ 5 — Trani / Polignano / Monopoli -->
+      <div class="day-section" id="section-4">
+        <div class="day-card" id="card-4">
+          <div class="card-photo">
+            <img src="https://d8j0ntlcm91z4.cloudfront.net/user_30EqZOFYJDlJHINvYw0ajQQPBWj/hf_20260611_172422_796ffd52-25fc-4000-8b0d-4a91cbf2cb94.png" alt="Trani katedra nad morzem" loading="lazy" />
+            <div class="card-photo-overlay"></div>
+            <div class="card-photo-num">5</div>
+            <div class="card-photo-title">Trani i Klify</div>
+          </div>
+          <div class="card-body">
+            <div class="day-label">Dzień piąty · ~143 km</div>
+            <div class="day-loc"><div class="loc-dot"></div>Trani → Polignano → Monopoli</div>
+            <div class="divider-map"></div>
+            <div class="highlights">
+              <div class="hl"><span class="hl-icon">⛪</span><div class="hl-text"><strong>Trani — Perła Adriatyku</strong> — katedra romańska kilka metrów od fal; morze i niebo w jednym kadrze</div></div>
+              <div class="hl"><span class="hl-icon">🌊</span><div class="hl-text"><strong>Polignano a Mare</strong> — miasto na pionowych klifach; zatoczka Lama Monachile i poezja na ścianach</div></div>
+              <div class="hl"><span class="hl-icon">⛵</span><div class="hl-text"><strong>Monopoli</strong> — romantyczny port z niebieskimi łódkami; owoce morza i baza na 2 noce</div></div>
+            </div>
+            <div class="card-foot">
+              <div class="sleep-badge">🏨 Nocleg w Monopoli</div>
+              <a href="/blog" class="read-link disabled">Blog wkrótce ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DZIEŃ 6 — Dolina Itria -->
+      <div class="day-section" id="section-5">
+        <div class="day-card" id="card-5">
+          <div class="card-photo">
+            <img src="https://d8j0ntlcm91z4.cloudfront.net/user_30EqZOFYJDlJHINvYw0ajQQPBWj/hf_20260611_172423_2721e107-ebf7-4c18-829c-3bb9411d7624.png" alt="Alberobello trulli" loading="lazy" />
+            <div class="card-photo-overlay"></div>
+            <div class="card-photo-num">6</div>
+            <div class="card-photo-title">Dolina Itria</div>
+          </div>
+          <div class="card-body">
+            <div class="day-label">Dzień szósty · ~77 km</div>
+            <div class="day-loc"><div class="loc-dot"></div>Alberobello → Martina Franca → Locorotondo → Cisternino</div>
+            <div class="divider-map"></div>
+            <div class="highlights">
+              <div class="hl"><span class="hl-icon">🏚️</span><div class="hl-text"><strong>Alberobello — trulli UNESCO</strong> — 1500 stożkowych domków bez zaprawy; krajobraz jak z bajki</div></div>
+              <div class="hl"><span class="hl-icon">⭕</span><div class="hl-text"><strong>Locorotondo</strong> — okrągłe białe miasteczko; Locorotondo DOC z widokiem na dolinę</div></div>
+              <div class="hl"><span class="hl-icon">🔥</span><div class="hl-text"><strong>Cisternino — Fornelli Pronti</strong> — bombette wieprzowe z pieca u rzeźnika; klimat 10/10</div></div>
+            </div>
+            <div class="card-foot">
+              <div class="sleep-badge">🏨 Nocleg w Monopoli</div>
+              <a href="/blog" class="read-link disabled">Blog wkrótce ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DZIEŃ 7 — Jaskinie Castellana -->
+      <div class="day-section" id="section-6">
+        <div class="day-card" id="card-6">
+          <div class="card-photo">
+            <img id="day7-img" src="https://d8j0ntlcm91z4.cloudfront.net/user_30EqZOFYJDlJHINvYw0ajQQPBWj/hf_20260611_172424_30d36a19-374c-41dc-8609-0699b8e48c26.png" alt="Grotte di Castellana" loading="lazy" />
+            <div class="card-photo-overlay"></div>
+            <div class="card-photo-num">7</div>
+            <div class="card-photo-title">Jaskinie i Relaks</div>
+          </div>
+          <div class="card-body">
+            <div class="day-label">Dzień siódmy · ~43 km</div>
+            <div class="day-loc"><div class="loc-dot"></div>Grotte di Castellana → Plaże Monopoli</div>
+            <div class="divider-map"></div>
+            <div class="highlights">
+              <div class="hl"><span class="hl-icon">🕳️</span><div class="hl-text"><strong>Grotte di Castellana</strong> — 3 km podziemnych korytarzy; stalaktyty jak w innym świecie</div></div>
+              <div class="hl"><span class="hl-icon">🤍</span><div class="hl-text"><strong>Grotta Bianca</strong> — śnieżnobiała, alabastrowa komnata; uznawana za najpiękniejszą jaskinię świata</div></div>
+              <div class="hl"><span class="hl-icon">🌡️</span><div class="hl-text"><strong>Szok termiczny</strong> — wewnątrz 15°C, na zewnątrz 35°C; sweter obowiązkowy!</div></div>
+              <div class="hl"><span class="hl-icon">⛵</span><div class="hl-text"><strong>Plaże Capitolo</strong> — zasłużony relaks; aperol spritz o zachodzie słońca</div></div>
+            </div>
+            <div class="card-foot">
+              <div class="sleep-badge">🏨 Nocleg w Monopoli</div>
+              <a href="/blog" class="read-link disabled">Blog wkrótce ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DZIEŃ 8 — Grottaglie / Powrót -->
+      <div class="day-section" id="section-7">
+        <div class="day-card" id="card-7">
+          <div class="card-photo">
+            <img src="https://d8j0ntlcm91z4.cloudfront.net/user_30EqZOFYJDlJHINvYw0ajQQPBWj/hf_20260611_172426_a61fa608-aad4-4532-8412-56f66fc18449.png" alt="Grottaglie ceramika" loading="lazy" />
+            <div class="card-photo-overlay"></div>
+            <div class="card-photo-num">8</div>
+            <div class="card-photo-title">Ceramika i Powrót</div>
+          </div>
+          <div class="card-body">
+            <div class="day-label">Dzień ósmy · ~153 km</div>
+            <div class="day-loc"><div class="loc-dot"></div>Grottaglie → Ceglie → Brindisi ✈️</div>
+            <div class="divider-map"></div>
+            <div class="highlights">
+              <div class="hl"><span class="hl-icon">🏺</span><div class="hl-text"><strong>Grottaglie</strong> — warsztaty ceramiczne wykute w jaskiniach; słynne pumo — ceramiczne szyszki szczęścia</div></div>
+              <div class="hl"><span class="hl-icon">👨‍🎨</span><div class="hl-text"><strong>Lekcja garncarstwa</strong> — mistrzowie od XVI w.; wyjdź z własnoręcznie uformowaną misą</div></div>
+              <div class="hl"><span class="hl-icon">🍪</span><div class="hl-text"><strong>Ceglie Messapica</strong> — stolica kulinarna regionu; migdałowe biscotto z wiśniową marmoladą</div></div>
+              <div class="hl"><span class="hl-icon">✈️</span><div class="hl-text"><strong>Wylot z Brindisi</strong> — w bagażu pumo, Negramaro i wspomnienia na całe życie</div></div>
+            </div>
+            <div class="card-foot">
+              <div class="sleep-badge">✈️ Wylot z Brindisi</div>
+              <a href="/blog" class="read-link disabled">Blog wkrótce ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- OUTRO -->
+      <div class="day-section" id="section-outro" style="justify-content:center;">
+        <div class="outro-map-card" id="outro-map-card">
+          <div class="outro-emoji">🫒</div>
+          <h3>~950 km · 8 dni · bezkres wspomnień</h3>
+          <p>Apulia to nie jest tylko destynacja — to stan ducha.</p>
+          <a href="/blog" style="display:inline-block;margin-top:1.2rem;background:var(--terra);color:#fff;padding:.65rem 1.6rem;border-radius:10px;font-weight:600;font-size:.85rem;">
+            Czytaj wpisy z trasy →
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TERMINY I CENY -->
+  <section id="prices" class="solid-w">
+    <div class="sec-head">
+      <div class="sec-tag">Terminy i ceny</div>
+      <h2 class="sec-title">Wybierz swój termin</h2>
+      <p class="sec-sub">Wszystkie ceny zawierają przelot, noclegi ze śniadaniami, transport i opłaty lotniskowe.</p>
+    </div>
+    <div class="price-grid">
+      <div class="price-card" style="opacity:.72;pointer-events:none;">
+        <div class="pc-date">Termin I</div>
+        <div class="pc-range">2 — 9 czerwca 2026</div>
+        <div class="pc-price-row"><span class="pc-from">od</span><span class="pc-num">3 799</span><span class="pc-pln">PLN / os.</span></div>
+        <div class="pc-avail avail-sold">Brak miejsc</div>
+        <button class="pc-btn" disabled style="opacity:.4;cursor:not-allowed;">Termin wyprzedany</button>
+      </div>
+      <div class="price-card promo">
+        <div class="promo-label">Zapisz się pierwszy</div>
+        <div class="pc-date">Wakacje 2026</div>
+        <div class="pc-range" style="font-style:italic;color:var(--mid);">Termin ogłoszony niebawem</div>
+        <div class="pc-price-row" style="opacity:.55;"><span class="pc-from">od</span><span class="pc-num">3 799</span><span class="pc-pln">PLN / os.</span></div>
+        <div class="pc-avail avail-soon">Ogłoszone niebawem</div>
+        <button class="pc-btn" onclick="document.getElementById('cta-section').scrollIntoView({behavior:'smooth'})">Zapisz się na listę</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CO WLICZONE -->
+  <section id="included" class="solid">
+    <div class="sec-head">
+      <div class="sec-tag">Program</div>
+      <h2 class="sec-title">Co masz w cenie?</h2>
+    </div>
+    <div class="incl-grid">
+      <div class="incl-box incl-yes">
+        <div class="incl-heading">W cenie wycieczki</div>
+        <ul class="incl-list">
+          <li>Przelot tam i z powrotem z Warszawy (WAW)</li>
+          <li>7 noclegów w hotelach ★★★ (śniadania wliczone)</li>
+          <li>Transport samochodem przez cały czas trwania</li>
+          <li>Pilot mówiący po polsku — pełna trasa</li>
+          <li>Wstępy: Grotte di Castellana (pełna trasa), Castel del Monte</li>
+          <li>Degustacja burraty w caseificio koło Andrii</li>
+          <li>Opłaty lotniskowe i podatki portowe</li>
+        </ul>
+      </div>
+      <div class="incl-box incl-no">
+        <div class="incl-heading">Nie wliczone</div>
+        <ul class="incl-list">
+          <li>Obiady i kolacje (poza wskazanymi w programie)</li>
+          <li>Ubezpieczenie podróżne (możliwość dokupienia u nas)</li>
+          <li>Napoje i wydatki osobiste</li>
+          <li>Dodatkowe atrakcje biletowane (fakultatywne)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPINIE -->
+  <section id="testimonials" class="solid-w">
+    <div class="sec-head">
+      <div class="sec-tag">Opinie klientów</div>
+      <h2 class="sec-title">Co mówią podróżnicy</h2>
+      <p class="sec-sub">Ponad 340 zadowolonych uczestników w ciągu ostatnich 3 sezonów.</p>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">„Wyjazd absolutnie zachwycający! Matera o zachodzie słońca to widok, który zostaje na całe życie. Pilot znał każdy zakątek i każdą historię. Burrata w wytwórni? Rewelacja."</p>
+        <div class="testi-author"><div class="testi-avatar">MK</div><div><div class="testi-name">Marta K.</div><div class="testi-city">Warszawa · wrzesień 2024</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">„Trzecia wycieczka z KB Adventures i znowu nie zawiedli. Trasa idealnie dobrana, hotele czyste. Polignano a Mare wzięło mi dosłownie dech — widziałem milion zdjęć, ale na żywo to co innego."</p>
+        <div class="testi-author"><div class="testi-avatar">TW</div><div><div class="testi-name">Tomasz W.</div><div class="testi-city">Kraków · październik 2024</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars">★★★★½</div>
+        <p class="testi-text">„Trulli w Alberobello i Grotta Bianca to dwa obowiązkowe 'wow' tej trasy. Doceniłam pilota — wszystko spokojnie tłumaczył. Jedyna uwaga: za krótko w Lecce, ale plan jest napięty."</p>
+        <div class="testi-author"><div class="testi-avatar">BS</div><div><div class="testi-name">Beata S.</div><div class="testi-city">Gdańsk · wrzesień 2024</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="solid">
+    <div class="sec-head">
+      <div class="sec-tag">FAQ</div>
+      <h2 class="sec-title">Najczęstsze pytania</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q">Z jakiego lotniska wylatujemy?</button>
+        <div class="faq-a">Wylot z Warszawy Chopina (WAW) do Brindisi (BDS). Możliwy dojazd z innych miast — skontaktuj się z nami, pomożemy zaplanować dojazd.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Jak wygląda ubezpieczenie?</button>
+        <div class="faq-a">Ubezpieczenie KL + NNW możesz dokupić przy rezerwacji. Polecamy opcję z rozszerzeniem o rezygnację z podróży — szczegóły na stronie rezerwacji.</div>
+      </div>
+      <div class="faq-item open">
+        <button class="faq-q">Czy będzie ciepło?</button>
+        <div class="faq-a">Tak — będzie ciepło! Czerwiec w Apulii to słońce praktycznie każdego dnia, temperatura 28–34°C. Morze już w pełni do kąpieli. Zabierz krem z filtrem i lekkie ubrania.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Jak wygląda kwestia samochodu?</button>
+        <div class="faq-a">W cenie wycieczki masz transport busem/samochodem grupowym z pilotem. Jeśli preferujesz własne auto, możemy pomóc w zorganizowaniu wypożyczalni — pamiętaj o karcie kredytowej na kaucję i sprawdzeniu strefy ZTL w miastach.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Czy trasa jest dla każdego?</button>
+        <div class="faq-a">Trasa jest aktywna — każdego dnia jest kilka godzin chodzenia po nierównych powierzchniach (kamienne uliczki Matery, Sassi, schody w Polignano). Nie wymaga kondycji sportowca, ale dobre buty i chęć do chodzenia są obowiązkowe.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta-section" class="solid-d">
+    <div class="sec-head" style="padding-bottom:0;">
+      <div class="sec-tag" style="background:rgba(232,160,32,.18);color:var(--gold);">Rezerwacja</div>
+      <h2 class="sec-title" style="color:var(--map-text);">Zarezerwuj swoje miejsce</h2>
+      <p class="sec-sub" style="color:var(--map-muted);margin-bottom:0;">Rezerwacja bez przedpłaty — blokujemy miejsce na 48h i dzwonimy, by omówić szczegóły.</p>
+    </div>
+    <div style="padding:2.5rem 1.5rem 5rem;">
+      <form class="cta-form" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-field"><label>Imię i nazwisko</label><input type="text" placeholder="Jan Kowalski" required></div>
+          <div class="form-field"><label>Telefon</label><input type="tel" placeholder="+48 500 000 000" required></div>
+        </div>
+        <div class="form-field"><label>E-mail</label><input type="email" placeholder="jan@example.com" required></div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Termin</label>
+            <select>
+              <option value="">Wybierz termin...</option>
+              <option value="t1" disabled>Termin I — 2–9.06.2026 (brak miejsc)</option>
+              <option value="t2">Wakacje 2026 — termin ogłoszony niebawem</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Liczba osób</label>
+            <select>
+              <option>1 osoba</option>
+              <option>2 osoby</option>
+              <option>3 osoby</option>
+              <option>4+ osoby</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-terra-lg" id="submit-btn" style="width:100%;margin-top:.5rem;">
+          Wyślij zgłoszenie — oddzwonimy w 2h
+        </button>
+        <p class="form-note">Wypełniając formularz zgadzasz się na kontakt w sprawie rezerwacji. Dane nie będą przekazywane stronom trzecim.</p>
+      </form>
+      <p style="text-align:center;margin-top:1.5rem;font-size:.85rem;color:var(--map-muted);">Wolisz zadzwonić? <a href="tel:+48604740968" style="color:var(--gold);font-weight:600;">604 740 968</a></p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="footer">
+    <div class="footer-logo">
+      <svg width="22" height="22" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <polygon points="14,2 26,22 2,22" fill="#E8A020" opacity=".9"/>
+        <polygon points="14,7 22,22 6,22" fill="#D4552A" opacity=".85"/>
+        <circle cx="14" cy="22" r="2.5" fill="#FFF5E6" opacity=".7"/>
+      </svg>
+      KB<span>&nbsp;Adventures</span>
+    </div>
+    <div class="footer-links">
+      <a href="/">Strona główna</a>
+      <a href="/blog">Blog</a>
+      <a href="/mapa">Mapa tras</a>
+      <a href="/o-mnie">O mnie</a>
+      <a href="tel:+48604740968">604 740 968</a>
+    </div>
+    <p class="footer-copy">© 2026 KB Adventures · Wszelkie prawa zastrzeżone</p>
+  </footer>
+
+</div>
+
+<script>
+const DAYS = [
+  { lat: 40.632, lng: 17.936, zoom: 14, label: "Dzień 1 — Brindisi"           },
+  { lat: 40.353, lng: 18.171, zoom: 12, label: "Dzień 2 — Lecce / Otranto"    },
+  { lat: 40.730, lng: 17.407, zoom: 13, label: "Dzień 3 — Ostuni / Bari"      },
+  { lat: 40.666, lng: 16.604, zoom: 12, label: "Dzień 4 — Matera"             },
+  { lat: 41.277, lng: 16.415, zoom: 13, label: "Dzień 5 — Trani / Polignano"  },
+  { lat: 40.783, lng: 17.236, zoom: 12, label: "Dzień 6 — Dolina Itria"       },
+  { lat: 40.888, lng: 17.151, zoom: 13, label: "Dzień 7 — Grotte di Castellana"},
+  { lat: 40.533, lng: 17.433, zoom: 12, label: "Dzień 8 — Grottaglie"         },
+];
+const OVERVIEW = { center: [40.7, 16.9], zoom: 7 };
+
+const map = L.map('map', {
+  center: OVERVIEW.center, zoom: OVERVIEW.zoom,
+  zoomControl: false, attributionControl: false,
+  scrollWheelZoom: false, dragging: false,
+  doubleClickZoom: false, keyboard: false, tap: false, touchZoom: false,
+});
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 19, subdomains: 'abcd' }).addTo(map);
+L.polyline(DAYS.map(d => [d.lat, d.lng]), { color: '#E8A020', weight: 3, opacity: .55, dashArray: '7 11', lineJoin: 'round', lineCap: 'round' }).addTo(map);
+
+const pinMarkers = [];
+DAYS.forEach((d, i) => {
+  const m = L.marker([d.lat, d.lng], {
+    icon: L.divIcon({ className: '', html: `<div class="day-pin" id="pin-${i}"><span>${i+1}</span></div>`, iconSize: [28,28], iconAnchor: [14,28] }),
+    zIndexOffset: 100,
+  });
+  pinMarkers.push(m);
+});
+function showPins() { pinMarkers.forEach(m => { if (!map.hasLayer(m)) m.addTo(map); }); }
+function hidePins() { pinMarkers.forEach(m => { if (map.hasLayer(m)) map.removeLayer(m); }); }
+
+const carMarker = L.marker(OVERVIEW.center, {
+  icon: L.divIcon({ className: '', html: '<div class="car-wrap">🚗</div>', iconSize: [34,34], iconAnchor: [17,17] }),
+  zIndexOffset: 500,
+}).addTo(map);
+
+let carRaf = null;
+function animateCar(toLat, toLng, ms = 1400) {
+  const { lat, lng } = carMarker.getLatLng();
+  const from = [lat, lng], to = [toLat, toLng];
+  cancelAnimationFrame(carRaf);
+  const t0 = performance.now();
+  (function step(t) {
+    const r = Math.min((t - t0) / ms, 1);
+    const e = r < .5 ? 2*r*r : -1+(4-2*r)*r;
+    carMarker.setLatLng([from[0]+(to[0]-from[0])*e, from[1]+(to[1]-from[1])*e]);
+    if (r < 1) carRaf = requestAnimationFrame(step);
+  })(t0);
+}
+
+let currentDay = -1;
+function activateDay(idx) {
+  if (idx === currentDay) return;
+  currentDay = idx;
+  showPins();
+  const d = DAYS[idx];
+  const pill = document.getElementById('day-pill');
+  pill.textContent = d.label; pill.style.opacity = '1';
+  map.flyTo([d.lat, d.lng], d.zoom, { duration: 1.5, easeLinearity: .28 });
+  animateCar(d.lat, d.lng);
+  DAYS.forEach((_, i) => { const el = document.getElementById(`pin-${i}`); if (el) el.classList.toggle('active', i === idx); });
+  document.querySelectorAll('.day-card').forEach((c, i) => c.classList.toggle('active', i === idx));
+}
+function flyOverview() {
+  map.flyTo(OVERVIEW.center, OVERVIEW.zoom, { duration: 2, easeLinearity: .3 });
+  document.getElementById('day-pill').style.opacity = '0';
+  currentDay = -1; hidePins();
+  document.querySelectorAll('.day-pin').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.day-card').forEach(el => el.classList.remove('active'));
+}
+
+const dayObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const idx = parseInt(entry.target.id.replace('section-', ''));
+    if (isNaN(idx)) return;
+    document.getElementById(`card-${idx}`)?.classList.add('visible');
+    activateDay(idx);
+  });
+}, { threshold: .45 });
+
+document.querySelectorAll('.day-section[id^="section-"]').forEach(el => {
+  if (el.id !== 'section-outro') dayObs.observe(el);
+});
+
+new IntersectionObserver(([e]) => {
+  if (!e.isIntersecting) return;
+  e.target.classList.add('visible');
+  flyOverview();
+}, { threshold: .35 }).observe(document.getElementById('outro-map-card'));
+
+new IntersectionObserver(([e]) => {
+  if (e.isIntersecting) flyOverview();
+}, { threshold: .15 }).observe(document.getElementById('hero'));
+
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('progress').style.width = (total > 0 ? window.scrollY / total * 100 : 0) + '%';
+}, { passive: true });
+
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item');
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = '✅ Zgłoszenie wysłane! Oddzwonimy wkrótce.';
+  btn.style.background = '#228b22';
+  btn.disabled = true;
+}
+</script>
+</body>
+</html>
