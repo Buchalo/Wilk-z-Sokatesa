@@ -1,0 +1,192 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const trips = [
+  {
+    lat: 40.7,
+    lng: 17.1,
+    label: 'Puglia, Włochy',
+    slug: 'puglia-droga-ktora-warto-zgubic-sie',
+    country: 'Włochy',
+    tags: ['droga', 'miasto'],
+    image: 'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=400&q=70',
+  },
+  {
+    lat: 64.9,
+    lng: -19.0,
+    label: 'Ring Road, Islandia',
+    slug: 'islandia-ring-road-zima',
+    country: 'Islandia',
+    tags: ['droga', 'natura'],
+    image: 'https://images.unsplash.com/photo-1529963183134-61a90db47eaf?w=400&q=70',
+  },
+  {
+    lat: 31.6,
+    lng: -8.0,
+    label: 'Marrakesz → Atlas, Maroko',
+    slug: 'maroko-z-marrakeszu-przez-atlas',
+    country: 'Maroko',
+    tags: ['droga', 'pustynia'],
+    image: 'https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=400&q=70',
+  },
+  {
+    lat: 57.5,
+    lng: -5.0,
+    label: 'NC500, Szkocja',
+    slug: 'szkocja-highlands-na-motocyklu',
+    country: 'Szkocja',
+    tags: ['droga', 'natura'],
+    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=70',
+  },
+  {
+    lat: 37.2,
+    lng: -8.0,
+    label: 'Algarve, Portugalia',
+    slug: 'portugalia-wzdluz-atlantyku',
+    country: 'Portugalia',
+    tags: ['droga', 'ocean'],
+    image: 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=400&q=70',
+  },
+  {
+    lat: 46.5,
+    lng: 12.0,
+    label: 'Dolomity, Włochy',
+    slug: 'dolomity-serpentynami-na-passo-giau',
+    country: 'Włochy',
+    tags: ['góry', 'natura'],
+    image: 'https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=400&q=70',
+  },
+];
+---
+
+<BaseLayout title="Mapa tras — KB Adventures" description="Interaktywna mapa wszystkich wypraw KB Adventures.">
+  <!-- HERO -->
+  <section class="pt-24 pb-10 px-6 bg-dark">
+    <div class="container mx-auto max-w-6xl">
+      <p class="text-gold text-xs uppercase tracking-[0.4em] mb-3 font-medium">Wszystkie destynacje</p>
+      <h1 class="font-serif text-5xl md:text-6xl text-white mb-4">
+        Mapa <span class="text-gold italic">tras</span>
+      </h1>
+      <p class="text-white/60 text-lg max-w-2xl">
+        Kliknij na pin, żeby zobaczyć trasę i przeczytać historię wyprawy.
+      </p>
+    </div>
+  </section>
+
+  <!-- MAPA -->
+  <div class="relative">
+    <div id="world-map" class="w-full" style="height: 70vh; min-height: 500px;"></div>
+
+    <!-- Popup panel -->
+    <div id="trip-popup" class="hidden absolute top-4 right-4 w-72 bg-white rounded-2xl shadow-2xl overflow-hidden z-[999]">
+      <div class="relative aspect-video">
+        <img id="popup-img" src="" alt="" class="w-full h-full object-cover" />
+        <button id="popup-close" class="absolute top-2 right-2 bg-white/90 rounded-full p-1 text-gray-700 hover:bg-white">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="p-4">
+        <p id="popup-country" class="text-xs text-gold uppercase tracking-wider font-semibold mb-1"></p>
+        <h3 id="popup-title" class="font-serif text-lg text-gray-900 mb-1"></h3>
+        <div id="popup-tags" class="flex flex-wrap gap-1 mb-3"></div>
+        <a id="popup-link" href="#" class="inline-block bg-forest text-white text-sm px-4 py-2 rounded-lg font-medium hover:bg-forest/90 transition-colors">
+          Czytaj relację →
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- LISTA DESTYNACJI -->
+  <section class="py-16 px-6 bg-cream">
+    <div class="container mx-auto max-w-6xl">
+      <h2 class="font-serif text-3xl text-gray-900 mb-8 fade-up">Wszystkie destynacje ({trips.length})</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {trips.map((trip, i) => (
+          <a
+            href={`/blog/${trip.slug}`}
+            class="fade-up flex items-center gap-4 bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow group"
+            style={`transition-delay: ${i * 0.05}s`}
+          >
+            <div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+              <img src={trip.image} alt={trip.label} class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
+            </div>
+            <div>
+              <p class="text-xs text-gold font-semibold uppercase tracking-wider">{trip.country}</p>
+              <p class="font-serif text-gray-900 font-medium leading-snug">{trip.label}</p>
+              <div class="flex gap-1 mt-1">
+                {trip.tags.map(tag => (
+                  <span class="text-xs text-gray-400">#{tag}</span>
+                ))}
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script define:vars={{ trips }}>
+  async function initWorldMap() {
+    const L = (await import('leaflet')).default;
+    if (!document.querySelector('link[href*="leaflet"]')) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(link);
+    }
+
+    const map = L.map('world-map').setView([40, 10], 3);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CartoDB',
+    }).addTo(map);
+
+    const popup = document.getElementById('trip-popup');
+    const popupImg = document.getElementById('popup-img');
+    const popupTitle = document.getElementById('popup-title');
+    const popupCountry = document.getElementById('popup-country');
+    const popupTags = document.getElementById('popup-tags');
+    const popupLink = document.getElementById('popup-link');
+
+    trips.forEach(trip => {
+      const icon = L.divIcon({
+        className: '',
+        html: `
+          <div class="map-pin" style="
+            width: 20px; height: 20px;
+            background: #D4A853;
+            border: 3px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 0 5px rgba(212,168,83,0.25), 0 4px 12px rgba(0,0,0,0.4);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+          "></div>
+        `,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+      });
+
+      const marker = L.marker([trip.lat, trip.lng], { icon }).addTo(map);
+
+      marker.on('click', () => {
+        popupImg.src = trip.image;
+        popupImg.alt = trip.label;
+        popupTitle.textContent = trip.label;
+        popupCountry.textContent = trip.country;
+        popupTags.innerHTML = trip.tags.map(t => `<span style="font-size:11px;color:#6b7280">#${t}</span>`).join(' ');
+        popupLink.href = `/blog/${trip.slug}`;
+        popup.classList.remove('hidden');
+      });
+    });
+
+    document.getElementById('popup-close').addEventListener('click', () => {
+      popup.classList.add('hidden');
+    });
+
+    map.on('click', () => popup.classList.add('hidden'));
+  }
+
+  initWorldMap();
+</script>

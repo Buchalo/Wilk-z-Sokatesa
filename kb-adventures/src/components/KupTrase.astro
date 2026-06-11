@@ -1,0 +1,44 @@
+---
+interface Props {
+  disabled?: boolean;
+  href?: string;
+  filename?: string;
+  price?: string;
+}
+
+const { disabled = true, href = '#', filename = 'trasa.gpx', price } = Astro.props;
+---
+
+<div class="my-8 p-6 bg-forest/5 border border-forest/20 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center gap-4">
+  <div class="flex-1">
+    <h4 class="font-serif text-lg text-gray-900 mb-1">Pobierz trasę GPX</h4>
+    <p class="text-sm text-gray-600">
+      {disabled
+        ? 'Plik GPX z dokładną trasą będzie wkrótce dostępny do pobrania.'
+        : `Pobierz plik ${filename} i załaduj go do swojego urządzenia nawigacyjnego.`}
+    </p>
+    {price && !disabled && <p class="text-forest font-semibold mt-1">{price}</p>}
+  </div>
+  {disabled ? (
+    <div class="flex items-center gap-2 bg-gray-200 text-gray-400 px-6 py-3 rounded-xl cursor-not-allowed select-none font-medium">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+      Pobierz trasę
+      <span class="text-xs bg-gray-300 text-gray-500 px-2 py-0.5 rounded-full ml-1">wkrótce</span>
+    </div>
+  ) : (
+    <a
+      href={href}
+      download={filename}
+      class="flex items-center gap-2 bg-forest hover:bg-forest/90 text-white px-6 py-3 rounded-xl font-medium transition-colors"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+      Pobierz trasę
+    </a>
+  )}
+</div>

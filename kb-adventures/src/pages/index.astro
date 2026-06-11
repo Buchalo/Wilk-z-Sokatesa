@@ -1,0 +1,203 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BlogCard from '../components/BlogCard.astro';
+
+const latestPosts = [
+  {
+    title: 'Puglia — droga którą warto zgubić się',
+    excerpt: 'Kręte drogi między oliwkowymi gajami, trulli i białe miasta Salento. Puglia to południe Italii w najprawdziwszej postaci.',
+    coverImage: 'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=800&q=80',
+    slug: 'puglia-droga-ktora-warto-zgubic-sie',
+    date: '2024-09-15',
+    country: 'Włochy',
+    tags: ['droga', 'miasto', 'kultura'],
+  },
+  {
+    title: 'Islandia — Ring Road zimą',
+    excerpt: 'Słońce wschodzi o 11 i zachodzi o 15. Ale w te cztery godziny dziennego światła dzieje się coś magicznego.',
+    coverImage: 'https://images.unsplash.com/photo-1529963183134-61a90db47eaf?w=800&q=80',
+    slug: 'islandia-ring-road-zima',
+    date: '2024-02-10',
+    country: 'Islandia',
+    tags: ['droga', 'natura', 'zima'],
+  },
+  {
+    title: 'Maroko — z Marrakeszu przez Atlas',
+    excerpt: 'Medyna, souki, zapach ras el hanout — a potem pustka Atlasu i droga na południe do Merzouga.',
+    coverImage: 'https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=800&q=80',
+    slug: 'maroko-z-marrakeszu-przez-atlas',
+    date: '2023-11-03',
+    country: 'Maroko',
+    tags: ['droga', 'pustynia', 'miasto'],
+  },
+];
+---
+
+<BaseLayout>
+  <!-- HERO FULLSCREEN z wideo -->
+  <section class="relative h-screen flex items-center justify-center overflow-hidden bg-dark">
+    <video
+      class="absolute inset-0 w-full h-full object-cover opacity-50"
+      src="/videos/hero.mp4"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+    ></video>
+    <div class="absolute inset-0 bg-gradient-to-br from-dark via-[#0d1a10] to-[#0a1020] opacity-70"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-dark/80 via-transparent to-dark/30"></div>
+
+    <div class="relative z-10 text-center px-6 max-w-4xl mx-auto" id="hero-content">
+      <p class="text-gold text-sm uppercase tracking-[0.4em] font-medium mb-4 animate-[fadeDown_0.8s_ease_0.2s_both]">
+        Krzysztof Buchała
+      </p>
+      <h1 class="font-serif text-6xl md:text-8xl text-white font-bold leading-none mb-6 animate-[fadeUp_1s_ease_0.4s_both]">
+        KB <span class="text-gold italic">Adventures</span>
+      </h1>
+      <p class="text-xl md:text-2xl text-white/75 font-light mb-10 animate-[fadeUp_1s_ease_0.6s_both]">
+        Podróże które warto przeżyć
+      </p>
+      <div class="animate-[fadeUp_1s_ease_0.9s_both]">
+        <a href="/blog" class="inline-block border-2 border-gold text-gold hover:bg-gold hover:text-dark px-10 py-4 rounded-full font-medium tracking-wider uppercase text-sm transition-all duration-300 mr-4">
+          Odkryj trasy
+        </a>
+        <a href="/mapa" class="inline-block border-2 border-white/40 text-white/80 hover:border-white hover:text-white px-10 py-4 rounded-full font-medium tracking-wider uppercase text-sm transition-all duration-300">
+          Mapa
+        </a>
+      </div>
+    </div>
+
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+      <svg class="w-6 h-6 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      </svg>
+    </div>
+  </section>
+
+  <!-- OSTATNIE WYPRAWY -->
+  <section class="py-24 px-6 bg-cream">
+    <div class="container mx-auto max-w-6xl">
+      <div class="text-center mb-16 fade-up">
+        <p class="text-gold text-xs uppercase tracking-[0.4em] mb-3 font-medium">Blog podróżniczy</p>
+        <h2 class="font-serif text-5xl text-gray-900 mb-4">Ostatnie wyprawy</h2>
+        <div class="w-16 h-0.5 bg-gold mx-auto"></div>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        {latestPosts.map((post, i) => (
+          <div class="fade-up" style={`transition-delay: ${i * 0.15}s`}>
+            <BlogCard {...post} />
+          </div>
+        ))}
+      </div>
+      <div class="text-center mt-12 fade-up">
+        <a href="/blog" class="inline-block bg-dark hover:bg-forest text-white px-10 py-4 rounded-full font-medium tracking-wider uppercase text-sm transition-colors duration-300">
+          Wszystkie wyprawy
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAPA MINIATURA -->
+  <section class="py-24 px-6 bg-dark">
+    <div class="container mx-auto max-w-6xl">
+      <div class="grid md:grid-cols-2 gap-16 items-center">
+        <div class="fade-up">
+          <p class="text-gold text-xs uppercase tracking-[0.4em] mb-3 font-medium">Trasy i szlaki</p>
+          <h2 class="font-serif text-5xl text-white mb-6 leading-tight">
+            Mapa<br /><span class="text-gold italic">moich tras</span>
+          </h2>
+          <p class="text-white/60 text-lg leading-relaxed mb-8">
+            Każda podróż zostawia ślad. Interaktywna mapa wszystkich moich wypraw — kliknij pin, żeby przeczytać historię.
+          </p>
+          <a href="/mapa" class="inline-flex items-center gap-3 text-gold hover:gap-5 transition-all font-medium uppercase text-sm tracking-widest">
+            Otwórz mapę
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+        </div>
+        <div class="fade-in rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+          <div id="mini-map" class="w-full h-72"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- O MNIE STRIP -->
+  <section class="py-24 px-6 bg-white">
+    <div class="container mx-auto max-w-4xl text-center fade-up">
+      <div class="w-24 h-24 rounded-full bg-forest/10 mx-auto mb-6 overflow-hidden border-4 border-gold/30">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80" alt="Krzysztof Buchała" class="w-full h-full object-cover" />
+      </div>
+      <p class="text-gold text-xs uppercase tracking-[0.4em] mb-4">Za obiektywem i kierownicą</p>
+      <h2 class="font-serif text-4xl text-gray-900 mb-6">Cześć, jestem Krzysiek</h2>
+      <p class="text-gray-600 text-lg leading-relaxed max-w-2xl mx-auto mb-8">
+        Podróżuję od kiedy pamiętam. KB Adventures to nie tylko blog — to archiwum tras, emocji i widoków,
+        które chcę przekazać dalej. Każda droga ma swoją historię.
+      </p>
+      <a href="/o-mnie" class="inline-block border-2 border-forest text-forest hover:bg-forest hover:text-white px-8 py-3 rounded-full font-medium tracking-wider uppercase text-sm transition-all duration-300">
+        Poznaj moją historię
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<script>
+  async function initMiniMap() {
+    const L = (await import('leaflet')).default;
+    if (!document.querySelector('link[href*="leaflet"]')) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(link);
+    }
+    const map = L.map('mini-map', { zoomControl: false, scrollWheelZoom: false }).setView([40, 15], 3);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CartoDB',
+    }).addTo(map);
+
+    const goldIcon = L.divIcon({
+      className: '',
+      html: `<div style="width:14px;height:14px;background:#D4A853;border:2px solid white;border-radius:50%;box-shadow:0 0 0 4px rgba(212,168,83,0.3)"></div>`,
+      iconSize: [14, 14],
+      iconAnchor: [7, 7],
+    });
+
+    [
+      { lat: 40.7, lng: 17.1, label: 'Puglia' },
+      { lat: 64.9, lng: -19.0, label: 'Islandia' },
+      { lat: 31.6, lng: -8.0, label: 'Maroko' },
+    ].forEach(p => {
+      L.marker([p.lat, p.lng], { icon: goldIcon }).addTo(map)
+        .bindPopup(`<strong style="font-family:serif">${p.label}</strong>`);
+    });
+  }
+
+  const miniMapEl = document.getElementById('mini-map');
+  if (miniMapEl) {
+    const obs = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) { initMiniMap(); obs.disconnect(); }
+    }, { threshold: 0.2 });
+    obs.observe(miniMapEl);
+  }
+
+  window.addEventListener('scroll', () => {
+    const heroContent = document.getElementById('hero-content');
+    if (heroContent && window.scrollY < window.innerHeight) {
+      heroContent.style.transform = `translateY(${window.scrollY * 0.3}px)`;
+      (heroContent.style as any).opacity = String(1 - window.scrollY / 600);
+    }
+  });
+</script>

@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply font-sans bg-white text-gray-900 antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply font-serif;
+  }
+}
+
+@layer utilities {
+  .text-gold {
+    color: #D4A853;
+  }
+  .bg-dark {
+    background-color: #0a0a0a;
+  }
+  .bg-cream {
+    background-color: #F9F5EF;
+  }
+}
+
+/* Scroll-triggered animations */
+.fade-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-in {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+}
+
+/* Parallax hero */
+.parallax-hero {
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Blog card hover */
+.blog-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.blog-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+/* Lightbox */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.lightbox-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+.lightbox-overlay img {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+/* MDX content styles */
+.prose-kb {
+  @apply max-w-3xl mx-auto;
+}
+.prose-kb h2 {
+  @apply text-3xl font-serif text-gray-900 mt-12 mb-4;
+}
+.prose-kb h3 {
+  @apply text-2xl font-serif text-gray-800 mt-8 mb-3;
+}
+.prose-kb p {
+  @apply text-lg leading-relaxed text-gray-700 mb-6;
+}
+.prose-kb a {
+  @apply text-forest underline;
+}
+.prose-kb blockquote {
+  @apply border-l-4 border-gold pl-6 italic text-gray-600 my-8;
+}
+.prose-kb ul {
+  @apply list-disc pl-6 mb-6 space-y-2 text-gray-700;
+}
+
+/* Page transition */
+.page-transition {
+  animation: pageIn 0.4s ease forwards;
+}
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

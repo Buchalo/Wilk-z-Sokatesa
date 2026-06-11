@@ -1,0 +1,167 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Galeria from '../../components/Galeria.astro';
+import MapaTrasy from '../../components/MapaTrasy.astro';
+import Wideo from '../../components/Wideo.astro';
+import KupTrase from '../../components/KupTrase.astro';
+
+export async function getStaticPaths() {
+  const { getCollection } = await import('astro:content');
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+const { title, date, country, tags, coverImage, excerpt, mapCenter, mapZoom, mapPoints, gallery } = post.data;
+
+const formattedDate = new Date(date).toLocaleDateString('pl-PL', {
+  year: 'numeric', month: 'long', day: 'numeric',
+});
+---
+
+<BaseLayout title={`${title} — KB Adventures`} description={excerpt} image={coverImage}>
+  <!-- HERO ARTYKUŁU -->
+  <section class="relative h-[70vh] flex items-end overflow-hidden bg-dark">
+    <img
+      src={coverImage}
+      alt={title}
+      class="absolute inset-0 w-full h-full object-cover opacity-60"
+    />
+    <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent"></div>
+    <div class="relative z-10 container mx-auto max-w-4xl px-6 pb-16">
+      <div class="flex gap-3 mb-4 flex-wrap">
+        <span class="bg-gold text-dark text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full">
+          {country}
+        </span>
+        {tags.map((tag: string) => (
+          <span class="border border-white/40 text-white text-xs px-3 py-1 rounded-full">
+            #{tag}
+          </span>
+        ))}
+      </div>
+      <h1 class="font-serif text-4xl md:text-6xl text-white font-bold leading-tight mb-4">
+        {title}
+      </h1>
+      <p class="text-white/60 text-sm">{formattedDate}</p>
+    </div>
+  </section>
+
+  <!-- TREŚĆ -->
+  <article class="py-16 px-6 bg-white">
+    <div class="prose-kb">
+      <!-- Lead -->
+      <p class="font-serif text-2xl text-gray-700 leading-relaxed mb-10 italic border-l-4 border-gold pl-6">
+        {excerpt}
+      </p>
+
+      <!-- MDX Content -->
+      <div class="prose-kb-content">
+        <Content />
+      </div>
+
+      <!-- Mapa trasy -->
+      {mapPoints && mapPoints.length > 0 && (
+        <div class="mt-12 fade-up">
+          <h2 class="font-serif text-3xl text-gray-900 mb-2">Mapa trasy</h2>
+          <div class="w-12 h-0.5 bg-gold mb-6"></div>
+          <MapaTrasy
+            points={mapPoints}
+            center={mapCenter || [41.9, 16.2]}
+            zoom={mapZoom || 8}
+            mapId={`trasa-map-${post.slug}`}
+          />
+        </div>
+      )}
+
+      <!-- Galeria -->
+      {gallery && gallery.length > 0 && (
+        <div class="fade-up">
+          <h2 class="font-serif text-3xl text-gray-900 mb-2">Galeria</h2>
+          <div class="w-12 h-0.5 bg-gold mb-6"></div>
+          <Galeria images={gallery} title="" />
+        </div>
+      )}
+
+      <!-- Pobierz trasę -->
+      <div class="fade-up">
+        <KupTrase disabled={true} />
+      </div>
+    </div>
+  </article>
+
+  <!-- NAWIGACJA POWRÓT -->
+  <section class="py-12 px-6 bg-cream border-t border-gray-100">
+    <div class="container mx-auto max-w-4xl flex items-center justify-between">
+      <a href="/blog" class="inline-flex items-center gap-2 text-forest hover:text-dark transition-colors font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+        </svg>
+        Wszystkie wyprawy
+      </a>
+      <a href="/mapa" class="inline-flex items-center gap-2 text-forest hover:text-dark transition-colors font-medium">
+        Mapa tras
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .prose-kb-content :global(h2) {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.875rem;
+    color: #111827;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+  }
+  .prose-kb-content :global(h3) {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: #1f2937;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+  .prose-kb-content :global(p) {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #374151;
+    margin-bottom: 1.5rem;
+  }
+  .prose-kb-content :global(blockquote) {
+    border-left: 4px solid #D4A853;
+    padding-left: 1.5rem;
+    font-style: italic;
+    color: #6b7280;
+    margin: 2rem 0;
+  }
+  .prose-kb-content :global(ul) {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #374151;
+  }
+  .prose-kb-content :global(li) {
+    margin-bottom: 0.5rem;
+    font-size: 1.125rem;
+    line-height: 1.7;
+  }
+  .prose-kb-content :global(a) {
+    color: #1A4D2E;
+    text-decoration: underline;
+  }
+  .prose-kb-content :global(strong) {
+    font-weight: 600;
+    color: #111827;
+  }
+  .prose-kb-content :global(img) {
+    border-radius: 0.75rem;
+    width: 100%;
+    margin: 2rem 0;
+  }
+</style>

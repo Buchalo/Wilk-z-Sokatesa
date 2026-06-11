@@ -1,0 +1,110 @@
+---
+interface GaleriaImage {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
+interface Props {
+  images: GaleriaImage[];
+  title?: string;
+}
+
+const { images, title = 'Galeria' } = Astro.props;
+---
+
+<section class="my-12">
+  {title && <h2 class="font-serif text-3xl text-gray-900 mb-6">{title}</h2>}
+
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="galeria-grid">
+    {images.map((img, i) => (
+      <button
+        class="galeria-thumb group relative overflow-hidden rounded-xl aspect-square cursor-pointer"
+        data-index={i}
+        data-src={img.src}
+        data-caption={img.caption || ''}
+      >
+        <img
+          src={img.src}
+          alt={img.alt}
+          class="w-full h-full object-cover transition-transform duration-400 group-hover:scale-110"
+          loading="lazy"
+        />
+        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center">
+          <svg class="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+          </svg>
+        </div>
+      </button>
+    ))}
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox-overlay" role="dialog" aria-modal="true">
+    <button id="lightbox-close" class="absolute top-6 right-6 text-white/80 hover:text-white transition-colors z-10" aria-label="Zamknij">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors p-3" aria-label="Poprzednie">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+    <div class="text-center">
+      <img id="lightbox-img" src="" alt="" />
+      <p id="lightbox-caption" class="text-white/70 mt-4 text-sm px-8"></p>
+    </div>
+    <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white transition-colors p-3" aria-label="Następne">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+  </div>
+</section>
+
+<script>
+  const images = Array.from(document.querySelectorAll<HTMLButtonElement>('.galeria-thumb')).map(btn => ({
+    src: btn.dataset.src || '',
+    caption: btn.dataset.caption || '',
+  }));
+
+  let currentIndex = 0;
+  const lightbox = document.getElementById('lightbox')!;
+  const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
+  const lightboxCaption = document.getElementById('lightbox-caption')!;
+
+  function openLightbox(index: number) {
+    currentIndex = index;
+    lightboxImg.src = images[index].src;
+    lightboxCaption.textContent = images[index].caption;
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function navigate(dir: number) {
+    currentIndex = (currentIndex + dir + images.length) % images.length;
+    lightboxImg.src = images[currentIndex].src;
+    lightboxCaption.textContent = images[currentIndex].caption;
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.galeria-thumb').forEach((btn) => {
+    btn.addEventListener('click', () => openLightbox(Number(btn.dataset.index)));
+  });
+
+  document.getElementById('lightbox-close')!.addEventListener('click', closeLightbox);
+  document.getElementById('lightbox-prev')!.addEventListener('click', () => navigate(-1));
+  document.getElementById('lightbox-next')!.addEventListener('click', () => navigate(1));
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') navigate(-1);
+    if (e.key === 'ArrowRight') navigate(1);
+  });
+</script>

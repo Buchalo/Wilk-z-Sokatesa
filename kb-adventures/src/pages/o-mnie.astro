@@ -1,0 +1,171 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const milestones = [
+  { year: '2014', text: 'Pierwsza większa solowa podróż — Bałkany na motorze. 3 tygodnie, 6 krajów.' },
+  { year: '2017', text: 'Islandia Ring Road w środku zimy. Minus 15°C i zorze polarne.' },
+  { year: '2019', text: 'Maroko, Atlas i Sahara. Tu zrodziła się idea KB Adventures jako bloga.' },
+  { year: '2022', text: 'Dolomity, Puglia, Szkocja — seria "drogi które warto przejechać".' },
+  { year: '2024', text: 'Uruchomienie pełnej platformy z trasami GPX do pobrania.' },
+];
+
+const stats = [
+  { value: '40+', label: 'krajów' },
+  { value: '180k', label: 'km dróg' },
+  { value: '6', label: 'lat bloga' },
+  { value: '200+', label: 'tras GPX' },
+];
+---
+
+<BaseLayout title="O mnie — KB Adventures" description="Kim jest Krzysztof Buchała i czym jest KB Adventures.">
+  <!-- HERO -->
+  <section class="relative min-h-[70vh] flex items-center bg-dark overflow-hidden">
+    <div class="absolute inset-0">
+      <img
+        src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1600&q=80"
+        alt="Droga w górach"
+        class="w-full h-full object-cover opacity-25"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-dark via-dark/70 to-transparent"></div>
+    </div>
+    <div class="relative z-10 container mx-auto max-w-6xl px-6 py-24 grid md:grid-cols-2 gap-16 items-center">
+      <div class="fade-up">
+        <p class="text-gold text-xs uppercase tracking-[0.4em] mb-4 font-medium">KB Adventures</p>
+        <h1 class="font-serif text-5xl md:text-6xl text-white font-bold mb-6 leading-tight">
+          Krzysztof<br /><span class="text-gold italic">Buchała</span>
+        </h1>
+        <p class="text-white/70 text-xl leading-relaxed mb-8">
+          Podróżnik, fotograf, maniak dróg. Szukam tras, które opowiadają coś więcej niż tylko miejsce.
+        </p>
+        <div class="flex gap-4">
+          <a href="/blog" class="bg-gold text-dark px-8 py-3 rounded-full font-medium uppercase text-sm tracking-wider hover:bg-gold/90 transition-colors">
+            Moje wyprawy
+          </a>
+          <a href="/mapa" class="border-2 border-white/40 text-white px-8 py-3 rounded-full font-medium uppercase text-sm tracking-wider hover:border-white transition-colors">
+            Mapa tras
+          </a>
+        </div>
+      </div>
+      <div class="fade-in hidden md:block">
+        <div class="relative">
+          <div class="w-80 h-80 rounded-2xl overflow-hidden mx-auto border-4 border-gold/30 shadow-2xl">
+            <img
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
+              alt="Krzysztof Buchała"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="absolute -bottom-4 -right-4 bg-gold text-dark px-6 py-3 rounded-xl shadow-lg">
+            <p class="font-serif text-2xl font-bold">10+</p>
+            <p class="text-xs font-medium uppercase tracking-wider">lat w drodze</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATYSTYKI -->
+  <section class="py-16 bg-forest">
+    <div class="container mx-auto max-w-4xl px-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        {stats.map((stat, i) => (
+          <div class="fade-up" style={`transition-delay: ${i * 0.1}s`}>
+            <p class="font-serif text-5xl text-white font-bold mb-1">{stat.value}</p>
+            <p class="text-white/60 text-sm uppercase tracking-widest font-medium">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- HISTORIA -->
+  <section class="py-24 px-6 bg-white">
+    <div class="container mx-auto max-w-4xl">
+      <div class="grid md:grid-cols-5 gap-16 items-start">
+        <div class="md:col-span-3 fade-up">
+          <p class="text-gold text-xs uppercase tracking-[0.4em] mb-4 font-medium">Historia</p>
+          <h2 class="font-serif text-4xl text-gray-900 mb-6">Skąd się wziął<br />KB Adventures</h2>
+          <div class="w-12 h-0.5 bg-gold mb-8"></div>
+          <div class="space-y-5 text-gray-600 text-lg leading-relaxed">
+            <p>
+              Wszystko zaczęło się w 2014 roku, gdy wsiadłem na motocykl i pojechałem przez Bałkany bez szczegółowego planu.
+              Trzy tygodnie, sześć krajów, setki kilometrów górskich dróg i kilkanaście niesamowitych spotkań z ludźmi.
+            </p>
+            <p>
+              Wróciłem z poczuciem, że coś ważnego wydarzyło się na tej drodze. Że podróżowanie
+              <em>przez</em> kraj — a nie <em>po</em> kraju — jest zupełnie innym doświadczeniem.
+              Że drogi boczne mówią więcej niż autostrady.
+            </p>
+            <p>
+              KB Adventures to nie jest blog o atrakcjach. To archiwum tras, które mają charakter.
+              Każdy wpis to konkretna droga, konkretne miejsca i szczegółowa mapa, żebyś mógł pojechać tam sam.
+            </p>
+          </div>
+        </div>
+        <div class="md:col-span-2 fade-up" style="transition-delay: 0.2s">
+          <div class="bg-cream rounded-2xl p-8">
+            <h3 class="font-serif text-xl text-gray-900 mb-6">Filozofia podróżowania</h3>
+            <ul class="space-y-4">
+              {[
+                'Drogi boczne zamiast autostrad',
+                'Nocleg u lokalnych zamiast hoteli łańcuchowych',
+                'Jedzenie tam, gdzie jedzą mieszkańcy',
+                'Tempo dostosowane do krajobrazu',
+                'Mapa papierowa jako backup',
+              ].map(item => (
+                <li class="flex items-start gap-3 text-gray-600">
+                  <span class="w-5 h-5 bg-gold rounded-full flex-shrink-0 mt-0.5 flex items-center justify-center">
+                    <svg class="w-3 h-3 text-dark" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                  </span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="py-24 px-6 bg-dark">
+    <div class="container mx-auto max-w-3xl">
+      <div class="text-center mb-16 fade-up">
+        <p class="text-gold text-xs uppercase tracking-[0.4em] mb-3 font-medium">Kamienie milowe</p>
+        <h2 class="font-serif text-4xl text-white">Droga do KB Adventures</h2>
+      </div>
+      <div class="relative">
+        <div class="absolute left-8 top-0 bottom-0 w-px bg-gold/30"></div>
+        <div class="space-y-8">
+          {milestones.map((m, i) => (
+            <div class="fade-up relative pl-20" style={`transition-delay: ${i * 0.15}s`}>
+              <div class="absolute left-5 top-2 w-6 h-6 bg-gold rounded-full border-4 border-dark shadow-lg"></div>
+              <p class="text-gold font-serif text-2xl font-bold mb-1">{m.year}</p>
+              <p class="text-white/70 leading-relaxed">{m.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-24 px-6 bg-cream text-center">
+    <div class="container mx-auto max-w-2xl fade-up">
+      <h2 class="font-serif text-4xl text-gray-900 mb-4">Gotowy na swoją wyprawę?</h2>
+      <p class="text-gray-600 text-lg mb-8">
+        Przeglądaj trasy, pobierz mapy GPX i jedź tam, gdzie warto się zgubić.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="/blog" class="bg-dark hover:bg-forest text-white px-10 py-4 rounded-full font-medium tracking-wider uppercase text-sm transition-colors">
+          Odkryj trasy
+        </a>
+        <a href="/mapa" class="border-2 border-forest text-forest hover:bg-forest hover:text-white px-10 py-4 rounded-full font-medium tracking-wider uppercase text-sm transition-all">
+          Otwórz mapę
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

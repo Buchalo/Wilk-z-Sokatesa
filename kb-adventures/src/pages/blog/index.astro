@@ -1,0 +1,195 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+
+const allPosts = [
+  {
+    title: 'Puglia — droga którą warto zgubić się',
+    excerpt: 'Kręte drogi między oliwkowymi gajami, trulli i białe miasta Salento. Puglia to południe Italii w najprawdziwszej postaci.',
+    coverImage: 'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=800&q=80',
+    slug: 'puglia-droga-ktora-warto-zgubic-sie',
+    date: '2024-09-15',
+    country: 'Włochy',
+    tags: ['droga', 'miasto', 'kultura'],
+  },
+  {
+    title: 'Islandia — Ring Road zimą',
+    excerpt: 'Słońce wschodzi o 11 i zachodzi o 15. Ale w te cztery godziny dziennego światła dzieje się coś magicznego.',
+    coverImage: 'https://images.unsplash.com/photo-1529963183134-61a90db47eaf?w=800&q=80',
+    slug: 'islandia-ring-road-zima',
+    date: '2024-02-10',
+    country: 'Islandia',
+    tags: ['droga', 'natura', 'zima'],
+  },
+  {
+    title: 'Maroko — z Marrakeszu przez Atlas',
+    excerpt: 'Medyna, souki, zapach ras el hanout — a potem pustka Atlasu i droga na południe do Merzouga.',
+    coverImage: 'https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=800&q=80',
+    slug: 'maroko-z-marrakeszu-przez-atlas',
+    date: '2023-11-03',
+    country: 'Maroko',
+    tags: ['droga', 'pustynia', 'miasto'],
+  },
+  {
+    title: 'Szkocja — Highlands na motocyklu',
+    excerpt: 'North Coast 500 — największa roadtrip trasa Wielkiej Brytanii. Mgła, owce na drodze i widoki które zatrzymują oddech.',
+    coverImage: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
+    slug: 'szkocja-highlands-na-motocyklu',
+    date: '2023-07-20',
+    country: 'Szkocja',
+    tags: ['droga', 'natura', 'motocykl'],
+  },
+  {
+    title: 'Portugalia — wzdłuż Atlantyku',
+    excerpt: 'Od Porto do Algarve wzdłuż zachodniego brzegu Europy. Fado, pastel de nata i oceańskie klify.',
+    coverImage: 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=800&q=80',
+    slug: 'portugalia-wzdluz-atlantyku',
+    date: '2023-05-05',
+    country: 'Portugalia',
+    tags: ['droga', 'miasto', 'oceán'],
+  },
+  {
+    title: 'Dolomity — serpentynami na Passo Giau',
+    excerpt: 'Dolomity jesienią to nieziemski spektakl kolorów. Przełęcz Giau o wschodzie słońca — moment który zostaje na zawsze.',
+    coverImage: 'https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=800&q=80',
+    slug: 'dolomity-serpentynami-na-passo-giau',
+    date: '2022-10-10',
+    country: 'Włochy',
+    tags: ['natura', 'góry', 'droga'],
+  },
+];
+
+const allCountries = [...new Set(allPosts.map(p => p.country))];
+const allTags = [...new Set(allPosts.flatMap(p => p.tags))];
+---
+
+<BaseLayout title="Blog — KB Adventures" description="Wszystkie wyprawy Krzysztofa Buchały. Trasy, krajobrazy, miasta — historia każdej drogi.">
+  <!-- HERO -->
+  <section class="relative h-64 md:h-80 flex items-end bg-dark overflow-hidden">
+    <div class="absolute inset-0">
+      <img
+        src="https://images.unsplash.com/photo-1452421822248-d4c2b47f0c81?w=1600&q=80"
+        alt="Blog hero"
+        class="w-full h-full object-cover opacity-30"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent"></div>
+    </div>
+    <div class="relative z-10 container mx-auto max-w-6xl px-6 pb-12">
+      <p class="text-gold text-xs uppercase tracking-[0.4em] mb-2 font-medium">KB Adventures</p>
+      <h1 class="font-serif text-5xl md:text-6xl text-white">Wszystkie wyprawy</h1>
+    </div>
+  </section>
+
+  <!-- FILTRY -->
+  <section class="sticky top-16 z-40 bg-white border-b border-gray-100 shadow-sm">
+    <div class="container mx-auto max-w-6xl px-6 py-4">
+      <div class="flex flex-wrap gap-3 items-center">
+        <span class="text-xs text-gray-500 uppercase tracking-wider font-medium mr-2">Kraj:</span>
+        <button
+          class="filter-btn filter-country active text-xs px-4 py-2 rounded-full border-2 border-gold bg-gold text-dark font-medium transition-all"
+          data-value="all"
+        >
+          Wszystkie
+        </button>
+        {allCountries.map(country => (
+          <button
+            class="filter-btn filter-country text-xs px-4 py-2 rounded-full border-2 border-gray-200 text-gray-600 font-medium hover:border-gold hover:text-gold transition-all"
+            data-value={country}
+          >
+            {country}
+          </button>
+        ))}
+        <span class="text-gray-300 mx-2">|</span>
+        <span class="text-xs text-gray-500 uppercase tracking-wider font-medium mr-2">Typ:</span>
+        <button
+          class="filter-btn filter-tag active text-xs px-4 py-2 rounded-full border-2 border-forest bg-forest text-white font-medium transition-all"
+          data-value="all"
+        >
+          Wszystkie
+        </button>
+        {allTags.map(tag => (
+          <button
+            class="filter-btn filter-tag text-xs px-4 py-2 rounded-full border-2 border-gray-200 text-gray-600 font-medium hover:border-forest hover:text-forest transition-all"
+            data-value={tag}
+          >
+            #{tag}
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- GRID WPISÓW -->
+  <section class="py-16 px-6 bg-cream min-h-screen">
+    <div class="container mx-auto max-w-6xl">
+      <p class="text-sm text-gray-500 mb-8" id="results-count">{allPosts.length} wypraw</p>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="posts-grid">
+        {allPosts.map((post) => (
+          <div
+            class="post-item fade-up"
+            data-country={post.country}
+            data-tags={post.tags.join(',')}
+          >
+            <BlogCard {...post} />
+          </div>
+        ))}
+      </div>
+      <div id="no-results" class="hidden text-center py-24">
+        <p class="font-serif text-3xl text-gray-400">Brak wyników</p>
+        <p class="text-gray-400 mt-2">Spróbuj innych filtrów</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  let activeCountry = 'all';
+  let activeTag = 'all';
+
+  function applyFilters() {
+    const posts = document.querySelectorAll<HTMLElement>('.post-item');
+    let visible = 0;
+    posts.forEach(post => {
+      const country = post.dataset.country || '';
+      const tags = (post.dataset.tags || '').split(',');
+      const matchCountry = activeCountry === 'all' || country === activeCountry;
+      const matchTag = activeTag === 'all' || tags.includes(activeTag);
+      if (matchCountry && matchTag) {
+        post.style.display = '';
+        visible++;
+      } else {
+        post.style.display = 'none';
+      }
+    });
+    const count = document.getElementById('results-count')!;
+    count.textContent = `${visible} ${visible === 1 ? 'wyprawa' : 'wypraw'}`;
+    const noResults = document.getElementById('no-results')!;
+    noResults.classList.toggle('hidden', visible > 0);
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.filter-country').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-country').forEach(b => {
+        b.classList.remove('active', 'bg-gold', 'border-gold', 'text-dark');
+        b.classList.add('border-gray-200', 'text-gray-600');
+      });
+      btn.classList.add('active', 'bg-gold', 'border-gold', 'text-dark');
+      btn.classList.remove('border-gray-200', 'text-gray-600');
+      activeCountry = btn.dataset.value || 'all';
+      applyFilters();
+    });
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.filter-tag').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-tag').forEach(b => {
+        b.classList.remove('active', 'bg-forest', 'border-forest', 'text-white');
+        b.classList.add('border-gray-200', 'text-gray-600');
+      });
+      btn.classList.add('active', 'bg-forest', 'border-forest', 'text-white');
+      btn.classList.remove('border-gray-200', 'text-gray-600');
+      activeTag = btn.dataset.value || 'all';
+      applyFilters();
+    });
+  });
+</script>
