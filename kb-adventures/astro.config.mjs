@@ -4,4 +4,6 @@ import mdx from '@astrojs/mdx';
 
 export default defineConfig({
   integrations: [tailwind(), mdx()],
+  site: 'https://buchalo.github.io',
+  base: '/Wilk-z-Sokatesa',
 });
