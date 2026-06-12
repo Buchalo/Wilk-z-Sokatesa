@@ -30,7 +30,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <ViewTransitions />
   </head>
   <body>
-    <nav class="fixed top-0 left-0 right-0 z-50 mix-blend-normal" id="navbar">
+    <nav class="fixed top-0 left-0 right-0 z-50 mix-blend-normal transition-all duration-300" id="navbar">
       <div class="container mx-auto px-6 py-4 flex items-center justify-between">
         <a href={`${base}/`} class="font-serif text-2xl text-white drop-shadow-lg tracking-wide hover:text-gold transition-colors">
           KB <span class="text-gold">Adventures</span>
@@ -60,14 +60,36 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     </footer>
 
     <script>
-      // Navbar scroll effect
+      // Hide default navbar on homepage (it has its own hero nav)
       const navbar = document.getElementById('navbar');
+      const isHomepage = document.getElementById('hero') !== null;
+      if (isHomepage && navbar) {
+        navbar.style.opacity = '0';
+        navbar.style.pointerEvents = 'none';
+      }
+
+      // Navbar scroll effect
       window.addEventListener('scroll', () => {
+        if (!navbar) return;
+        if (isHomepage) {
+          // Show navbar only after scrolling past hero
+          const heroH = document.getElementById('hero')?.offsetHeight ?? window.innerHeight;
+          if (window.scrollY > heroH - 80) {
+            navbar.style.opacity = '1';
+            navbar.style.pointerEvents = '';
+            navbar.classList.add('bg-[#0a0a0a]/95', 'backdrop-blur-sm', 'shadow-xl');
+          } else {
+            navbar.style.opacity = '0';
+            navbar.style.pointerEvents = 'none';
+            navbar.classList.remove('bg-[#0a0a0a]/95', 'backdrop-blur-sm', 'shadow-xl');
+          }
+          return;
+        }
         if (window.scrollY > 80) {
-          navbar?.classList.add('bg-dark/95', 'backdrop-blur-sm', 'shadow-xl');
-          navbar?.classList.remove('bg-transparent');
+          navbar.classList.add('bg-dark/95', 'backdrop-blur-sm', 'shadow-xl');
+          navbar.classList.remove('bg-transparent');
         } else {
-          navbar?.classList.remove('bg-dark/95', 'backdrop-blur-sm', 'shadow-xl');
+          navbar.classList.remove('bg-dark/95', 'backdrop-blur-sm', 'shadow-xl');
         }
       });
 
