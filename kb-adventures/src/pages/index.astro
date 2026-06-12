@@ -3,7 +3,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-const HERO_IMG = 'https://d8j0ntlcm91z4.cloudfront.net/user_30EqZOFYJDlJHINvYw0ajQQPBWj/hf_20260612_121112_6531d020-a8ca-461f-ba1c-fa2aa45c0137.png';
+const HERO_VIDEO = 'https://d8j0ntlcm91z4.cloudfront.net/user_30EqZOFYJDlJHINvYw0ajQQPBWj/hf_20260612_122047_55065b38-5699-465f-af98-28472b5711c4.mp4';
+const HERO_POSTER = 'https://d8j0ntlcm91z4.cloudfront.net/user_30EqZOFYJDlJHINvYw0ajQQPBWj/hf_20260612_121909_76bab362-d4d3-4a93-ad74-e3d20f623575.jpeg';
 
 const trips = [
   {
@@ -55,15 +56,18 @@ const trips = [
     <span class="hero-giant-adv">Adventures</span>
   </div>
 
-  <!-- Layer 2 — hero photo with gradient mask (z-2) -->
+  <!-- Layer 2 — hero video with gradient mask (z-2) -->
   <div class="hero-photo-wrap">
-    <img
-      src={HERO_IMG}
-      alt="Włoska droga wybrzeżem Adriatyku"
+    <video
+      src={HERO_VIDEO}
+      poster={HERO_POSTER}
       class="hero-photo-img"
-      loading="eager"
-      transition:name="hero-photo"
-    />
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+    ></video>
     <div class="hero-photo-overlay"></div>
   </div>
 
@@ -130,8 +134,10 @@ const trips = [
       <p class="about-eyebrow">Za kierownicą i obiektywem</p>
       <h2 class="about-name">Cześć, jestem Krzysiek</h2>
       <p class="about-text">
-        Podróżuję odkąd pamiętam. KB Adventures to archiwum tras, emocji i widoków —
-        do każdego wyjazdu tworzę szczegółową mapę GPX i mini przewodnik, żebyś mógł pojechać tą samą drogą.
+        Jestem Krzysiek — kierowca, fotograf i wieczny uciekinier z biura.
+        Jeżdżę głównie samochodem, lubię boczne drogi i miejsca bez gwiazdek w przewodniku.
+        KB Adventures to moje archiwum tras — każdy wyjazd opisuję dzień po dniu,
+        a do każdej trasy dołączam plik GPX i mini przewodnik, żebyś mógł pojechać dokładnie tą samą drogą.
       </p>
       <a href={`${base}/o-mnie`} class="about-link">
         Więcej o mnie
