@@ -77,21 +77,9 @@ const trips = [
     <!-- Layer 3 — UI content (z-3), fades out as scroll progresses -->
     <div class="hero-content-layer" id="hero-ui">
 
-      <!-- Top bar -->
-      <nav class="hero-topbar">
-        <span class="hero-topbar-label">Krzysztof Buchała</span>
-        <div class="hero-topbar-links">
-          <a href={`${base}/blog`} class="hero-nav-link">Blog</a>
-          <a href={`${base}/mapa`} class="hero-nav-link">Mapa</a>
-          <a href={`${base}/o-mnie`} class="hero-nav-link">O mnie</a>
-          <a href={`${base}/apulia`} class="hero-nav-cta">Apulia 2026</a>
-        </div>
-      </nav>
-
-      <!-- Center tagline -->
-      <div class="hero-tagline-wrap">
-        <p class="hero-tagline">Podróże które warto przeżyć</p>
-      </div>
+      <!-- spacer to push stats to bottom -->
+      <div></div>
+      <div></div>
 
       <!-- Bottom scroll hint -->
       <div class="hero-stats-bar">
@@ -153,33 +141,6 @@ const trips = [
 
   </section>
 </div>
-
-<!-- ═══════════════════════════════════════════
-  O MNIE — dark strip
-═══════════════════════════════════════════ -->
-<section class="about-strip fade-up">
-  <div class="about-inner">
-    <div class="about-avatar">
-      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80" alt="Krzysztof Buchała" class="about-avatar-img" />
-    </div>
-    <div class="about-body">
-      <p class="about-eyebrow">Za kierownicą i obiektywem</p>
-      <h2 class="about-name">Cześć, jestem Krzysiek</h2>
-      <p class="about-text">
-        Jestem Krzysiek — kierowca, fotograf i wieczny uciekinier z biura.
-        Jeżdżę głównie samochodem, lubię boczne drogi i miejsca bez gwiazdek w przewodniku.
-        KB Adventures to moje archiwum tras — każdy wyjazd opisuję dzień po dniu,
-        a do każdej trasy dołączam plik GPX i mini przewodnik, żebyś mógł pojechać dokładnie tą samą drogą.
-      </p>
-      <a href={`${base}/o-mnie`} class="about-link">
-        Więcej o mnie
-        <svg class="about-link-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-        </svg>
-      </a>
-    </div>
-  </div>
-</section>
 
 <!-- ═══════════════════════════════════════════
   MOJE WYPRAWY
@@ -520,7 +481,7 @@ const trips = [
   z-index: 4;
   display: flex;
   align-items: flex-end;
-  justify-content: flex-start;
+  justify-content: flex-end;
   padding: 0 3rem 4rem;
   pointer-events: none;
   opacity: 0;

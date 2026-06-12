@@ -60,36 +60,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     </footer>
 
     <script>
-      // Hide default navbar on homepage (it has its own hero nav)
       const navbar = document.getElementById('navbar');
-      const isHomepage = document.getElementById('hero') !== null;
-      if (isHomepage && navbar) {
-        navbar.style.opacity = '0';
-        navbar.style.pointerEvents = 'none';
-      }
 
-      // Navbar scroll effect
+      // Navbar scroll effect — transparent at top, dark on scroll
       window.addEventListener('scroll', () => {
         if (!navbar) return;
-        if (isHomepage) {
-          // Show navbar only after scrolling past hero
-          const heroH = document.getElementById('hero')?.offsetHeight ?? window.innerHeight;
-          if (window.scrollY > heroH - 80) {
-            navbar.style.opacity = '1';
-            navbar.style.pointerEvents = '';
-            navbar.classList.add('bg-[#0a0a0a]/95', 'backdrop-blur-sm', 'shadow-xl');
-          } else {
-            navbar.style.opacity = '0';
-            navbar.style.pointerEvents = 'none';
-            navbar.classList.remove('bg-[#0a0a0a]/95', 'backdrop-blur-sm', 'shadow-xl');
-          }
-          return;
-        }
         if (window.scrollY > 80) {
-          navbar.classList.add('bg-dark/95', 'backdrop-blur-sm', 'shadow-xl');
-          navbar.classList.remove('bg-transparent');
+          navbar.classList.add('bg-[#0a0a0a]/95', 'backdrop-blur-sm', 'shadow-xl');
         } else {
-          navbar.classList.remove('bg-dark/95', 'backdrop-blur-sm', 'shadow-xl');
+          navbar.classList.remove('bg-[#0a0a0a]/95', 'backdrop-blur-sm', 'shadow-xl');
         }
       });
 

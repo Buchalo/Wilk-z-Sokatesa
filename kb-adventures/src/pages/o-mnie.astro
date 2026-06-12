@@ -1,171 +1,523 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-
-const milestones = [
-  { year: '2014', text: 'Pierwsza większa solowa podróż — Bałkany na motorze. 3 tygodnie, 6 krajów.' },
-  { year: '2017', text: 'Islandia Ring Road w środku zimy. Minus 15°C i zorze polarne.' },
-  { year: '2019', text: 'Maroko, Atlas i Sahara. Tu zrodziła się idea KB Adventures jako bloga.' },
-  { year: '2022', text: 'Dolomity, Puglia, Szkocja — seria "drogi które warto przejechać".' },
-  { year: '2024', text: 'Uruchomienie pełnej platformy z trasami GPX do pobrania.' },
-];
-
-const stats = [
-  { value: '40+', label: 'krajów' },
-  { value: '180k', label: 'km dróg' },
-  { value: '6', label: 'lat bloga' },
-  { value: '200+', label: 'tras GPX' },
-];
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <BaseLayout title="O mnie — KB Adventures" description="Kim jest Krzysztof Buchała i czym jest KB Adventures.">
-  <!-- HERO -->
-  <section class="relative min-h-[70vh] flex items-center bg-dark overflow-hidden">
-    <div class="absolute inset-0">
-      <img
-        src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1600&q=80"
-        alt="Droga w górach"
-        class="w-full h-full object-cover opacity-25"
-      />
-      <div class="absolute inset-0 bg-gradient-to-r from-dark via-dark/70 to-transparent"></div>
-    </div>
-    <div class="relative z-10 container mx-auto max-w-6xl px-6 py-24 grid md:grid-cols-2 gap-16 items-center">
-      <div class="fade-up">
-        <p class="text-gold text-xs uppercase tracking-[0.4em] mb-4 font-medium">KB Adventures</p>
-        <h1 class="font-serif text-5xl md:text-6xl text-white font-bold mb-6 leading-tight">
-          Krzysztof<br /><span class="text-gold italic">Buchała</span>
-        </h1>
-        <p class="text-white/70 text-xl leading-relaxed mb-8">
-          Podróżnik, fotograf, maniak dróg. Szukam tras, które opowiadają coś więcej niż tylko miejsce.
-        </p>
-        <div class="flex gap-4">
-          <a href="/blog" class="bg-gold text-dark px-8 py-3 rounded-full font-medium uppercase text-sm tracking-wider hover:bg-gold/90 transition-colors">
-            Moje wyprawy
-          </a>
-          <a href="/mapa" class="border-2 border-white/40 text-white px-8 py-3 rounded-full font-medium uppercase text-sm tracking-wider hover:border-white transition-colors">
-            Mapa tras
-          </a>
-        </div>
-      </div>
-      <div class="fade-in hidden md:block">
-        <div class="relative">
-          <div class="w-80 h-80 rounded-2xl overflow-hidden mx-auto border-4 border-gold/30 shadow-2xl">
-            <img
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
-              alt="Krzysztof Buchała"
-              class="w-full h-full object-cover"
-            />
-          </div>
-          <div class="absolute -bottom-4 -right-4 bg-gold text-dark px-6 py-3 rounded-xl shadow-lg">
-            <p class="font-serif text-2xl font-bold">10+</p>
-            <p class="text-xs font-medium uppercase tracking-wider">lat w drodze</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- STATYSTYKI -->
-  <section class="py-16 bg-forest">
-    <div class="container mx-auto max-w-4xl px-6">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-        {stats.map((stat, i) => (
-          <div class="fade-up" style={`transition-delay: ${i * 0.1}s`}>
-            <p class="font-serif text-5xl text-white font-bold mb-1">{stat.value}</p>
-            <p class="text-white/60 text-sm uppercase tracking-widest font-medium">{stat.label}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
+<style>
+*, *::before, *::after { box-sizing: border-box; }
 
-  <!-- HISTORIA -->
-  <section class="py-24 px-6 bg-white">
-    <div class="container mx-auto max-w-4xl">
-      <div class="grid md:grid-cols-5 gap-16 items-start">
-        <div class="md:col-span-3 fade-up">
-          <p class="text-gold text-xs uppercase tracking-[0.4em] mb-4 font-medium">Historia</p>
-          <h2 class="font-serif text-4xl text-gray-900 mb-6">Skąd się wziął<br />KB Adventures</h2>
-          <div class="w-12 h-0.5 bg-gold mb-8"></div>
-          <div class="space-y-5 text-gray-600 text-lg leading-relaxed">
-            <p>
-              Wszystko zaczęło się w 2014 roku, gdy wsiadłem na motocykl i pojechałem przez Bałkany bez szczegółowego planu.
-              Trzy tygodnie, sześć krajów, setki kilometrów górskich dróg i kilkanaście niesamowitych spotkań z ludźmi.
-            </p>
-            <p>
-              Wróciłem z poczuciem, że coś ważnego wydarzyło się na tej drodze. Że podróżowanie
-              <em>przez</em> kraj — a nie <em>po</em> kraju — jest zupełnie innym doświadczeniem.
-              Że drogi boczne mówią więcej niż autostrady.
-            </p>
-            <p>
-              KB Adventures to nie jest blog o atrakcjach. To archiwum tras, które mają charakter.
-              Każdy wpis to konkretna droga, konkretne miejsca i szczegółowa mapa, żebyś mógł pojechać tam sam.
-            </p>
-          </div>
-        </div>
-        <div class="md:col-span-2 fade-up" style="transition-delay: 0.2s">
-          <div class="bg-cream rounded-2xl p-8">
-            <h3 class="font-serif text-xl text-gray-900 mb-6">Filozofia podróżowania</h3>
-            <ul class="space-y-4">
-              {[
-                'Drogi boczne zamiast autostrad',
-                'Nocleg u lokalnych zamiast hoteli łańcuchowych',
-                'Jedzenie tam, gdzie jedzą mieszkańcy',
-                'Tempo dostosowane do krajobrazu',
-                'Mapa papierowa jako backup',
-              ].map(item => (
-                <li class="flex items-start gap-3 text-gray-600">
-                  <span class="w-5 h-5 bg-gold rounded-full flex-shrink-0 mt-0.5 flex items-center justify-center">
-                    <svg class="w-3 h-3 text-dark" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                    </svg>
-                  </span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+:root {
+  --amber:     #EF9F27;
+  --amber-d:   #BA7517;
+  --amber-dim: rgba(239,159,39,.12);
+  --amber-bdr: rgba(239,159,39,.22);
+  --bg:        #0d1117;
+  --bg2:       #111820;
+  --bg3:       #161d27;
+  --white:     #F0F4FF;
+  --muted:     rgba(240,244,255,.5);
+  --muted2:    rgba(240,244,255,.28);
+}
 
-  <!-- TIMELINE -->
-  <section class="py-24 px-6 bg-dark">
-    <div class="container mx-auto max-w-3xl">
-      <div class="text-center mb-16 fade-up">
-        <p class="text-gold text-xs uppercase tracking-[0.4em] mb-3 font-medium">Kamienie milowe</p>
-        <h2 class="font-serif text-4xl text-white">Droga do KB Adventures</h2>
-      </div>
-      <div class="relative">
-        <div class="absolute left-8 top-0 bottom-0 w-px bg-gold/30"></div>
-        <div class="space-y-8">
-          {milestones.map((m, i) => (
-            <div class="fade-up relative pl-20" style={`transition-delay: ${i * 0.15}s`}>
-              <div class="absolute left-5 top-2 w-6 h-6 bg-gold rounded-full border-4 border-dark shadow-lg"></div>
-              <p class="text-gold font-serif text-2xl font-bold mb-1">{m.year}</p>
-              <p class="text-white/70 leading-relaxed">{m.text}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
+body { background: var(--bg); }
 
-  <!-- CTA -->
-  <section class="py-24 px-6 bg-cream text-center">
-    <div class="container mx-auto max-w-2xl fade-up">
-      <h2 class="font-serif text-4xl text-gray-900 mb-4">Gotowy na swoją wyprawę?</h2>
-      <p class="text-gray-600 text-lg mb-8">
-        Przeglądaj trasy, pobierz mapy GPX i jedź tam, gdzie warto się zgubić.
-      </p>
-      <div class="flex flex-wrap justify-center gap-4">
-        <a href="/blog" class="bg-dark hover:bg-forest text-white px-10 py-4 rounded-full font-medium tracking-wider uppercase text-sm transition-colors">
-          Odkryj trasy
-        </a>
-        <a href="/mapa" class="border-2 border-forest text-forest hover:bg-forest hover:text-white px-10 py-4 rounded-full font-medium tracking-wider uppercase text-sm transition-all">
-          Otwórz mapę
-        </a>
-      </div>
+/* ── PROGRESS BAR ── */
+#progress {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+  background: linear-gradient(90deg, var(--amber-d), var(--amber));
+  z-index: 2000; transition: width .08s linear;
+}
+
+/* ── HERO ── */
+#om-hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  padding: 6rem 1.5rem 3rem;
+  background: var(--bg);
+}
+
+.om-hero-mountains {
+  position: absolute; inset: 0; z-index: 0;
+  width: 100%; height: 100%;
+}
+
+.om-hero-overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background:
+    radial-gradient(ellipse 75% 60% at 50% 55%, rgba(13,17,23,.72) 0%, transparent 100%),
+    linear-gradient(180deg, rgba(13,17,23,.6) 0%, rgba(13,17,23,.4) 40%, rgba(13,17,23,.85) 100%);
+}
+
+.om-hero-content {
+  position: relative; z-index: 3;
+  max-width: 900px;
+}
+
+.om-hero-eyebrow {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: .72rem; font-weight: 700;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--amber);
+  border: 1px solid var(--amber-bdr);
+  background: var(--amber-dim);
+  padding: .35rem 1rem; border-radius: 100px;
+  margin-bottom: 1.8rem;
+}
+
+.om-hero-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(3rem, 8vw, 6rem);
+  line-height: .95;
+  letter-spacing: .01em;
+  color: var(--white);
+  margin-bottom: 1.2rem;
+  font-weight: 700;
+}
+
+.om-hero-title .amber { color: var(--amber); display: block; font-style: italic; }
+
+.om-hero-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(.95rem, 1.8vw, 1.15rem);
+  color: var(--muted);
+  max-width: 600px; margin: 0 auto 2.5rem;
+  line-height: 1.7;
+}
+
+.om-hero-btns {
+  display: flex; flex-wrap: wrap; gap: .75rem; justify-content: center;
+}
+
+.om-btn-gold {
+  display: inline-flex; align-items: center; gap: .45rem;
+  background: var(--amber); color: #0d1117;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700; font-size: .82rem;
+  letter-spacing: .08em; text-transform: uppercase;
+  padding: .75rem 1.8rem; border-radius: 999px;
+  transition: background .2s, transform .15s;
+  text-decoration: none;
+}
+.om-btn-gold:hover { background: var(--amber-d); color: var(--white); transform: translateY(-2px); }
+
+.om-btn-ghost {
+  display: inline-flex; align-items: center; gap: .45rem;
+  background: transparent; color: var(--muted);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600; font-size: .82rem;
+  letter-spacing: .06em;
+  padding: .75rem 1.8rem; border-radius: 999px;
+  border: 1px solid rgba(240,244,255,.14);
+  transition: border-color .2s, color .2s;
+  text-decoration: none;
+}
+.om-btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
+
+/* ── INTRO ── */
+#om-intro {
+  padding: 6rem 1.75rem;
+  max-width: 1100px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 300px; gap: 4rem; align-items: center;
+}
+@media (max-width: 860px) {
+  #om-intro { grid-template-columns: 1fr; gap: 3rem; }
+  .kb-monogram { display: none; }
+}
+
+.intro-lead {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.1rem, 2.4vw, 1.4rem);
+  font-weight: 400; color: var(--white);
+  line-height: 1.7; margin-bottom: 1.5rem;
+  border-left: 3px solid var(--amber);
+  padding-left: 1.4rem;
+  font-style: italic;
+}
+
+.intro-body {
+  font-family: 'Inter', sans-serif;
+  font-size: .98rem; color: var(--muted);
+  line-height: 1.85;
+  display: flex; flex-direction: column; gap: 1rem;
+}
+
+/* ── STATS ── */
+#om-stats {
+  background: var(--bg2);
+  border-top: 1px solid rgba(239,159,39,.1);
+  border-bottom: 1px solid rgba(239,159,39,.1);
+  padding: 3.5rem 1.75rem;
+}
+
+.stats-grid {
+  max-width: 900px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;
+  text-align: center;
+}
+@media (max-width: 640px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 7vw, 4rem);
+  color: var(--amber);
+  line-height: 1;
+  margin-bottom: .35rem;
+  font-weight: 700;
+}
+
+.stat-label {
+  font-family: 'Inter', sans-serif;
+  font-size: .78rem; font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase; letter-spacing: .1em;
+}
+
+/* ── PILLARS ── */
+#om-pillars {
+  padding: 6rem 1.75rem;
+  max-width: 1100px; margin: 0 auto;
+}
+
+.sec-label {
+  font-family: 'Inter', sans-serif;
+  font-size: .72rem; font-weight: 700; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--amber);
+  margin-bottom: 1rem;
+}
+
+.sec-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.05;
+  margin-bottom: 3rem;
+  color: var(--white);
+  font-weight: 700;
+}
+
+.pillars-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem;
+}
+@media (max-width: 640px) { .pillars-grid { grid-template-columns: 1fr; } }
+
+.pillar-card {
+  background: var(--bg2);
+  border: 1px solid rgba(240,244,255,.07);
+  border-top: 3px solid var(--amber);
+  border-radius: 14px;
+  padding: 2rem 1.75rem;
+  transition: transform .28s ease, box-shadow .28s ease;
+}
+.pillar-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px rgba(0,0,0,.5);
+}
+
+.pillar-icon {
+  width: 44px; height: 44px; margin-bottom: 1.2rem;
+  background: var(--amber-dim);
+  border: 1px solid var(--amber-bdr);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.pillar-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  margin-bottom: .65rem; color: var(--white);
+  font-weight: 600;
+}
+
+.pillar-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: .9rem; color: var(--muted); line-height: 1.7;
+}
+
+/* ── QUOTE ── */
+#om-quote {
+  background: var(--bg3);
+  border-top: 1px solid rgba(239,159,39,.08);
+  border-bottom: 1px solid rgba(239,159,39,.08);
+  padding: 6rem 1.75rem;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+
+.quote-mark {
+  position: absolute; top: -1rem; left: 50%;
+  transform: translateX(-50%);
+  font-family: Georgia, serif;
+  font-size: clamp(160px, 20vw, 240px);
+  line-height: 1;
+  color: rgba(239,159,39,.06);
+  pointer-events: none; user-select: none;
+}
+
+.quote-text {
+  position: relative; z-index: 1;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.3rem, 3vw, 2rem);
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--white);
+  max-width: 760px; margin: 0 auto 1.75rem;
+}
+
+.quote-attr {
+  position: relative; z-index: 1;
+  font-family: 'Inter', sans-serif;
+  font-size: .82rem; font-weight: 600;
+  color: var(--amber);
+  letter-spacing: .08em; text-transform: uppercase;
+}
+
+/* ── CTA CLOSE ── */
+#om-cta {
+  background: var(--bg2);
+  border-top: 1px solid rgba(239,159,39,.1);
+  padding: 7rem 1.75rem;
+  text-align: center;
+}
+
+.cta-big {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(4rem, 12vw, 9rem);
+  line-height: .9;
+  color: var(--white);
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.cta-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(.95rem, 2vw, 1.15rem);
+  color: var(--muted);
+  max-width: 520px; margin: 0 auto 2.5rem;
+  line-height: 1.7;
+}
+
+/* ── REVEAL ANIMATIONS ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity .65s ease, transform .65s ease;
+}
+.reveal.slide-right { transform: translateX(32px); }
+.reveal.visible { opacity: 1; transform: translate(0); }
+</style>
+
+<div id="progress"></div>
+
+<!-- HERO -->
+<section id="om-hero">
+  <svg class="om-hero-mountains" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#060c14"/>
+        <stop offset="100%" stop-color="#111d2e"/>
+      </linearGradient>
+    </defs>
+    <rect width="1440" height="900" fill="url(#skyGrad)"/>
+    <circle cx="120" cy="80" r="1.2" fill="#fff" opacity=".6"/>
+    <circle cx="280" cy="45" r=".8" fill="#fff" opacity=".5"/>
+    <circle cx="440" cy="120" r="1" fill="#fff" opacity=".4"/>
+    <circle cx="600" cy="60" r=".7" fill="#fff" opacity=".7"/>
+    <circle cx="780" cy="30" r="1.3" fill="#fff" opacity=".5"/>
+    <circle cx="950" cy="90" r=".9" fill="#fff" opacity=".6"/>
+    <circle cx="1100" cy="50" r="1.1" fill="#fff" opacity=".4"/>
+    <circle cx="1300" cy="110" r=".8" fill="#fff" opacity=".6"/>
+    <circle cx="1050" cy="110" r="180" fill="rgba(239,159,39,.06)"/>
+    <circle cx="1050" cy="110" r="28" fill="#fffbef" opacity=".08"/>
+    <polygon points="0,900 0,560 120,430 240,500 360,380 480,460 600,320 720,400 840,260 960,360 1080,220 1200,330 1320,250 1440,350 1440,900" fill="#0e1520" opacity=".9"/>
+    <polygon points="0,900 0,640 180,480 300,560 420,440 540,530 660,390 780,480 900,350 1020,440 1140,300 1260,420 1380,360 1440,410 1440,900" fill="#0b1219" opacity=".95"/>
+    <polygon points="0,900 0,720 160,580 280,660 400,550 520,640 640,520 760,610 880,490 1000,590 1120,470 1240,570 1360,510 1440,560 1440,900" fill="#0d1117"/>
+  </svg>
+  <div class="om-hero-overlay"></div>
+  <div class="om-hero-content">
+    <p class="om-hero-eyebrow">KB Adventures — Za kierownicą i obiektywem</p>
+    <h1 class="om-hero-title">
+      Krzysztof
+      <span class="amber">Buchała</span>
+    </h1>
+    <p class="om-hero-sub">
+      Podróżnik, fotograf, maniak dróg.<br />
+      Szukam tras, które opowiadają coś więcej niż tylko miejsce.
+    </p>
+    <div class="om-hero-btns">
+      <a href={`${base}/apulia`} class="om-btn-gold">
+        Zobacz Apulię
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </a>
+      <a href={`${base}/mapa`} class="om-btn-ghost">Mapa tras</a>
     </div>
-  </section>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section id="om-intro">
+  <div class="reveal">
+    <p class="intro-lead">
+      KB Adventures to nie biuro podróży. To archiwum tras człowieka, który nie potrafi usiedzieć w miejscu — i nie zamierza.
+    </p>
+    <div class="intro-body">
+      <p>Nie interesują mnie trasy, które ktoś już przetarł milion razy. Jeżdżę tam, gdzie lokalny pyta cię, skąd wiesz o tym miejscu. Samochód zamiast autokaru, boczne drogi zamiast autostrad.</p>
+      <p>Każdy wyjazd opisuję dzień po dniu. Do każdej trasy dołączam plik GPX i mini przewodnik — żebyś mógł pojechać dokładnie tą samą drogą, w swoim tempie.</p>
+      <p>KB Adventures zaczęło się od jednej trasy przez Apulię. Teraz to archiwum, które rośnie z każdym wyjazdem. <strong style="color:var(--white)">Autentyczne, konkretne, twoje.</strong></p>
+    </div>
+  </div>
+  <div class="kb-monogram reveal slide-right">
+    <svg width="280" height="280" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="140" cy="140" r="138" stroke="rgba(239,159,39,.12)" stroke-width="1.5"/>
+      <circle cx="140" cy="140" r="110" stroke="rgba(239,159,39,.07)" stroke-width="1"/>
+      <!-- globe lines -->
+      <circle cx="140" cy="140" r="80" stroke="rgba(239,159,39,.18)" stroke-width="1.2" fill="none"/>
+      <ellipse cx="140" cy="140" rx="40" ry="80" stroke="rgba(239,159,39,.12)" stroke-width="1" fill="none"/>
+      <line x1="60" y1="140" x2="220" y2="140" stroke="rgba(239,159,39,.12)" stroke-width="1"/>
+      <line x1="70" y1="108" x2="210" y2="108" stroke="rgba(239,159,39,.08)" stroke-width="1"/>
+      <line x1="70" y1="172" x2="210" y2="172" stroke="rgba(239,159,39,.08)" stroke-width="1"/>
+      <!-- route dot on Italy -->
+      <circle cx="155" cy="148" r="5" fill="#EF9F27" opacity=".8"/>
+      <circle cx="155" cy="148" r="10" stroke="#EF9F27" stroke-width="1" fill="none" opacity=".3"/>
+      <!-- K B letters -->
+      <path d="M90 100 L90 180 M90 140 L130 100 M90 140 L130 180" stroke="#EF9F27" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+      <path d="M148 100 L148 180 M148 100 Q185 100 185 130 Q185 140 148 140 Q185 140 185 165 Q185 180 148 180" stroke="#EF9F27" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
+      <!-- decorative dots -->
+      <circle cx="140" cy="248" r="4" fill="#EF9F27" opacity=".4"/>
+      <circle cx="158" cy="245" r="2.5" fill="#EF9F27" opacity=".25"/>
+      <circle cx="122" cy="245" r="2.5" fill="#EF9F27" opacity=".25"/>
+    </svg>
+  </div>
+</section>
+
+<!-- STATS -->
+<section id="om-stats">
+  <div class="stats-grid">
+    <div class="reveal">
+      <div class="stat-num" data-target="40" data-suffix="+">0</div>
+      <div class="stat-label">Krajów</div>
+    </div>
+    <div class="reveal">
+      <div class="stat-num" data-target="180" data-suffix="k">0</div>
+      <div class="stat-label">km dróg</div>
+    </div>
+    <div class="reveal">
+      <div class="stat-num" data-target="6" data-suffix="">0</div>
+      <div class="stat-label">lat bloga</div>
+    </div>
+    <div class="reveal">
+      <div class="stat-num" data-target="200" data-suffix="+">0</div>
+      <div class="stat-label">tras GPX</div>
+    </div>
+  </div>
+</section>
+
+<!-- PILLARS -->
+<section id="om-pillars">
+  <div class="sec-label reveal">Filozofia</div>
+  <h2 class="sec-title reveal">Jak jeżdżę</h2>
+  <div class="pillars-grid">
+    <div class="pillar-card reveal">
+      <div class="pillar-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EF9F27" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M3 12h18M3 6h18M3 18h18"/>
+        </svg>
+      </div>
+      <div class="pillar-title">Boczne drogi</div>
+      <p class="pillar-desc">Autostrady skracają czas, ale zabierają podróż. Jeżdżę tam, gdzie droga jest atrakcją samą w sobie — kręte, wąskie, bez GPS-owego korka.</p>
+    </div>
+    <div class="pillar-card reveal">
+      <div class="pillar-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EF9F27" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/>
+        </svg>
+      </div>
+      <div class="pillar-title">Bez gwiazdek w przewodniku</div>
+      <p class="pillar-desc">Omijam miejsca, gdzie lokalni nie chodzą. Szukam restauracji bez zdjęć w menu, noclegów u ludzi, targów o 6 rano.</p>
+    </div>
+    <div class="pillar-card reveal">
+      <div class="pillar-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EF9F27" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+        </svg>
+      </div>
+      <div class="pillar-title">Konkretna trasa GPX</div>
+      <p class="pillar-desc">Każdy wyjazd to gotowa do wgrania trasa GPX. Nie piszę "warto pojechać" — daję ci dokładnie tę samą drogę, którą ja przejechałem.</p>
+    </div>
+    <div class="pillar-card reveal">
+      <div class="pillar-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EF9F27" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <path d="M3 9h18M9 21V9"/>
+        </svg>
+      </div>
+      <div class="pillar-title">Dzień po dniu</div>
+      <p class="pillar-desc">Nie ogólnikowe recenzje, ale konkretny dziennik: skąd, dokąd, co po drodze, ile trwało, gdzie zjeść, gdzie spać.</p>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section id="om-quote">
+  <div class="quote-mark">"</div>
+  <blockquote class="quote-text reveal">
+    „Podróż to jedyna rzecz, którą kupujesz, a która sprawia, że czujesz się bogatszy."
+  </blockquote>
+  <p class="quote-attr reveal">— Krzysiek Buchała, KB Adventures</p>
+</section>
+
+<!-- CTA -->
+<section id="om-cta">
+  <div class="cta-big reveal">Wsiadasz?</div>
+  <p class="cta-sub reveal">Każda trasa to historia, którą będziesz opowiadać latami. Zacznij od Apulii.</p>
+  <a href={`${base}/apulia`} class="om-btn-gold reveal">
+    Sprawdź Apulię 2026
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+  </a>
+</section>
+
 </BaseLayout>
+
+<script>
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  const bar = document.getElementById('progress');
+  if (bar) bar.style.width = pct + '%';
+});
+
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
+}, { threshold: .15 });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+function animateCounter(el: HTMLElement, target: number, suffix: string, duration = 1500) {
+  const start = performance.now();
+  (function step(now: number) {
+    const p = Math.min((now - start) / duration, 1);
+    const ease = p < .5 ? 2*p*p : -1+(4-2*p)*p;
+    (el as HTMLElement).textContent = Math.round(target * ease) + suffix;
+    if (p < 1) requestAnimationFrame(step);
+  })(start);
+}
+
+const counterObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target as HTMLElement;
+    const target = parseInt(el.dataset.target || '0');
+    const suffix = el.dataset.suffix || '';
+    if (target > 0) animateCounter(el, target, suffix);
+    counterObs.unobserve(el);
+  });
+}, { threshold: .5 });
+document.querySelectorAll('.stat-num[data-target]').forEach(el => {
+  if (parseInt((el as HTMLElement).dataset.target || '0') > 0) counterObs.observe(el);
+});
+</script>
