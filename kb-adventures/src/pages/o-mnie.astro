@@ -3,521 +3,515 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
-<BaseLayout title="O mnie — KB Adventures" description="Kim jest Krzysztof Buchała i czym jest KB Adventures.">
+<BaseLayout title="O mnie — Krzysztof Buchała" description="Przedsiębiorca. Podróżnik. Budowniczy miejsc i doświadczeń. 67 krajów.">
 
 <style>
-*, *::before, *::after { box-sizing: border-box; }
-
 :root {
-  --amber:     #EF9F27;
-  --amber-d:   #BA7517;
-  --amber-dim: rgba(239,159,39,.12);
-  --amber-bdr: rgba(239,159,39,.22);
-  --bg:        #0d1117;
-  --bg2:       #111820;
-  --bg3:       #161d27;
-  --white:     #F0F4FF;
-  --muted:     rgba(240,244,255,.5);
-  --muted2:    rgba(240,244,255,.28);
+  --gold: #D4A853;
+  --gold-dim: rgba(212,168,83,.12);
+  --gold-bdr: rgba(212,168,83,.3);
+  --bg:  #0a0a0a;
+  --bg2: #111111;
+  --bg3: #161616;
+  --white: #ffffff;
+  --muted: rgba(255,255,255,0.65);
+  --muted2: rgba(255,255,255,0.4);
 }
-
-body { background: var(--bg); }
-
-/* ── PROGRESS BAR ── */
-#progress {
-  position: fixed; top: 0; left: 0; height: 3px; width: 0%;
-  background: linear-gradient(90deg, var(--amber-d), var(--amber));
-  z-index: 2000; transition: width .08s linear;
-}
+*, *::before, *::after { box-sizing: border-box; }
+body { background: var(--bg); font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
 /* ── HERO ── */
-#om-hero {
-  position: relative;
+.pm-hero {
   min-height: 100vh;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  text-align: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 80px 6vw 0;
+  gap: 48px;
+  position: relative;
   overflow: hidden;
-  padding: 6rem 1.5rem 3rem;
-  background: var(--bg);
 }
-
-.om-hero-mountains {
+.pm-hero-bg {
   position: absolute; inset: 0; z-index: 0;
-  width: 100%; height: 100%;
+  background: radial-gradient(ellipse 70% 70% at 80% 50%, rgba(212,168,83,.07) 0%, transparent 65%);
 }
-
-.om-hero-overlay {
-  position: absolute; inset: 0; z-index: 1;
-  background:
-    radial-gradient(ellipse 75% 60% at 50% 55%, rgba(13,17,23,.72) 0%, transparent 100%),
-    linear-gradient(180deg, rgba(13,17,23,.6) 0%, rgba(13,17,23,.4) 40%, rgba(13,17,23,.85) 100%);
+.pm-hero-content { position: relative; z-index: 2; }
+.pm-hero-eyebrow {
+  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 22px; font-weight: 600;
+  opacity: 0; transform: translateY(20px);
+  animation: fadeUp .9s .2s forwards;
 }
-
-.om-hero-content {
-  position: relative; z-index: 3;
-  max-width: 900px;
-}
-
-.om-hero-eyebrow {
-  display: inline-block;
-  font-family: 'Inter', sans-serif;
-  font-size: .72rem; font-weight: 700;
-  letter-spacing: .22em; text-transform: uppercase;
-  color: var(--amber);
-  border: 1px solid var(--amber-bdr);
-  background: var(--amber-dim);
-  padding: .35rem 1rem; border-radius: 100px;
-  margin-bottom: 1.8rem;
-}
-
-.om-hero-title {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(3rem, 8vw, 6rem);
-  line-height: .95;
-  letter-spacing: .01em;
-  color: var(--white);
-  margin-bottom: 1.2rem;
-  font-weight: 700;
-}
-
-.om-hero-title .amber { color: var(--amber); display: block; font-style: italic; }
-
-.om-hero-sub {
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(.95rem, 1.8vw, 1.15rem);
-  color: var(--muted);
-  max-width: 600px; margin: 0 auto 2.5rem;
-  line-height: 1.7;
-}
-
-.om-hero-btns {
-  display: flex; flex-wrap: wrap; gap: .75rem; justify-content: center;
-}
-
-.om-btn-gold {
-  display: inline-flex; align-items: center; gap: .45rem;
-  background: var(--amber); color: #0d1117;
-  font-family: 'Inter', sans-serif;
-  font-weight: 700; font-size: .82rem;
-  letter-spacing: .08em; text-transform: uppercase;
-  padding: .75rem 1.8rem; border-radius: 999px;
-  transition: background .2s, transform .15s;
-  text-decoration: none;
-}
-.om-btn-gold:hover { background: var(--amber-d); color: var(--white); transform: translateY(-2px); }
-
-.om-btn-ghost {
-  display: inline-flex; align-items: center; gap: .45rem;
-  background: transparent; color: var(--muted);
-  font-family: 'Inter', sans-serif;
-  font-weight: 600; font-size: .82rem;
-  letter-spacing: .06em;
-  padding: .75rem 1.8rem; border-radius: 999px;
-  border: 1px solid rgba(240,244,255,.14);
-  transition: border-color .2s, color .2s;
-  text-decoration: none;
-}
-.om-btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
-
-/* ── INTRO ── */
-#om-intro {
-  padding: 6rem 1.75rem;
-  max-width: 1100px; margin: 0 auto;
-  display: grid; grid-template-columns: 1fr 300px; gap: 4rem; align-items: center;
-}
-@media (max-width: 860px) {
-  #om-intro { grid-template-columns: 1fr; gap: 3rem; }
-  .kb-monogram { display: none; }
-}
-
-.intro-lead {
+.pm-hero h1 {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(1.1rem, 2.4vw, 1.4rem);
-  font-weight: 400; color: var(--white);
-  line-height: 1.7; margin-bottom: 1.5rem;
-  border-left: 3px solid var(--amber);
-  padding-left: 1.4rem;
-  font-style: italic;
+  font-size: clamp(40px, 6vw, 78px);
+  font-weight: 900; line-height: 1.05;
+  letter-spacing: -2px; color: #fff;
+  margin-bottom: 24px;
+  opacity: 0; transform: translateY(30px);
+  animation: fadeUp .9s .4s forwards;
 }
-
-.intro-body {
-  font-family: 'Inter', sans-serif;
-  font-size: .98rem; color: var(--muted);
-  line-height: 1.85;
-  display: flex; flex-direction: column; gap: 1rem;
+.pm-hero h1 em { font-style: italic; color: var(--gold); }
+.pm-hero-sub {
+  font-size: clamp(16px, 2vw, 19px);
+  color: var(--muted); line-height: 1.65;
+  margin-bottom: 40px; font-weight: 300; max-width: 480px;
+  opacity: 0; transform: translateY(20px);
+  animation: fadeUp .9s .6s forwards;
 }
-
-/* ── STATS ── */
-#om-stats {
-  background: var(--bg2);
-  border-top: 1px solid rgba(239,159,39,.1);
-  border-bottom: 1px solid rgba(239,159,39,.1);
-  padding: 3.5rem 1.75rem;
+.pm-hero-cta {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  opacity: 0; transform: translateY(20px);
+  animation: fadeUp .9s .8s forwards;
 }
-
-.stats-grid {
-  max-width: 900px; margin: 0 auto;
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;
-  text-align: center;
+.pm-btn-gold {
+  background: var(--gold); color: #0a0a0a;
+  padding: 14px 30px; border-radius: 30px;
+  font-size: 14px; font-weight: 600; letter-spacing: .04em;
+  text-decoration: none; transition: all .2s;
 }
-@media (max-width: 640px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+.pm-btn-gold:hover { background: #c49a40; transform: scale(1.02); }
+.pm-btn-ghost {
+  background: transparent; color: #fff;
+  padding: 14px 30px; border-radius: 30px;
+  font-size: 14px; font-weight: 400;
+  border: 1px solid rgba(255,255,255,.3);
+  text-decoration: none; transition: all .2s;
+}
+.pm-btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
 
-.stat-num {
+.pm-hero-stats {
+  display: flex; gap: 40px; margin-top: 52px;
+  opacity: 0; transform: translateY(20px);
+  animation: fadeUp .9s 1s forwards;
+}
+.pm-stat-num {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(2.8rem, 7vw, 4rem);
-  color: var(--amber);
-  line-height: 1;
-  margin-bottom: .35rem;
-  font-weight: 700;
+  font-size: 40px; font-weight: 700; color: #fff; line-height: 1;
+}
+.pm-stat-num span { color: var(--gold); }
+.pm-stat-label {
+  font-size: 11px; color: var(--muted2); margin-top: 4px;
+  text-transform: uppercase; letter-spacing: .12em;
 }
 
-.stat-label {
-  font-family: 'Inter', sans-serif;
-  font-size: .78rem; font-weight: 600;
-  color: var(--muted);
-  text-transform: uppercase; letter-spacing: .1em;
+.pm-hero-scroll {
+  margin-top: 48px;
+  opacity: 0; animation: fadeUp .9s 1.1s forwards;
+}
+.pm-scroll-line {
+  width: 1px; height: 48px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  margin-left: 4px;
+  animation: scrollPulse 2s infinite;
 }
 
-/* ── PILLARS ── */
-#om-pillars {
-  padding: 6rem 1.75rem;
-  max-width: 1100px; margin: 0 auto;
-}
-
-.sec-label {
-  font-family: 'Inter', sans-serif;
-  font-size: .72rem; font-weight: 700; letter-spacing: .18em;
-  text-transform: uppercase; color: var(--amber);
-  margin-bottom: 1rem;
-}
-
-.sec-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2rem, 5vw, 3rem);
-  line-height: 1.05;
-  margin-bottom: 3rem;
-  color: var(--white);
-  font-weight: 700;
-}
-
-.pillars-grid {
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem;
-}
-@media (max-width: 640px) { .pillars-grid { grid-template-columns: 1fr; } }
-
-.pillar-card {
-  background: var(--bg2);
-  border: 1px solid rgba(240,244,255,.07);
-  border-top: 3px solid var(--amber);
-  border-radius: 14px;
-  padding: 2rem 1.75rem;
-  transition: transform .28s ease, box-shadow .28s ease;
-}
-.pillar-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 50px rgba(0,0,0,.5);
-}
-
-.pillar-icon {
-  width: 44px; height: 44px; margin-bottom: 1.2rem;
-  background: var(--amber-dim);
-  border: 1px solid var(--amber-bdr);
-  border-radius: 10px;
+/* ── HERO PHOTO ── */
+.pm-photo-wrap {
+  position: relative; z-index: 2;
   display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: translateX(30px) scale(0.97);
+  animation: fadeRight 1s .5s forwards;
 }
+.pm-photo-frame {
+  position: relative;
+  width: min(420px, 42vw);
+  aspect-ratio: 3/4;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(212,168,83,.15);
+}
+.pm-photo-frame img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center top;
+}
+.pm-photo-frame::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 60%, rgba(10,10,10,.5) 100%);
+}
+.pm-photo-badge {
+  position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: rgba(10,10,10,.75); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.15); border-radius: 20px;
+  padding: 8px 18px; font-size: 13px; color: rgba(255,255,255,.9);
+  white-space: nowrap; z-index: 3;
+}
+.pm-photo-badge span { color: var(--gold); font-weight: 500; }
 
-.pillar-title {
+/* ── SECTIONS ── */
+.pm-section { max-width: 1100px; margin: 0 auto; padding: 100px 5vw; }
+.pm-divider { width: 100%; height: 1px; background: rgba(255,255,255,.08); }
+.pm-label {
+  font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 16px; font-weight: 600;
+}
+.pm-title {
   font-family: 'Playfair Display', serif;
-  font-size: 1.3rem;
-  margin-bottom: .65rem; color: var(--white);
-  font-weight: 600;
+  font-size: clamp(30px, 4.5vw, 50px);
+  font-weight: 700; line-height: 1.1;
+  letter-spacing: -1px; color: #fff; margin-bottom: 24px;
 }
 
-.pillar-desc {
-  font-family: 'Inter', sans-serif;
-  font-size: .9rem; color: var(--muted); line-height: 1.7;
+/* ── ABOUT ── */
+.pm-about-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px; align-items: start; margin-top: 52px;
+}
+.pm-about-text p {
+  font-size: 16px; line-height: 1.85;
+  color: var(--muted); font-weight: 300; margin-bottom: 20px;
+}
+.pm-about-text p strong { color: #fff; font-weight: 500; }
+.pm-about-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.pm-about-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 18px; padding: 22px 18px;
+  transition: border-color .3s, background .3s;
+}
+.pm-about-card:hover { border-color: var(--gold-bdr); background: var(--gold-dim); }
+.pm-about-card-icon { font-size: 24px; margin-bottom: 10px; }
+.pm-about-card-title { font-size: 14px; font-weight: 500; color: #fff; margin-bottom: 4px; }
+.pm-about-card-desc { font-size: 12px; color: var(--muted2); line-height: 1.55; }
+
+/* ── SKILLS ── */
+.pm-skills-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 16px; margin-top: 52px;
+}
+.pm-skill-card {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 20px; padding: 28px 24px;
+  transition: all .35s cubic-bezier(.25,.8,.25,1);
+  opacity: 0; transform: translateY(28px);
+}
+.pm-skill-card.in { opacity: 1; transform: none; }
+.pm-skill-card:hover {
+  border-color: var(--gold-bdr);
+  background: var(--gold-dim);
+  transform: translateY(-4px);
+}
+.pm-skill-icon { font-size: 28px; margin-bottom: 14px; }
+.pm-skill-name { font-size: 15px; font-weight: 500; color: #fff; margin-bottom: 6px; }
+.pm-skill-desc { font-size: 13px; color: var(--muted2); line-height: 1.6; }
+
+/* ── GLOBE ── */
+.pm-globe-wrap {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px; align-items: center; margin-top: 52px;
+}
+.pm-globe-container {
+  position: relative; width: 100%;
+  aspect-ratio: 1; max-width: 460px; margin: 0 auto;
+}
+#globeCanvas { width: 100%; height: 100%; cursor: grab; border-radius: 50%; }
+#globeCanvas:active { cursor: grabbing; }
+.pm-globe-glow {
+  position: absolute; inset: -20%;
+  background: radial-gradient(circle, rgba(212,168,83,.1) 0%, transparent 65%);
+  pointer-events: none; border-radius: 50%;
+}
+.pm-globe-count {
+  font-family: 'Playfair Display', serif;
+  font-size: 80px; font-weight: 900; color: #fff; line-height: 1; margin-bottom: 8px;
+}
+.pm-globe-count span { color: var(--gold); }
+.pm-globe-sub { font-size: 17px; color: var(--muted2); font-weight: 300; margin-bottom: 32px; }
+.pm-countries-list {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  max-height: 260px; overflow-y: auto;
+}
+.pm-countries-list::-webkit-scrollbar { width: 3px; }
+.pm-countries-list::-webkit-scrollbar-thumb { background: rgba(212,168,83,.25); border-radius: 2px; }
+.pm-country-tag {
+  font-size: 11px; padding: 4px 11px; border-radius: 20px;
+  border: 1px solid var(--gold-bdr); color: var(--muted);
+  background: var(--gold-dim);
 }
 
-/* ── QUOTE ── */
-#om-quote {
-  background: var(--bg3);
-  border-top: 1px solid rgba(239,159,39,.08);
-  border-bottom: 1px solid rgba(239,159,39,.08);
-  padding: 6rem 1.75rem;
-  text-align: center;
+/* ── CONTACT ── */
+.pm-contact-box {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 28px; padding: 64px 40px;
+  margin-top: 52px; text-align: center;
   position: relative; overflow: hidden;
 }
-
-.quote-mark {
-  position: absolute; top: -1rem; left: 50%;
-  transform: translateX(-50%);
-  font-family: Georgia, serif;
-  font-size: clamp(160px, 20vw, 240px);
-  line-height: 1;
-  color: rgba(239,159,39,.06);
-  pointer-events: none; user-select: none;
+.pm-contact-box::before {
+  content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 60%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,168,83,.6), transparent);
 }
-
-.quote-text {
-  position: relative; z-index: 1;
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(1.3rem, 3vw, 2rem);
-  font-style: italic;
-  line-height: 1.55;
-  color: var(--white);
-  max-width: 760px; margin: 0 auto 1.75rem;
-}
-
-.quote-attr {
-  position: relative; z-index: 1;
-  font-family: 'Inter', sans-serif;
-  font-size: .82rem; font-weight: 600;
-  color: var(--amber);
-  letter-spacing: .08em; text-transform: uppercase;
-}
-
-/* ── CTA CLOSE ── */
-#om-cta {
-  background: var(--bg2);
-  border-top: 1px solid rgba(239,159,39,.1);
-  padding: 7rem 1.75rem;
-  text-align: center;
-}
-
-.cta-big {
+.pm-contact-title {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(4rem, 12vw, 9rem);
-  line-height: .9;
-  color: var(--white);
-  margin-bottom: 1.5rem;
-  font-weight: 700;
-  font-style: italic;
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 700; color: #fff; margin-bottom: 16px; letter-spacing: -1px;
+}
+.pm-contact-sub { font-size: 16px; color: var(--muted2); font-weight: 300; margin-bottom: 36px; }
+.pm-contact-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--gold); color: #0a0a0a;
+  padding: 15px 36px; border-radius: 30px;
+  font-size: 15px; font-weight: 600;
+  text-decoration: none; transition: all .2s;
+}
+.pm-contact-btn:hover { background: #c49a40; transform: scale(1.02); }
+.pm-contact-btn svg { width: 18px; height: 18px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 860px) {
+  .pm-hero { grid-template-columns: 1fr; padding-top: 100px; }
+  .pm-photo-wrap { display: none; }
+  .pm-about-grid { grid-template-columns: 1fr; gap: 36px; }
+  .pm-skills-grid { grid-template-columns: 1fr 1fr; }
+  .pm-globe-wrap { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .pm-skills-grid { grid-template-columns: 1fr; }
+  .pm-about-cards { grid-template-columns: 1fr; }
 }
 
-.cta-sub {
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(.95rem, 2vw, 1.15rem);
-  color: var(--muted);
-  max-width: 520px; margin: 0 auto 2.5rem;
-  line-height: 1.7;
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
 }
-
-/* ── REVEAL ANIMATIONS ── */
+@keyframes fadeRight {
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes scrollPulse {
+  0%,100% { opacity: .6; } 50% { opacity: 1; }
+}
 .reveal {
-  opacity: 0;
-  transform: translateY(32px);
+  opacity: 0; transform: translateY(28px);
   transition: opacity .65s ease, transform .65s ease;
 }
-.reveal.slide-right { transform: translateX(32px); }
-.reveal.visible { opacity: 1; transform: translate(0); }
+.reveal.visible { opacity: 1; transform: none; }
 </style>
 
-<div id="progress"></div>
-
 <!-- HERO -->
-<section id="om-hero">
-  <svg class="om-hero-mountains" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <defs>
-      <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#060c14"/>
-        <stop offset="100%" stop-color="#111d2e"/>
-      </linearGradient>
-    </defs>
-    <rect width="1440" height="900" fill="url(#skyGrad)"/>
-    <circle cx="120" cy="80" r="1.2" fill="#fff" opacity=".6"/>
-    <circle cx="280" cy="45" r=".8" fill="#fff" opacity=".5"/>
-    <circle cx="440" cy="120" r="1" fill="#fff" opacity=".4"/>
-    <circle cx="600" cy="60" r=".7" fill="#fff" opacity=".7"/>
-    <circle cx="780" cy="30" r="1.3" fill="#fff" opacity=".5"/>
-    <circle cx="950" cy="90" r=".9" fill="#fff" opacity=".6"/>
-    <circle cx="1100" cy="50" r="1.1" fill="#fff" opacity=".4"/>
-    <circle cx="1300" cy="110" r=".8" fill="#fff" opacity=".6"/>
-    <circle cx="1050" cy="110" r="180" fill="rgba(239,159,39,.06)"/>
-    <circle cx="1050" cy="110" r="28" fill="#fffbef" opacity=".08"/>
-    <polygon points="0,900 0,560 120,430 240,500 360,380 480,460 600,320 720,400 840,260 960,360 1080,220 1200,330 1320,250 1440,350 1440,900" fill="#0e1520" opacity=".9"/>
-    <polygon points="0,900 0,640 180,480 300,560 420,440 540,530 660,390 780,480 900,350 1020,440 1140,300 1260,420 1380,360 1440,410 1440,900" fill="#0b1219" opacity=".95"/>
-    <polygon points="0,900 0,720 160,580 280,660 400,550 520,640 640,520 760,610 880,490 1000,590 1120,470 1240,570 1360,510 1440,560 1440,900" fill="#0d1117"/>
-  </svg>
-  <div class="om-hero-overlay"></div>
-  <div class="om-hero-content">
-    <p class="om-hero-eyebrow">KB Adventures — Za kierownicą i obiektywem</p>
-    <h1 class="om-hero-title">
-      Krzysztof
-      <span class="amber">Buchała</span>
-    </h1>
-    <p class="om-hero-sub">
-      Podróżnik, fotograf, maniak dróg.<br />
-      Szukam tras, które opowiadają coś więcej niż tylko miejsce.
-    </p>
-    <div class="om-hero-btns">
-      <a href={`${base}/apulia`} class="om-btn-gold">
-        Zobacz Apulię
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-      </a>
-      <a href={`${base}/mapa`} class="om-btn-ghost">Mapa tras</a>
+<section class="pm-hero">
+  <div class="pm-hero-bg"></div>
+  <div class="pm-hero-content">
+    <p class="pm-hero-eyebrow">Krzysztof Buchała</p>
+    <h1>Nie ma rzeczy<br><em>niemożliwych</em></h1>
+    <p class="pm-hero-sub">Przedsiębiorca. Podróżnik. Budowniczy miejsc i doświadczeń.</p>
+    <div class="pm-hero-cta">
+      <a href="#omnie" class="pm-btn-gold">Poznaj mnie</a>
+      <a href="#mapa" class="pm-btn-ghost">67 krajów →</a>
     </div>
-  </div>
-</section>
-
-<!-- INTRO -->
-<section id="om-intro">
-  <div class="reveal">
-    <p class="intro-lead">
-      KB Adventures to nie biuro podróży. To archiwum tras człowieka, który nie potrafi usiedzieć w miejscu — i nie zamierza.
-    </p>
-    <div class="intro-body">
-      <p>Nie interesują mnie trasy, które ktoś już przetarł milion razy. Jeżdżę tam, gdzie lokalny pyta cię, skąd wiesz o tym miejscu. Samochód zamiast autokaru, boczne drogi zamiast autostrad.</p>
-      <p>Każdy wyjazd opisuję dzień po dniu. Do każdej trasy dołączam plik GPX i mini przewodnik — żebyś mógł pojechać dokładnie tą samą drogą, w swoim tempie.</p>
-      <p>KB Adventures zaczęło się od jednej trasy przez Apulię. Teraz to archiwum, które rośnie z każdym wyjazdem. <strong style="color:var(--white)">Autentyczne, konkretne, twoje.</strong></p>
-    </div>
-  </div>
-  <div class="kb-monogram reveal slide-right">
-    <svg width="280" height="280" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <circle cx="140" cy="140" r="138" stroke="rgba(239,159,39,.12)" stroke-width="1.5"/>
-      <circle cx="140" cy="140" r="110" stroke="rgba(239,159,39,.07)" stroke-width="1"/>
-      <!-- globe lines -->
-      <circle cx="140" cy="140" r="80" stroke="rgba(239,159,39,.18)" stroke-width="1.2" fill="none"/>
-      <ellipse cx="140" cy="140" rx="40" ry="80" stroke="rgba(239,159,39,.12)" stroke-width="1" fill="none"/>
-      <line x1="60" y1="140" x2="220" y2="140" stroke="rgba(239,159,39,.12)" stroke-width="1"/>
-      <line x1="70" y1="108" x2="210" y2="108" stroke="rgba(239,159,39,.08)" stroke-width="1"/>
-      <line x1="70" y1="172" x2="210" y2="172" stroke="rgba(239,159,39,.08)" stroke-width="1"/>
-      <!-- route dot on Italy -->
-      <circle cx="155" cy="148" r="5" fill="#EF9F27" opacity=".8"/>
-      <circle cx="155" cy="148" r="10" stroke="#EF9F27" stroke-width="1" fill="none" opacity=".3"/>
-      <!-- K B letters -->
-      <path d="M90 100 L90 180 M90 140 L130 100 M90 140 L130 180" stroke="#EF9F27" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
-      <path d="M148 100 L148 180 M148 100 Q185 100 185 130 Q185 140 148 140 Q185 140 185 165 Q185 180 148 180" stroke="#EF9F27" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity=".7"/>
-      <!-- decorative dots -->
-      <circle cx="140" cy="248" r="4" fill="#EF9F27" opacity=".4"/>
-      <circle cx="158" cy="245" r="2.5" fill="#EF9F27" opacity=".25"/>
-      <circle cx="122" cy="245" r="2.5" fill="#EF9F27" opacity=".25"/>
-    </svg>
-  </div>
-</section>
-
-<!-- STATS -->
-<section id="om-stats">
-  <div class="stats-grid">
-    <div class="reveal">
-      <div class="stat-num" data-target="40" data-suffix="+">0</div>
-      <div class="stat-label">Krajów</div>
-    </div>
-    <div class="reveal">
-      <div class="stat-num" data-target="180" data-suffix="k">0</div>
-      <div class="stat-label">km dróg</div>
-    </div>
-    <div class="reveal">
-      <div class="stat-num" data-target="6" data-suffix="">0</div>
-      <div class="stat-label">lat bloga</div>
-    </div>
-    <div class="reveal">
-      <div class="stat-num" data-target="200" data-suffix="+">0</div>
-      <div class="stat-label">tras GPX</div>
-    </div>
-  </div>
-</section>
-
-<!-- PILLARS -->
-<section id="om-pillars">
-  <div class="sec-label reveal">Filozofia</div>
-  <h2 class="sec-title reveal">Jak jeżdżę</h2>
-  <div class="pillars-grid">
-    <div class="pillar-card reveal">
-      <div class="pillar-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EF9F27" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-          <path d="M3 12h18M3 6h18M3 18h18"/>
-        </svg>
+    <div class="pm-hero-stats">
+      <div>
+        <div class="pm-stat-num">67<span>+</span></div>
+        <div class="pm-stat-label">Krajów</div>
       </div>
-      <div class="pillar-title">Boczne drogi</div>
-      <p class="pillar-desc">Autostrady skracają czas, ale zabierają podróż. Jeżdżę tam, gdzie droga jest atrakcją samą w sobie — kręte, wąskie, bez GPS-owego korka.</p>
-    </div>
-    <div class="pillar-card reveal">
-      <div class="pillar-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EF9F27" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/>
-        </svg>
+      <div>
+        <div class="pm-stat-num">5</div>
+        <div class="pm-stat-label">Kontynentów</div>
       </div>
-      <div class="pillar-title">Bez gwiazdek w przewodniku</div>
-      <p class="pillar-desc">Omijam miejsca, gdzie lokalni nie chodzą. Szukam restauracji bez zdjęć w menu, noclegów u ludzi, targów o 6 rano.</p>
-    </div>
-    <div class="pillar-card reveal">
-      <div class="pillar-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EF9F27" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-          <polygon points="3 11 22 2 13 21 11 13 3 11"/>
-        </svg>
+      <div>
+        <div class="pm-stat-num">∞</div>
+        <div class="pm-stat-label">Pomysłów</div>
       </div>
-      <div class="pillar-title">Konkretna trasa GPX</div>
-      <p class="pillar-desc">Każdy wyjazd to gotowa do wgrania trasa GPX. Nie piszę "warto pojechać" — daję ci dokładnie tę samą drogę, którą ja przejechałem.</p>
     </div>
-    <div class="pillar-card reveal">
-      <div class="pillar-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EF9F27" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-          <rect x="3" y="3" width="18" height="18" rx="2"/>
-          <path d="M3 9h18M9 21V9"/>
-        </svg>
-      </div>
-      <div class="pillar-title">Dzień po dniu</div>
-      <p class="pillar-desc">Nie ogólnikowe recenzje, ale konkretny dziennik: skąd, dokąd, co po drodze, ile trwało, gdzie zjeść, gdzie spać.</p>
+    <div class="pm-hero-scroll"><div class="pm-scroll-line"></div></div>
+  </div>
+  <div class="pm-photo-wrap">
+    <div class="pm-photo-frame">
+      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80" alt="Krzysztof Buchała" />
+      <div class="pm-photo-badge">KB Adventures · <span>67 krajów</span></div>
     </div>
   </div>
 </section>
 
-<!-- QUOTE -->
-<section id="om-quote">
-  <div class="quote-mark">"</div>
-  <blockquote class="quote-text reveal">
-    „Podróż to jedyna rzecz, którą kupujesz, a która sprawia, że czujesz się bogatszy."
-  </blockquote>
-  <p class="quote-attr reveal">— Krzysiek Buchała, KB Adventures</p>
-</section>
+<div class="pm-divider"></div>
 
-<!-- CTA -->
-<section id="om-cta">
-  <div class="cta-big reveal">Wsiadasz?</div>
-  <p class="cta-sub reveal">Każda trasa to historia, którą będziesz opowiadać latami. Zacznij od Apulii.</p>
-  <a href={`${base}/apulia`} class="om-btn-gold reveal">
-    Sprawdź Apulię 2026
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-  </a>
-</section>
+<!-- O MNIE -->
+<div class="pm-section" id="omnie">
+  <div class="reveal"><p class="pm-label">O mnie</p></div>
+  <h2 class="pm-title reveal">Odkrywam świat.<br>Buduję miejsca.</h2>
+  <div class="pm-about-grid">
+    <div class="pm-about-text reveal">
+      <p>Moja pasja to <strong>odkrywanie</strong> — zarówno świata, jak i nowych umiejętności. Odwiedziłem już <strong>67 krajów</strong> i nie zamierzam zwalniać tempa.</p>
+      <p>Zawodowo działam w <strong>budownictwie</strong> — tworzę przestrzenie do mieszkania, miejsca które stają się domem. Obserwując mnie, może znajdziesz i <strong>swoje miejsce na ziemi</strong>.</p>
+      <p>Kocham sport, aktywność i ruch — nie potrafię długo siedzieć w miejscu. Każdy szalony pomysł mnie nakręca i pcha do przodu.</p>
+    </div>
+    <div class="pm-about-cards reveal">
+      <div class="pm-about-card">
+        <div class="pm-about-card-icon">🏗️</div>
+        <div class="pm-about-card-title">Budownictwo</div>
+        <div class="pm-about-card-desc">Tworzę miejsca do życia z charakterem i duszą</div>
+      </div>
+      <div class="pm-about-card">
+        <div class="pm-about-card-icon">✈️</div>
+        <div class="pm-about-card-title">Podróże</div>
+        <div class="pm-about-card-desc">67 krajów, 5 kontynentów i każdy rok nowe</div>
+      </div>
+      <div class="pm-about-card">
+        <div class="pm-about-card-icon">⚡</div>
+        <div class="pm-about-card-title">Energia</div>
+        <div class="pm-about-card-desc">Szalone pomysły? Właśnie to mnie napędza</div>
+      </div>
+      <div class="pm-about-card">
+        <div class="pm-about-card-icon">🏋️</div>
+        <div class="pm-about-card-title">Sport</div>
+        <div class="pm-about-card-desc">Aktywność to filozofia, nie hobby</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="pm-divider"></div>
+
+<!-- SKILLS -->
+<div class="pm-section" id="skills">
+  <div class="reveal"><p class="pm-label">Umiejętności</p></div>
+  <h2 class="pm-title reveal">Co wnoszę<br>do stołu</h2>
+  <div class="pm-skills-grid">
+    <div class="pm-skill-card"><div class="pm-skill-icon">🏠</div><div class="pm-skill-name">Deweloperka</div><div class="pm-skill-desc">Realizacja projektów mieszkaniowych od fundamentów po klucz w ręku</div></div>
+    <div class="pm-skill-card"><div class="pm-skill-icon">📐</div><div class="pm-skill-name">Zarządzanie projektem</div><div class="pm-skill-desc">Koordynacja zespołów, harmonogramy, kontrola jakości i budżetu</div></div>
+    <div class="pm-skill-card"><div class="pm-skill-icon">🤝</div><div class="pm-skill-name">Negocjacje</div><div class="pm-skill-desc">Wielokulturowe doświadczenie — 67 krajów uczy pokory i elastyczności</div></div>
+    <div class="pm-skill-card"><div class="pm-skill-icon">🌍</div><div class="pm-skill-name">Perspektywa globalna</div><div class="pm-skill-desc">Rozumienie różnych rynków, kultur i modeli biznesowych z pierwszej ręki</div></div>
+    <div class="pm-skill-card"><div class="pm-skill-icon">🚀</div><div class="pm-skill-name">Przedsiębiorczość</div><div class="pm-skill-desc">Zamieniam pomysły w działające biznesy — szybko, konkretnie, bez teorii</div></div>
+    <div class="pm-skill-card"><div class="pm-skill-icon">🧠</div><div class="pm-skill-name">Adaptacja</div><div class="pm-skill-desc">W nowych środowiskach czuję się jak ryba w wodzie — uczę się błyskawicznie</div></div>
+  </div>
+</div>
+
+<div class="pm-divider"></div>
+
+<!-- GLOBE -->
+<div class="pm-section" id="mapa">
+  <div class="reveal"><p class="pm-label">Mój świat</p></div>
+  <h2 class="pm-title reveal">Zaznaczone<br>na mapie</h2>
+  <div class="pm-globe-wrap">
+    <div class="pm-globe-container reveal">
+      <div class="pm-globe-glow"></div>
+      <canvas id="globeCanvas"></canvas>
+    </div>
+    <div class="reveal">
+      <div class="pm-globe-count">67<span>+</span></div>
+      <div class="pm-globe-sub">odwiedzonych krajów</div>
+      <div class="pm-countries-list" id="countriesList"></div>
+    </div>
+  </div>
+</div>
+
+<div class="pm-divider"></div>
+
+<!-- CONTACT -->
+<div class="pm-section" id="kontakt" style="text-align:center">
+  <div class="reveal"><p class="pm-label">Kontakt</p></div>
+  <div class="pm-contact-box reveal">
+    <h2 class="pm-contact-title">Znajdź swoje<br>miejsce na ziemi</h2>
+    <p class="pm-contact-sub">Budownictwo, biznes, podróże — zawsze chętnie porozmawiam.</p>
+    <a href="https://www.linkedin.com/in/krzysztof-bucha%C5%82o-38506b269" target="_blank" rel="noopener" class="pm-contact-btn">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      Napisz na LinkedIn
+    </a>
+  </div>
+</div>
 
 </BaseLayout>
 
 <script>
-window.addEventListener('scroll', () => {
-  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
-  const bar = document.getElementById('progress');
-  if (bar) bar.style.width = pct + '%';
+/* ── Reveal ── */
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revObs.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+const skillObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.pm-skill-card').forEach((c, i) => {
+  c.style.transitionDelay = (i * 0.08) + 's';
+  skillObs.observe(c);
 });
 
-const revealObs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
-}, { threshold: .15 });
-document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+/* ── Countries list ── */
+const visited = ["Botswana","Egypt","Kenya","Morocco","Namibia","South Africa","Tanzania","Zimbabwe","Armenia","Azerbaijan","Cambodia","China","Georgia","India","Israel","Jordan","Kyrgyzstan","Nepal","Oman","Palestine","Russia","Sri Lanka","Thailand","Turkey","United Arab Emirates","Vietnam","Albania","Austria","Belgium","Bosnia and Herzegovina","Bulgaria","Croatia","Cyprus","Czechia","Denmark","Estonia","France","Germany","Greece","Hungary","Iceland","Ireland","Italy","Latvia","Liechtenstein","Lithuania","Luxembourg","Malta","Montenegro","Netherlands","North Macedonia","Norway","Poland","Portugal","Romania","Serbia","Slovakia","Slovenia","Spain","Sweden","Switzerland","United Kingdom","Vatican","Mexico","Argentina","Chile"];
 
-function animateCounter(el: HTMLElement, target: number, suffix: string, duration = 1500) {
-  const start = performance.now();
-  (function step(now: number) {
-    const p = Math.min((now - start) / duration, 1);
-    const ease = p < .5 ? 2*p*p : -1+(4-2*p)*p;
-    (el as HTMLElement).textContent = Math.round(target * ease) + suffix;
-    if (p < 1) requestAnimationFrame(step);
-  })(start);
+const list = document.getElementById('countriesList');
+if (list) visited.forEach(c => { const t = document.createElement('div'); t.className = 'pm-country-tag'; t.textContent = c; list.appendChild(t); });
+
+/* ── Globe ── */
+const canvas = document.getElementById('globeCanvas') as HTMLCanvasElement | null;
+if (canvas) {
+  const ctx = canvas.getContext('2d')!;
+  const visitedISO: Record<string,string> = {"Botswana":"BW","Egypt":"EG","Kenya":"KE","Morocco":"MA","Namibia":"NA","South Africa":"ZA","Tanzania":"TZ","Zimbabwe":"ZW","Armenia":"AM","Azerbaijan":"AZ","Cambodia":"KH","China":"CN","Georgia":"GE","India":"IN","Israel":"IL","Jordan":"JO","Kyrgyzstan":"KG","Nepal":"NP","Oman":"OM","Palestine":"PS","Russia":"RU","Sri Lanka":"LK","Thailand":"TH","Turkey":"TR","United Arab Emirates":"AE","Vietnam":"VN","Albania":"AL","Austria":"AT","Belgium":"BE","Bosnia and Herzegovina":"BA","Bulgaria":"BG","Croatia":"HR","Cyprus":"CY","Czechia":"CZ","Denmark":"DK","Estonia":"EE","France":"FR","Germany":"DE","Greece":"GR","Hungary":"HU","Iceland":"IS","Ireland":"IE","Italy":"IT","Latvia":"LV","Liechtenstein":"LI","Lithuania":"LT","Luxembourg":"LU","Malta":"MT","Montenegro":"ME","Netherlands":"NL","North Macedonia":"MK","Norway":"NO","Poland":"PL","Portugal":"PT","Romania":"RO","Serbia":"RS","Slovakia":"SK","Slovenia":"SI","Spain":"ES","Sweden":"SE","Switzerland":"CH","United Kingdom":"GB","Vatican":"VA","Mexico":"MX","Argentina":"AR","Chile":"CL"};
+  const visitedSet = new Set(Object.values(visitedISO));
+  let rotation = 0, targetRotation = 0, isDragging = false, lastX = 0, autoRotate = true, geoData: any = null;
+
+  function resize() { const s = canvas!.parentElement!.clientWidth; canvas!.width = s; canvas!.height = s; }
+  resize(); window.addEventListener('resize', () => { resize(); drawGlobe(); });
+
+  function project(lon: number, lat: number, cx: number, cy: number, r: number, rot: number) {
+    const lambda = (lon * Math.PI / 180) + rot, phi = lat * Math.PI / 180;
+    const cosLat = Math.cos(phi);
+    return { x: cx + r * cosLat * Math.sin(lambda), y: cy - r * Math.sin(phi), z: cosLat * Math.cos(lambda) };
+  }
+
+  function drawGlobe() {
+    const W = canvas!.width, H = canvas!.height, cx = W / 2, cy = H / 2, r = W * 0.46;
+    ctx.clearRect(0, 0, W, H);
+    const g = ctx.createRadialGradient(cx - r * .2, cy - r * .2, 0, cx, cy, r);
+    g.addColorStop(0, '#1a1200'); g.addColorStop(.5, '#0f0c00'); g.addColorStop(1, '#080600');
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fillStyle = g; ctx.fill();
+    ctx.strokeStyle = 'rgba(212,168,83,0.08)'; ctx.lineWidth = 0.5;
+    for (let lat = -60; lat <= 60; lat += 30) { ctx.beginPath(); let f = true; for (let lon = -180; lon <= 180; lon += 2) { const p = project(lon, lat, cx, cy, r, rotation); if (p.z < 0) { f = true; continue; } f ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y); f = false; } ctx.stroke(); }
+    for (let lon = -180; lon < 180; lon += 30) { ctx.beginPath(); let f = true; for (let lat2 = -90; lat2 <= 90; lat2 += 2) { const p = project(lon, lat2, cx, cy, r, rotation); if (p.z < 0) { f = true; continue; } f ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y); f = false; } ctx.stroke(); }
+    if (geoData) {
+      geoData.features.forEach((feature: any) => {
+        const iso = feature.properties.ISO_A2 || '';
+        const isV = visitedSet.has(iso);
+        const geom = feature.geometry;
+        const polys = geom.type === 'Polygon' ? [geom.coordinates] : geom.coordinates;
+        polys.forEach((poly: any) => { poly.forEach((ring: any) => {
+          ctx.beginPath(); let started = false;
+          ring.forEach(([lon, lat]: [number,number]) => { const p = project(lon, lat, cx, cy, r, rotation); if (p.z < 0) { started = false; return; } started ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y); started = true; });
+          ctx.closePath();
+          if (isV) { ctx.fillStyle = 'rgba(212,168,83,0.55)'; ctx.strokeStyle = 'rgba(212,168,83,0.9)'; }
+          else { ctx.fillStyle = 'rgba(60,90,130,0.35)'; ctx.strokeStyle = 'rgba(100,140,190,0.2)'; }
+          ctx.fill(); ctx.lineWidth = 0.4; ctx.stroke();
+        }); });
+      });
+    }
+    const atm = ctx.createRadialGradient(cx, cy, r * .95, cx, cy, r * 1.08);
+    atm.addColorStop(0, 'rgba(212,168,83,0.07)'); atm.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.beginPath(); ctx.arc(cx, cy, r * 1.08, 0, Math.PI * 2); ctx.fillStyle = atm; ctx.fill();
+    const spec = ctx.createRadialGradient(cx - r * .3, cy - r * .3, 0, cx, cy, r);
+    spec.addColorStop(0, 'rgba(255,255,255,0.06)'); spec.addColorStop(.4, 'rgba(255,255,255,0)');
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fillStyle = spec; ctx.fill();
+  }
+
+  function animate() {
+    if (autoRotate) { rotation += 0.003; targetRotation = rotation; }
+    else { rotation += (targetRotation - rotation) * 0.12; }
+    drawGlobe(); requestAnimationFrame(animate);
+  }
+
+  canvas.addEventListener('mousedown', e => { isDragging = true; autoRotate = false; lastX = e.clientX; });
+  window.addEventListener('mousemove', e => { if (!isDragging) return; targetRotation += (e.clientX - lastX) * 0.008; lastX = e.clientX; });
+  window.addEventListener('mouseup', () => { isDragging = false; setTimeout(() => { autoRotate = true; }, 3000); });
+  canvas.addEventListener('touchstart', e => { isDragging = true; autoRotate = false; lastX = e.touches[0].clientX; }, { passive: true });
+  canvas.addEventListener('touchmove', e => { if (!isDragging) return; targetRotation += (e.touches[0].clientX - lastX) * 0.008; lastX = e.touches[0].clientX; }, { passive: true });
+  canvas.addEventListener('touchend', () => { isDragging = false; setTimeout(() => { autoRotate = true; }, 3000); });
+  let lastScroll = 0;
+  window.addEventListener('scroll', () => { const dy = window.scrollY - lastScroll; lastScroll = window.scrollY; if (!isDragging) targetRotation += dy * 0.004; });
+
+  fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(r => r.json()).then(data => {
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js';
+    s.onload = () => {
+      const numToISO: Record<string,string> = {"004":"AF","008":"AL","012":"DZ","024":"AO","032":"AR","036":"AU","040":"AT","050":"BD","056":"BE","068":"BO","070":"BA","072":"BW","076":"BR","100":"BG","116":"KH","120":"CM","124":"CA","144":"LK","152":"CL","156":"CN","170":"CO","191":"HR","196":"CY","203":"CZ","208":"DK","218":"EC","818":"EG","233":"EE","231":"ET","246":"FI","250":"FR","276":"DE","300":"GR","320":"GT","340":"HN","348":"HU","356":"IN","360":"ID","364":"IR","368":"IQ","372":"IE","376":"IL","380":"IT","392":"JP","400":"JO","398":"KZ","404":"KE","417":"KG","418":"LA","422":"LB","428":"LV","440":"LT","442":"LU","504":"MA","508":"MZ","516":"NA","524":"NP","528":"NL","554":"NZ","566":"NG","578":"NO","512":"OM","586":"PK","616":"PL","620":"PT","642":"RO","643":"RU","682":"SA","710":"ZA","724":"ES","752":"SE","756":"CH","760":"SY","764":"TH","792":"TR","804":"UA","784":"AE","826":"GB","840":"US","858":"UY","862":"VE","704":"VN","716":"ZW","051":"AM","031":"AZ","268":"GE","352":"IS","498":"MD","499":"ME","807":"MK","688":"RS","703":"SK","705":"SI","275":"PS","336":"VA","470":"MT","438":"LI"};
+      const countries = (window as any).topojson.feature(data, data.objects.countries);
+      countries.features.forEach((f: any) => { f.properties.ISO_A2 = numToISO[String(f.id).padStart(3, '0')] || ''; });
+      geoData = countries;
+    };
+    document.head.appendChild(s);
+  }).catch(() => {});
+
+  animate();
 }
-
-const counterObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (!e.isIntersecting) return;
-    const el = e.target as HTMLElement;
-    const target = parseInt(el.dataset.target || '0');
-    const suffix = el.dataset.suffix || '';
-    if (target > 0) animateCounter(el, target, suffix);
-    counterObs.unobserve(el);
-  });
-}, { threshold: .5 });
-document.querySelectorAll('.stat-num[data-target]').forEach(el => {
-  if (parseInt((el as HTMLElement).dataset.target || '0') > 0) counterObs.observe(el);
-});
 </script>
