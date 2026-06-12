@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-const HERO_VIDEO = 'https://d8j0ntlcm91z4.cloudfront.net/user_30EqZOFYJDlJHINvYw0ajQQPBWj/hf_20260612_122047_55065b38-5699-465f-af98-28472b5711c4.mp4';
+const HERO_VIDEO = `${base}/videos/hero-scroll.mp4`;
 const HERO_POSTER = 'https://d8j0ntlcm91z4.cloudfront.net/user_30EqZOFYJDlJHINvYw0ajQQPBWj/hf_20260612_121909_76bab362-d4d3-4a93-ad74-e3d20f623575.jpeg';
 
 const trips = [
@@ -46,81 +46,113 @@ const trips = [
 <BaseLayout>
 
 <!-- ═══════════════════════════════════════════
-  HERO — giant text + photo layered (WILD LIFE style)
+  HERO — scroll-driven video (WILD LIFE style)
+  Tall outer section (~450vh) makes page scrollable.
+  Inner sticky div stays at viewport top while user scrolls.
+  JS maps scroll progress → video.currentTime.
 ═══════════════════════════════════════════ -->
-<section id="hero" class="relative h-screen overflow-hidden bg-[#0a0a0a]" aria-label="Hero">
+<div id="scroll-section" class="scroll-section-outer">
+  <section id="hero" class="scroll-sticky-inner bg-[#0a0a0a]" aria-label="Hero">
 
-  <!-- Layer 1 — giant background title (z-1) -->
-  <div class="hero-giant-text" aria-hidden="true">
-    <span class="hero-giant-kb">KB</span>
-    <span class="hero-giant-adv">Adventures</span>
-  </div>
-
-  <!-- Layer 2 — hero video with gradient mask (z-2) -->
-  <div class="hero-photo-wrap">
-    <video
-      src={HERO_VIDEO}
-      poster={HERO_POSTER}
-      class="hero-photo-img"
-      autoplay
-      muted
-      loop
-      playsinline
-      preload="auto"
-    ></video>
-    <div class="hero-photo-overlay"></div>
-  </div>
-
-  <!-- Layer 3 — content (z-3) -->
-  <div class="hero-content-layer">
-
-    <!-- Top bar -->
-    <nav class="hero-topbar">
-      <span class="hero-topbar-label">Krzysztof Buchała</span>
-      <div class="hero-topbar-links">
-        <a href={`${base}/blog`} class="hero-nav-link">Blog</a>
-        <a href={`${base}/mapa`} class="hero-nav-link">Mapa</a>
-        <a href={`${base}/o-mnie`} class="hero-nav-link">O mnie</a>
-        <a href={`${base}/apulia`} class="hero-nav-cta">Apulia 2026</a>
-      </div>
-    </nav>
-
-    <!-- Center tagline -->
-    <div class="hero-tagline-wrap" id="hero-tagline">
-      <p class="hero-tagline">Podróże które warto przeżyć</p>
+    <!-- Layer 1 — giant background title (z-1) -->
+    <div class="hero-giant-text" aria-hidden="true">
+      <span class="hero-giant-kb">KB</span>
+      <span class="hero-giant-adv">Adventures</span>
     </div>
 
-    <!-- Bottom stats bar -->
-    <div class="hero-stats-bar" id="hero-stats">
-      <div class="hero-stat">
-        <a href="#wyprawy" class="hero-stat-inner">
-          <span class="hero-stat-title">Moje wyprawy</span>
-          <span class="hero-stat-sub">3 kraje · 27 dni</span>
-        </a>
+    <!-- Layer 2 — scroll-driven video with gradient mask (z-2) -->
+    <div class="hero-photo-wrap">
+      <video
+        id="scroll-video"
+        src={HERO_VIDEO}
+        poster={HERO_POSTER}
+        class="hero-photo-img"
+        muted
+        playsinline
+        preload="auto"
+      ></video>
+      <div class="hero-photo-overlay"></div>
+    </div>
+
+    <!-- Layer 3 — UI content (z-3), fades out as scroll progresses -->
+    <div class="hero-content-layer" id="hero-ui">
+
+      <!-- Top bar -->
+      <nav class="hero-topbar">
+        <span class="hero-topbar-label">Krzysztof Buchała</span>
+        <div class="hero-topbar-links">
+          <a href={`${base}/blog`} class="hero-nav-link">Blog</a>
+          <a href={`${base}/mapa`} class="hero-nav-link">Mapa</a>
+          <a href={`${base}/o-mnie`} class="hero-nav-link">O mnie</a>
+          <a href={`${base}/apulia`} class="hero-nav-cta">Apulia 2026</a>
+        </div>
+      </nav>
+
+      <!-- Center tagline -->
+      <div class="hero-tagline-wrap">
+        <p class="hero-tagline">Podróże które warto przeżyć</p>
       </div>
-      <div class="hero-stat-sep"></div>
-      <div class="hero-stat">
-        <a href={`${base}/apulia`} class="hero-stat-inner hero-stat-gold">
-          <span class="hero-stat-title">Apulia 8 dni</span>
-          <span class="hero-stat-sub">Włochy · ~950 km</span>
-        </a>
-      </div>
-      <div class="hero-stat-sep"></div>
-      <div class="hero-stat">
-        <a href={`${base}/blog`} class="hero-stat-inner">
-          <span class="hero-stat-title">Blog</span>
-          <span class="hero-stat-sub">8 wpisów z Apulii</span>
-        </a>
-      </div>
-      <div class="hero-scroll-cue">
-        <svg class="hero-scroll-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7" />
-        </svg>
+
+      <!-- Bottom scroll hint -->
+      <div class="hero-stats-bar">
+        <div class="hero-stat">
+          <div class="hero-stat-inner">
+            <span class="hero-stat-title">Przewiń</span>
+            <span class="hero-stat-sub">aby odtworzyć trasę</span>
+          </div>
+        </div>
+        <div class="hero-stat-sep"></div>
+        <div class="hero-stat">
+          <a href={`${base}/apulia`} class="hero-stat-inner hero-stat-gold">
+            <span class="hero-stat-title">Apulia 8 dni</span>
+            <span class="hero-stat-sub">Włochy · ~950 km</span>
+          </a>
+        </div>
+        <div class="hero-stat-sep"></div>
+        <div class="hero-stat">
+          <a href={`${base}/blog`} class="hero-stat-inner">
+            <span class="hero-stat-title">Blog</span>
+            <span class="hero-stat-sub">8 wpisów z Apulii</span>
+          </a>
+        </div>
+        <div class="hero-scroll-cue">
+          <svg class="hero-scroll-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
       </div>
     </div>
-  </div>
 
-</section>
+    <!-- Layer 4 — "O mnie" overlay (z-4), slides up at end of video -->
+    <div class="about-overlay" id="about-overlay" aria-hidden="true">
+      <div class="about-overlay-inner">
+        <p class="about-overlay-eyebrow">Za kierownicą i obiektywem</p>
+        <h2 class="about-overlay-name">Cześć, jestem Krzysiek</h2>
+        <p class="about-overlay-text">
+          Kierowca, fotograf i wieczny uciekinier z biura.<br />
+          Jeżdżę głównie samochodem, lubię boczne drogi<br />
+          i miejsca bez gwiazdek w przewodniku.<br /><br />
+          KB Adventures to moje archiwum tras — każdy wyjazd opisuję dzień po dniu,
+          a do każdej trasy dołączam plik GPX i mini przewodnik.
+        </p>
+        <div class="about-overlay-pins">
+          <span class="about-overlay-pin">🇮🇹 Apulia 2026 · 950 km</span>
+          <span class="about-overlay-sep">·</span>
+          <span class="about-overlay-pin about-overlay-pin--dim">🇮🇸 Islandia — wkrótce</span>
+          <span class="about-overlay-sep">·</span>
+          <span class="about-overlay-pin about-overlay-pin--dim">🇲🇦 Maroko — wkrótce</span>
+        </div>
+        <a href={`${base}/o-mnie`} class="about-overlay-cta">
+          Poznaj mnie
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:1rem;height:1rem;display:inline-block;vertical-align:middle;margin-left:0.4rem">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
+      </div>
+    </div>
+
+  </section>
+</div>
 
 <!-- ═══════════════════════════════════════════
   O MNIE — dark strip
@@ -272,6 +304,18 @@ const trips = [
 </BaseLayout>
 
 <style>
+/* ─────────────────── SCROLL VIDEO CONTAINER ─────────────────── */
+.scroll-section-outer {
+  height: 450vh;
+  position: relative;
+}
+.scroll-sticky-inner {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
 /* ─────────────────── HERO ─────────────────── */
 .hero-giant-text {
   position: absolute;
@@ -468,6 +512,83 @@ const trips = [
   height: 1.2rem;
   color: white;
 }
+
+/* ─────────────────── ABOUT OVERLAY (end of scroll video) ─────────────────── */
+.about-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 0 3rem 4rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: none;
+}
+.about-overlay.visible {
+  pointer-events: auto;
+}
+.about-overlay-inner {
+  max-width: 600px;
+  transform: translateY(60px);
+  transition: transform 0.01s linear;
+}
+.about-overlay-eyebrow {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #D4A853;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  margin-bottom: 0.6rem;
+}
+.about-overlay-name {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: rgba(255,255,255,0.95);
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+.about-overlay-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 1.5rem;
+}
+.about-overlay-pins {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.75rem;
+}
+.about-overlay-pin {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.05em;
+}
+.about-overlay-pin--dim { color: rgba(255,255,255,0.35); }
+.about-overlay-sep { color: rgba(255,255,255,0.2); font-size: 0.7rem; }
+.about-overlay-cta {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #0a0a0a;
+  background: #D4A853;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  padding: 0.65rem 1.5rem;
+  border-radius: 999px;
+  transition: background 0.2s;
+}
+.about-overlay-cta:hover { background: #c49a40; }
 
 /* ─────────────────── ABOUT ─────────────────── */
 .about-strip {
@@ -853,6 +974,58 @@ const trips = [
 </style>
 
 <script>
+  /* ── Scroll-driven video ── */
+  const scrollSection = document.getElementById('scroll-section') as HTMLElement | null;
+  const scrollVideo = document.getElementById('scroll-video') as HTMLVideoElement | null;
+  const heroUI = document.getElementById('hero-ui') as HTMLElement | null;
+  const aboutOverlay = document.getElementById('about-overlay') as HTMLElement | null;
+  const heroGiant = document.querySelector('.hero-giant-text') as HTMLElement | null;
+
+  if (scrollVideo) {
+    scrollVideo.load();
+  }
+
+  function onScroll() {
+    if (!scrollSection || !scrollVideo) return;
+
+    const rect = scrollSection.getBoundingClientRect();
+    const totalScrollable = scrollSection.offsetHeight - window.innerHeight;
+    const scrolled = Math.max(0, -rect.top);
+    const progress = Math.min(1, scrolled / totalScrollable);
+
+    // Drive video by scroll
+    if (scrollVideo.readyState >= 2 && scrollVideo.duration) {
+      scrollVideo.currentTime = scrollVideo.duration * progress;
+    }
+
+    // Fade out hero UI in first 25% of scroll
+    if (heroUI) {
+      const uiOpacity = Math.max(0, 1 - progress / 0.25);
+      heroUI.style.opacity = String(uiOpacity);
+      heroUI.style.pointerEvents = uiOpacity < 0.05 ? 'none' : '';
+    }
+
+    // Fade out giant text in first 35%
+    if (heroGiant) {
+      heroGiant.style.opacity = String(Math.max(0, 1 - progress / 0.35));
+    }
+
+    // Slide up "O mnie" overlay starting at 72% of scroll
+    if (aboutOverlay) {
+      const start = 0.72;
+      const end = 0.95;
+      const p = Math.max(0, Math.min(1, (progress - start) / (end - start)));
+      aboutOverlay.style.opacity = String(p);
+      (aboutOverlay.querySelector('.about-overlay-inner') as HTMLElement).style.transform =
+        `translateY(${(1 - p) * 60}px)`;
+      if (p > 0.05) aboutOverlay.classList.add('visible');
+      else aboutOverlay.classList.remove('visible');
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll(); // run once on load
+
   /* ── Mini Map ── */
   async function initMiniMap() {
     const L = (await import('leaflet')).default;
@@ -888,16 +1061,4 @@ const trips = [
       if (entries[0].isIntersecting) { initMiniMap(); }
     }, { threshold: 0.1 }).observe(miniMapEl);
   }
-
-  /* ── Parallax on giant hero text ── */
-  window.addEventListener('scroll', () => {
-    const text = document.querySelector('.hero-giant-text') as HTMLElement;
-    const tagline = document.getElementById('hero-tagline') as HTMLElement;
-    if (!text) return;
-    const y = window.scrollY;
-    if (y < window.innerHeight) {
-      text.style.transform = `translateY(${y * 0.18}px)`;
-      if (tagline) tagline.style.opacity = String(1 - y / 400);
-    }
-  }, { passive: true });
 </script>
