@@ -1,0 +1,802 @@
+---
+// Dolomity Trip — interaktywna strona wyprawy ze scrollytelling mapą
+import KupTrase from '../components/KupTrase.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Dolomity 8 Dni — Camperem przez ferraty | KB Adventures</title>
+<meta name="description" content="8 dni camperem przez najtrudniejsze ferraty Południowego Tyrolu. Tre Cime o świcie, Cristallino 3008 m, jaskinie z I wojny i donaty u Friedricha Augusta." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;800;900&family=Inter:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --alpine:   #3A7BD5;
+  --alpine-h: #2E63AF;
+  --gold:     #D4A853;
+  --cream:    #EEF2F7;
+  --cream2:   #E3E9F0;
+  --dark:     #0D1B2A;
+  --dark2:    #162333;
+  --mid:      #4A6380;
+  --trust-bg: #0A1520;
+  --card-map: rgba(10,22,36,.92);
+  --card-bdr: rgba(58,123,213,.28);
+  --map-text: #EEF4FF;
+  --map-muted: rgba(220,235,255,.6);
+  --ff-head:  'Poppins', sans-serif;
+  --ff-body:  'Inter', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: var(--ff-body); background: var(--cream); color: var(--dark); overflow-x: hidden; }
+img  { display: block; max-width: 100%; }
+a    { color: inherit; text-decoration: none; }
+
+#map {
+  position: fixed; inset: 0;
+  width: 100vw; height: 100vh;
+  z-index: 0;
+}
+.leaflet-tile-pane {
+  filter: saturate(0.7) hue-rotate(200deg) brightness(0.82) contrast(1.1);
+}
+.leaflet-control-zoom,
+.leaflet-control-attribution { display: none !important; }
+
+#page { position: relative; z-index: 1; }
+.solid   { background: var(--cream); }
+.solid-w { background: #F5F8FC; }
+.solid-d { background: var(--dark2); }
+.solid-t { background: var(--trust-bg); }
+
+#progress {
+  position: fixed; top: 0; left: 0;
+  height: 3px; width: 0%;
+  background: linear-gradient(90deg, var(--gold), var(--alpine));
+  z-index: 2000; transition: width .1s linear;
+}
+
+#nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  padding: 0 1.5rem; height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: background .35s, box-shadow .35s;
+}
+#nav.scrolled {
+  background: rgba(10,22,36,.96);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 2px 16px rgba(0,0,0,.4);
+}
+.nav-logo {
+  font-family: var(--ff-head); font-size: 1.05rem; font-weight: 900;
+  color: var(--map-text); letter-spacing: -.02em;
+  display: flex; align-items: center;
+}
+.nav-logo span { color: var(--gold); }
+.nav-right { display: flex; align-items: center; gap: 1.25rem; }
+.btn { display: inline-flex; align-items: center; justify-content: center; border: none; cursor: pointer; border-radius: 8px; font-family: var(--ff-body); font-weight: 600; transition: background .2s, transform .15s; }
+.btn:hover { transform: translateY(-1px); }
+.btn-alpine { background: var(--alpine); color: #fff; padding: .55rem 1.25rem; font-size: .82rem; box-shadow: 0 4px 14px rgba(58,123,213,.38); }
+.btn-alpine:hover { background: var(--alpine-h); }
+.btn-alpine-lg { background: var(--alpine); color: #fff; padding: .85rem 2.2rem; font-size: 1rem; border-radius: 10px; box-shadow: 0 6px 20px rgba(58,123,213,.42); }
+.btn-alpine-lg:hover { background: var(--alpine-h); }
+.btn-outline-w { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,.55); padding: .82rem 1.8rem; font-size: .95rem; border-radius: 10px; }
+.btn-outline-w:hover { border-color: #fff; background: rgba(255,255,255,.1); }
+
+#day-pill {
+  position: fixed; top: 4.8rem; right: 1rem;
+  background: rgba(10,22,36,.9); backdrop-filter: blur(12px);
+  border: 1px solid var(--card-bdr); border-radius: 100px;
+  padding: .38rem 1rem; font-size: .74rem; font-weight: 700;
+  color: var(--gold); letter-spacing: .03em;
+  z-index: 200; opacity: 0; transition: opacity .4s; pointer-events: none;
+}
+
+#hero {
+  position: relative; height: 100vh; min-height: 580px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 6rem 1.5rem 3rem; text-align: center; background: transparent; overflow: hidden;
+}
+#hero-overlay {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 65% at 50% 46%, rgba(5,10,18,.92) 0%, rgba(5,10,18,.72) 55%, transparent 100%),
+    linear-gradient(180deg, rgba(8,16,28,.80) 0%, rgba(8,16,28,.90) 50%, rgba(8,16,28,.97) 100%);
+  z-index: 0;
+}
+#hero > *:not(#hero-overlay) { position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: .45rem;
+  background: rgba(212,168,83,.18); border: 1px solid rgba(212,168,83,.4);
+  color: var(--gold); padding: .38rem 1rem; border-radius: 100px;
+  font-size: .75rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 1.4rem;
+}
+.hero-title {
+  font-family: var(--ff-head); font-size: clamp(2.6rem, 8vw, 4.4rem); font-weight: 900;
+  color: var(--map-text); letter-spacing: -.03em; line-height: 1.0; margin-bottom: .65rem;
+  text-shadow: 0 2px 16px rgba(0,0,0,.65);
+}
+.hero-title em { color: var(--gold); font-style: normal; display: block; }
+.hero-sub { font-size: clamp(.9rem, 2.5vw, 1.05rem); color: rgba(220,235,255,.92); line-height: 1.65; max-width: 520px; margin: 0 auto 2rem; text-shadow: 0 1px 10px rgba(0,0,0,.7); }
+.hero-ctas { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; }
+.hero-tags { display: flex; gap: .5rem; justify-content: center; flex-wrap: wrap; }
+.htag { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); color: rgba(220,235,255,.8); padding: .28rem .8rem; border-radius: 100px; font-size: .74rem; font-weight: 500; }
+.hero-scroll { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: .4rem; color: var(--map-muted); font-size: .74rem; animation: bob 2.2s ease-in-out infinite; z-index: 1; }
+.scroll-arrow { width: 18px; height: 18px; border-right: 2px solid var(--gold); border-bottom: 2px solid var(--gold); transform: rotate(45deg); opacity: .7; }
+@keyframes bob { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(7px)} }
+
+#trust { background: var(--trust-bg); padding: 1.1rem 1.5rem; overflow-x: auto; scrollbar-width: none; }
+#trust::-webkit-scrollbar { display: none; }
+.trust-inner { display: flex; gap: 0; min-width: max-content; margin: 0 auto; justify-content: center; }
+.trust-item { display: flex; align-items: center; gap: .6rem; padding: 0 1.5rem; border-right: 1px solid rgba(255,255,255,.1); white-space: nowrap; }
+.trust-item:last-child { border-right: none; }
+.trust-icon { font-size: 1.2rem; }
+.trust-text { font-size: .78rem; font-weight: 600; color: rgba(220,235,255,.85); }
+
+.sec-head { text-align: center; padding: 4rem 1.5rem 3rem; }
+.sec-tag { display: inline-block; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .14em; color: var(--alpine); background: rgba(58,123,213,.1); padding: .28rem .9rem; border-radius: 100px; margin-bottom: .9rem; }
+.sec-title { font-family: var(--ff-head); font-size: clamp(1.7rem, 5vw, 2.5rem); font-weight: 900; color: var(--dark); letter-spacing: -.03em; line-height: 1.1; margin-bottom: .65rem; }
+.sec-sub { font-size: .95rem; color: var(--mid); max-width: 540px; margin: 0 auto; line-height: 1.65; }
+
+#trasa-section { background: transparent; padding-bottom: 0; }
+.days { padding: 0 1rem 0; }
+.day-section { min-height: 100vh; display: flex; align-items: center; justify-content: flex-start; padding: 3rem 0; }
+
+.day-card {
+  max-width: 400px; width: 100%;
+  background: var(--card-map);
+  backdrop-filter: blur(28px) saturate(1.8);
+  border: 1px solid var(--card-bdr);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 16px 52px rgba(0,0,0,.55);
+  opacity: 0; transform: translateX(-20px);
+  transition: opacity .5s ease, transform .5s ease, border-color .4s, box-shadow .4s;
+}
+.day-card.visible { opacity: 1; transform: translateX(0); }
+.day-card.active { border-color: rgba(212,168,83,.5); box-shadow: 0 16px 52px rgba(0,0,0,.55), 0 0 32px rgba(58,123,213,.12); }
+
+.card-photo {
+  position: relative; width: 100%; height: 180px; overflow: hidden;
+}
+.card-photo img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform .6s ease;
+}
+.day-card:hover .card-photo img { transform: scale(1.04); }
+.card-photo-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,.1) 0%, rgba(10,22,36,.65) 100%);
+}
+.card-photo-num {
+  position: absolute; top: 12px; left: 14px;
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, var(--gold), var(--alpine));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--ff-head); font-size: 1.05rem; font-weight: 900; color: #fff;
+  box-shadow: 0 4px 14px rgba(58,123,213,.38);
+}
+.card-photo-title {
+  position: absolute; bottom: 12px; left: 14px; right: 14px;
+  font-family: var(--ff-head); font-size: .95rem; font-weight: 700;
+  color: var(--map-text); line-height: 1.2;
+  text-shadow: 0 1px 8px rgba(0,0,0,.8);
+}
+
+.card-body { padding: 1.2rem 1.4rem 1.4rem; }
+.day-label { font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--gold); margin-bottom: .3rem; }
+.day-loc { display: flex; align-items: center; gap: .3rem; margin-bottom: .85rem; font-size: .72rem; color: var(--map-muted); }
+.loc-dot { width: 5px; height: 5px; background: var(--alpine); border-radius: 50%; flex-shrink: 0; }
+.divider-map { height: 1px; background: linear-gradient(90deg, rgba(212,168,83,.22), transparent); margin: 0 0 .85rem; }
+.highlights { display: flex; flex-direction: column; gap: .52rem; margin-bottom: .85rem; }
+.day-desc { font-size: .78rem; color: rgba(220,235,255,.52); line-height: 1.65; margin-bottom: .95rem; border-left: 2px solid rgba(212,168,83,.25); padding-left: .75rem; font-style: italic; }
+.hl { display: flex; align-items: flex-start; gap: .58rem; }
+.hl-icon { font-size: .9rem; flex-shrink: 0; margin-top: .05rem; line-height: 1.4; }
+.hl-text { font-size: .8rem; color: var(--map-muted); line-height: 1.52; }
+.hl-text strong { color: var(--map-text); font-weight: 600; }
+.card-foot { padding-top: .85rem; border-top: 1px solid rgba(58,123,213,.1); display: flex; align-items: center; justify-content: space-between; gap: .5rem; flex-wrap: wrap; }
+.sleep-badge { background: rgba(58,123,213,.22); border: 1px solid rgba(58,123,213,.38); color: #7ec8e3; padding: .26rem .75rem; border-radius: 100px; font-size: .68rem; font-weight: 600; }
+.extra-badge { background: rgba(212,168,83,.15); border: 1px solid rgba(212,168,83,.3); color: var(--gold); padding: .26rem .75rem; border-radius: 100px; font-size: .68rem; font-weight: 600; }
+.read-link {
+  display: inline-flex; align-items: center; gap: .3rem;
+  font-size: .72rem; font-weight: 600; color: var(--gold);
+  border: 1px solid rgba(212,168,83,.35); padding: .28rem .75rem; border-radius: 100px;
+  transition: background .2s, color .2s;
+  white-space: nowrap;
+}
+.read-link:hover { background: var(--gold); color: var(--dark); }
+
+.outro-map-card {
+  background: var(--card-map); backdrop-filter: blur(28px);
+  border: 1px solid var(--card-bdr); border-radius: 20px;
+  padding: 2.5rem 2rem; max-width: 400px; width: 100%; text-align: center;
+  box-shadow: 0 16px 52px rgba(0,0,0,.55);
+  opacity: 0; transform: translateY(18px); transition: opacity .55s, transform .55s;
+}
+.outro-map-card.visible { opacity: 1; transform: translateY(0); }
+.outro-map-card .outro-emoji { font-size: 2.5rem; margin-bottom: .8rem; }
+.outro-map-card h3 { font-family: var(--ff-head); font-size: 1.6rem; font-weight: 900; color: var(--map-text); margin-bottom: .5rem; }
+.outro-map-card p { font-size: .85rem; color: var(--map-muted); line-height: 1.6; }
+
+.day-pin {
+  width: 28px; height: 28px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+  background: var(--gold); border: 2.5px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,.45);
+  display: flex; align-items: center; justify-content: center; transition: background .3s;
+}
+.day-pin span { transform: rotate(45deg); font-size: 9px; font-weight: 800; color: #fff; }
+.day-pin.active { background: var(--alpine); animation: pinPulse 1.8s ease-in-out infinite; }
+@keyframes pinPulse {
+  0%,100% { box-shadow: 0 2px 8px rgba(58,123,213,.5), 0 0 0 0 rgba(58,123,213,.5); }
+  55%      { box-shadow: 0 2px 8px rgba(58,123,213,.5), 0 0 0 13px rgba(58,123,213,0); }
+}
+.car-wrap { font-size: 1.5rem; line-height: 1; filter: drop-shadow(0 2px 5px rgba(0,0,0,.7)); pointer-events: none; }
+
+#costs { background: #F5F8FC; padding: 0 1.5rem 5rem; }
+.costs-table { max-width: 560px; margin: 0 auto; border-radius: 16px; overflow: hidden; border: 1px solid var(--cream2); }
+.costs-row { display: flex; align-items: center; justify-content: space-between; padding: .85rem 1.4rem; border-bottom: 1px solid var(--cream2); font-size: .88rem; background: #fff; }
+.costs-row:nth-child(even) { background: var(--cream); }
+.costs-row:last-child { border-bottom: none; background: var(--dark2); color: var(--map-text); font-family: var(--ff-head); font-size: 1rem; font-weight: 900; }
+.costs-row:last-child .costs-amount { color: var(--gold); font-size: 1.1rem; }
+.costs-label { color: var(--mid); }
+.costs-amount { font-weight: 700; color: var(--dark); white-space: nowrap; }
+
+#faq { background: var(--cream); padding: 0 1.5rem 5rem; }
+.faq-list { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: .75rem; }
+.faq-item { background: #fff; border-radius: 12px; border: 1px solid var(--cream2); overflow: hidden; }
+.faq-q { width: 100%; background: none; border: none; text-align: left; padding: 1.1rem 1.3rem; font-family: var(--ff-body); font-size: .9rem; font-weight: 600; color: var(--dark); cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+.faq-q::after { content: '+'; font-size: 1.3rem; color: var(--alpine); flex-shrink: 0; transition: transform .25s; }
+.faq-item.open .faq-q::after { transform: rotate(45deg); }
+.faq-a { max-height: 0; overflow: hidden; padding: 0 1.3rem; font-size: .85rem; color: var(--mid); line-height: 1.7; transition: max-height .35s ease, padding .25s; }
+.faq-item.open .faq-a { max-height: 300px; padding: 0 1.3rem 1.2rem; }
+
+#plan { background: #fff; padding: 0 1.5rem 5rem; }
+.plan-table-wrap { max-width: 700px; margin: 0 auto; overflow-x: auto; }
+.plan-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+.plan-table th { background: var(--dark2); color: var(--map-text); padding: .75rem 1rem; text-align: left; font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; white-space: nowrap; }
+.plan-table td { padding: .7rem 1rem; border-bottom: 1px solid var(--cream2); color: var(--mid); vertical-align: top; }
+.plan-table tr:nth-child(even) td { background: var(--cream); }
+.plan-table tr:last-child td { border-bottom: none; }
+.plan-day-num { font-family: var(--ff-head); font-weight: 800; color: var(--alpine); }
+
+#footer { background: #07111C; padding: 2.5rem 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; text-align: center; }
+.footer-logo { font-family: var(--ff-head); font-size: 1rem; font-weight: 900; color: var(--map-text); display: flex; align-items: center; gap: 7px; justify-content: center; }
+.footer-logo span { color: var(--gold); }
+.footer-links { display: flex; gap: 1.25rem; flex-wrap: wrap; justify-content: center; }
+.footer-links a { font-size: .78rem; color: rgba(220,235,255,.45); transition: color .2s; }
+.footer-links a:hover { color: var(--map-muted); }
+.footer-copy { font-size: .72rem; color: rgba(220,235,255,.3); }
+
+@media (max-width: 680px) { .day-section { justify-content: center; } }
+@media (min-width: 681px) { .day-card { margin-left: 2rem; } }
+@media (min-width: 1024px) { .day-card { margin-left: 4rem; max-width: 390px; } }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div id="day-pill"></div>
+<div id="map"></div>
+
+<div id="page">
+
+  <nav id="nav">
+    <a href={`${base}/`} class="nav-logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" style="vertical-align:middle;margin-right:6px;flex-shrink:0" aria-hidden="true">
+        <polygon points="14,2 26,22 2,22" fill="#D4A853" opacity=".9"/>
+        <polygon points="14,7 22,22 6,22" fill="#3A7BD5" opacity=".85"/>
+        <circle cx="14" cy="22" r="2.5" fill="#EEF4FF" opacity=".7"/>
+      </svg>
+      KB<span>&nbsp;Adventures</span>
+    </a>
+    <div class="nav-right">
+      <a href={`${base}/blog`} style="font-size:.82rem;font-weight:600;color:rgba(220,235,255,.65);margin-right:.25rem;">Blog</a>
+      <a href={`${base}/o-mnie`} style="font-size:.82rem;font-weight:600;color:rgba(220,235,255,.65);margin-right:.25rem;">O&nbsp;mnie</a>
+      <a class="btn btn-alpine" href="#costs">Koszty</a>
+    </div>
+  </nav>
+
+  <section id="hero">
+    <div id="hero-overlay"></div>
+    <div class="hero-badge">🏔️ Sierpień 2026 · Camperem</div>
+    <h1 class="hero-title">DOLOMITY<em>Capo del Mondo</em></h1>
+    <p class="hero-sub">8 dni camperem przez najtrudniejsze ferraty Południowego Tyrolu. Tre Cime o świcie, Cristallino 3008 m, jaskinie z I wojny i donaty u Friedricha Augusta.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-alpine-lg" href="#costs">Zobacz koszty</a>
+      <a class="btn btn-outline-w" href="#plan">Plan trasy</a>
+    </div>
+    <div class="hero-tags">
+      <span class="htag">Ferraty B/C</span>
+      <span class="htag">Trzytysięczniki</span>
+      <span class="htag">Camper</span>
+      <span class="htag">Sierpień</span>
+      <span class="htag">Włochy/Austria</span>
+    </div>
+    <div class="hero-scroll"><span>Poznaj trasę</span><div class="scroll-arrow"></div></div>
+  </section>
+
+  <div id="trust" class="solid-t">
+    <div class="trust-inner">
+      <div class="trust-item"><span class="trust-icon">🏔️</span><span class="trust-text">8 dni w górach</span></div>
+      <div class="trust-item"><span class="trust-icon">⛏️</span><span class="trust-text">~7 ferrat (B/C)</span></div>
+      <div class="trust-item"><span class="trust-icon">🏔️</span><span class="trust-text">2 trzytysięczniki</span></div>
+      <div class="trust-item"><span class="trust-icon">🚐</span><span class="trust-text">Camper · własny</span></div>
+      <div class="trust-item"><span class="trust-icon">⛺</span><span class="trust-text">Dziko + 2 noclegi płatne</span></div>
+      <div class="trust-item"><span class="trust-icon">💰</span><span class="trust-text">~5 450 zł / para</span></div>
+    </div>
+  </div>
+
+  <div style="background:transparent; padding:5rem 1.5rem 1rem; text-align:center;">
+    <div class="sec-tag" style="color:var(--gold);background:rgba(212,168,83,.12);">Program wyprawy</div>
+    <h2 class="sec-title" style="color:var(--map-text);">Dzień po dniu</h2>
+    <p class="sec-sub" style="color:var(--map-muted);">Przewiń, aby odkryć każdy przystanek. Mapa podąża za trasą.</p>
+  </div>
+
+  <section id="trasa-section">
+    <div class="days">
+
+      <div class="day-section" id="section-0">
+        <div class="day-card" id="card-0">
+          <div class="card-photo">
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80" alt="Dolomity" loading="lazy" />
+            <div class="card-photo-overlay"></div>
+            <div class="card-photo-num">1</div>
+            <div class="card-photo-title">Dojazd + Lago di Braies</div>
+          </div>
+          <div class="card-body">
+            <div class="day-label">15 sierpnia · Dzień 1</div>
+            <div class="day-loc"><div class="loc-dot"></div>Dobbiaco → Braies → Misurina</div>
+            <div class="divider-map"></div>
+            <div class="highlights">
+              <div class="hl"><span class="hl-icon">🌊</span><div class="hl-text"><strong>Lago di Dobbiaco</strong> — obiad z widokiem na wodę</div></div>
+              <div class="hl"><span class="hl-icon">🔵</span><div class="hl-text"><strong>Lago di Braies od 16:00</strong> (bez kolejek)</div></div>
+              <div class="hl"><span class="hl-icon">🌙</span><div class="hl-text"><strong>Lago di Misurina</strong> wieczorem</div></div>
+              <div class="hl"><span class="hl-icon">🚗</span><div class="hl-text"><strong>Wjazd pod Tre Cime o 23:00</strong> (slot nocny)</div></div>
+            </div>
+            <p class="day-desc">Jezioro Dobbiaco na obiad, Lago di Braies od 16:00 — kiedy tłumy odpływają, a światło jest najpiękniejsze. Szlak nr 1 w górę daje perspektywę z lotu ptaka.</p>
+            <div class="card-foot">
+              <div class="sleep-badge">Nocleg · Rifugio Auronzo (2320 m)</div>
+              <span class="extra-badge">Slot nocny</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-section" id="section-1">
+        <div class="day-card" id="card-1">
+          <div class="card-photo">
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80" alt="Tre Cime" loading="lazy" />
+            <div class="card-photo-overlay"></div>
+            <div class="card-photo-num">2</div>
+            <div class="card-photo-title">Tre Cime + Ferrata Toblin</div>
+          </div>
+          <div class="card-body">
+            <div class="day-label">16 sierpnia · Dzień 2</div>
+            <div class="day-loc"><div class="loc-dot"></div>Rifugio Auronzo → Tre Cime → Misurina</div>
+            <div class="divider-map"></div>
+            <div class="highlights">
+              <div class="hl"><span class="hl-icon">🌅</span><div class="hl-text"><strong>5:00 pobudka</strong> · wschód słońca nad Tre Cime</div></div>
+              <div class="hl"><span class="hl-icon">⛏️</span><div class="hl-text"><strong>Ferrata Toblinger Knoten [C]</strong> · 150 m pionu</div></div>
+              <div class="hl"><span class="hl-icon">⏰</span><div class="hl-text"><strong>Wyjazd bramą przed 12:00</strong> — nieprzekraczalny</div></div>
+              <div class="hl"><span class="hl-icon">🍽️</span><div class="hl-text"><strong>Obiad w Misurinie</strong> po zejściu</div></div>
+            </div>
+            <p class="day-desc">Wstajemy o 5:00 — wschód słońca nad Tre Cime to widok, który zostaje na zawsze. Ferrata Toblinger Knoten z Rifugio Locatelli. Wyjazd bramą przed 12:00.</p>
+            <div class="card-foot">
+              <div class="sleep-badge">Ferrata Toblin · [C]</div>
+              <span class="extra-badge">3h · eksponowana</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-section" id="section-2">
+        <div class="day-card" id="card-2">
+          <div class="card-photo">
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80" alt="Cadini di Misurina" loading="lazy" />
+            <div class="card-photo-overlay"></div>
+            <div class="card-photo-num">3</div>
+            <div class="card-photo-title">Cadini + Ferrata Merlone + Cortina</div>
+          </div>
+          <div class="card-body">
+            <div class="day-label">17 sierpnia · Dzień 3</div>
+            <div class="day-loc"><div class="loc-dot"></div>Lago d'Antorno → Rif. Fonda Savio → Cortina</div>
+            <div class="divider-map"></div>
+            <div class="highlights">
+              <div class="hl"><span class="hl-icon">⛏️</span><div class="hl-text"><strong>Ferrata Merlone [C]</strong> · 250 m klamer i drabin</div></div>
+              <div class="hl"><span class="hl-icon">🏔️</span><div class="hl-text"><strong>Cadini di Misurina</strong> · ~11 km / ~900 m</div></div>
+              <div class="hl"><span class="hl-icon">🛍️</span><div class="hl-text"><strong>Cortina d'Ampezzo</strong> popołudniu</div></div>
+              <div class="hl"><span class="hl-icon">⛺</span><div class="hl-text"><strong>Nocleg</strong> koło kolejki Rio Gere</div></div>
+            </div>
+            <p class="day-desc">Wybraliśmy Wariant 1 — Ferratę Merlone na Cadini di Misurina. Najcięższy dzień wyprawy. Popołudnie w Cortinie d'Ampezzo na zasłużony odpoczynek.</p>
+            <div class="card-foot">
+              <div class="sleep-badge">Ferrata Merlone · [C]</div>
+              <span class="extra-badge">6h · stała ekspozycja</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-section" id="section-3">
+        <div class="day-card" id="card-3">
+          <div class="card-photo">
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80" alt="Cristallino" loading="lazy" />
+            <div class="card-photo-overlay"></div>
+            <div class="card-photo-num">4</div>
+            <div class="card-photo-title">Cristallino + Ferrata Ivano Dibona</div>
+          </div>
+          <div class="card-body">
+            <div class="day-label">18 sierpnia · Dzień 4</div>
+            <div class="day-loc"><div class="loc-dot"></div>Rio Gere → Cristallo → Passo Falzarego</div>
+            <div class="divider-map"></div>
+            <div class="highlights">
+              <div class="hl"><span class="hl-icon">🚡</span><div class="hl-text"><strong>Kolejka Rio Gere–Son Forca</strong> (22€/os. w obie)</div></div>
+              <div class="hl"><span class="hl-icon">🏔️</span><div class="hl-text"><strong>Cristallino d'Ampezzo · 3008 m n.p.m.</strong></div></div>
+              <div class="hl"><span class="hl-icon">⛏️</span><div class="hl-text"><strong>Ferrata Ivano Dibona</strong> · most wiszący Ponte Cristallo 27m</div></div>
+              <div class="hl"><span class="hl-icon">⛺</span><div class="hl-text"><strong>Nocleg Passo Falzarego</strong> (darmowy)</div></div>
+            </div>
+            <p class="day-desc">Kolejka Rio Gere–Son Forca, potem żlebem Grava di Staunies w górę. Cristallino d'Ampezzo 3008 m — nasz pierwszy trzytysięcznik. Pełna Ferrata Ivano Dibona żeby nie wracać brzydkim żlebem.</p>
+            <div class="card-foot">
+              <div class="sleep-badge">Cristallino · 3008 m</div>
+              <span class="extra-badge">Trzytysięcznik</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-section" id="section-4">
+        <div class="day-card" id="card-4">
+          <div class="card-photo">
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80" alt="Lagazuoi" loading="lazy" />
+            <div class="card-photo-overlay"></div>
+            <div class="card-photo-num">5</div>
+            <div class="card-photo-title">Fanis + Lagazuoi + jaskinie z I WŚ</div>
+          </div>
+          <div class="card-body">
+            <div class="day-label">19 sierpnia · Dzień 5</div>
+            <div class="day-loc"><div class="loc-dot"></div>Passo Falzarego → Lagazuoi → Giau</div>
+            <div class="divider-map"></div>
+            <div class="highlights">
+              <div class="hl"><span class="hl-icon">🪖</span><div class="hl-text"><strong>Jaskinie z I WŚ</strong> — Galleria dell'Anticima</div></div>
+              <div class="hl"><span class="hl-icon">⛏️</span><div class="hl-text"><strong>Ferrara degli Alpini</strong> · Col dei Bos</div></div>
+              <div class="hl"><span class="hl-icon">🌅</span><div class="hl-text"><strong>Passo Giau o 18:30</strong> — zachód słońca</div></div>
+              <div class="hl"><span class="hl-icon">⛺</span><div class="hl-text"><strong>Nocleg dziko</strong> · piękne widoki</div></div>
+            </div>
+            <p class="day-desc">Szlak 423 z Falzarego, Ferrara degli Alpini, Col dei Bos. Jaskinie z I wojny światowej (Galleria dell'Anticima) — kawałek historii wykuty w skale. Powrót przez Forcella Lagazuoi.</p>
+            <div class="card-foot">
+              <div class="sleep-badge">Lagazuoi · historia</div>
+              <span class="extra-badge">Tunele 1918</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-section" id="section-5">
+        <div class="day-card" id="card-5">
+          <div class="card-photo">
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80" alt="Friedrich August" loading="lazy" />
+            <div class="card-photo-overlay"></div>
+            <div class="card-photo-num">6</div>
+            <div class="card-photo-title">Friedrich August + donaty</div>
+          </div>
+          <div class="card-body">
+            <div class="day-label">20 sierpnia · Dzień 6</div>
+            <div class="day-loc"><div class="loc-dot"></div>Passo Sella → Rifugio Friedrich August</div>
+            <div class="divider-map"></div>
+            <div class="highlights">
+              <div class="hl"><span class="hl-icon">🍩</span><div class="hl-text"><strong>Donaty u Friedricha Augusta</strong> (z brzoskwinią — pistacja rano!)</div></div>
+              <div class="hl"><span class="hl-icon">🌧️</span><div class="hl-text"><strong>Dzień deszczowy</strong> · krótka trasa 30 min</div></div>
+              <div class="hl"><span class="hl-icon">🏔️</span><div class="hl-text"><strong>Widok na Sassolungo</strong> z przełęczy</div></div>
+              <div class="hl"><span class="hl-icon">⛺</span><div class="hl-text"><strong>Nocleg dziko</strong> w okolicach</div></div>
+            </div>
+            <p class="day-desc">Obudził nas deszcz. Weszliśmy 30 min z Passo Sella do Rifugio Friedrich August — słynne donaty (z marmoladą brzoskwiniową, bo pistacjowych zabrakło). Niebo się przejaśniło przy zejściu.</p>
+            <div class="card-foot">
+              <div class="sleep-badge">Rifugio Friedrich August</div>
+              <span class="extra-badge">Słynne donaty</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-section" id="section-6">
+        <div class="day-card" id="card-6">
+          <div class="card-photo">
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80" alt="QC Terme" loading="lazy" />
+            <div class="card-photo-overlay"></div>
+            <div class="card-photo-num">7</div>
+            <div class="card-photo-title">QC Terme + Ortisei</div>
+          </div>
+          <div class="card-body">
+            <div class="day-label">21 sierpnia · Dzień 7</div>
+            <div class="day-loc"><div class="loc-dot"></div>QC Terme Dolomiti → Ortisei</div>
+            <div class="divider-map"></div>
+            <div class="highlights">
+              <div class="hl"><span class="hl-icon">🛁</span><div class="hl-text"><strong>QC Terme Dolomiti</strong> · 9:00–14:00</div></div>
+              <div class="hl"><span class="hl-icon">🏔️</span><div class="hl-text"><strong>Spa z panoramą</strong> dolomitów</div></div>
+              <div class="hl"><span class="hl-icon">🛍️</span><div class="hl-text"><strong>Ortisei</strong> · 16:00–18:00</div></div>
+              <div class="hl"><span class="hl-icon">🏕️</span><div class="hl-text"><strong>Camping 18€/12h</strong> (brak miejsc na dziko)</div></div>
+            </div>
+            <p class="day-desc">Zasłużona regeneracja. QC Terme z widokiem na szczyty — najlepszy spa w Dolomitach. Popołudnie w urokliwym Ortisei, wieczór szukania campingu.</p>
+            <div class="card-foot">
+              <div class="sleep-badge">QC Terme · relaks</div>
+              <span class="extra-badge">Regeneracja</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-section" id="section-7">
+        <div class="day-card" id="card-7">
+          <div class="card-photo">
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80" alt="Seceda" loading="lazy" />
+            <div class="card-photo-overlay"></div>
+            <div class="card-photo-num">8</div>
+            <div class="card-photo-title">Seceda + Pra Plan</div>
+          </div>
+          <div class="card-body">
+            <div class="day-label">22 sierpnia · Dzień 8</div>
+            <div class="day-loc"><div class="loc-dot"></div>Pra Plan → Fermeda → Seceda → Col Raiser</div>
+            <div class="divider-map"></div>
+            <div class="highlights">
+              <div class="hl"><span class="hl-icon">🅿️</span><div class="hl-text"><strong>Pra Plan</strong> · złap parking o 7:30!</div></div>
+              <div class="hl"><span class="hl-icon">🏔️</span><div class="hl-text"><strong>Seceda pieszo</strong> przez Fermeda Hutte</div></div>
+              <div class="hl"><span class="hl-icon">🛤️</span><div class="hl-text"><strong>Via Pieralongia</strong> (ścieżka 4/4A)</div></div>
+              <div class="hl"><span class="hl-icon">🚡</span><div class="hl-text"><strong>Kolejka z Col Raiser</strong> w dół (34€ w obie)</div></div>
+            </div>
+            <p class="day-desc">7:30 — ostatni moment na miejsce parkingowe Pra Plan. Pieszo na Secede przez Rifugio Fermeda Hutte — oszczędzamy 34-74€ na kolejkach. Via Pieralongia (4/4A) to jeden z najpiękniejszych szlaków Dolomitów.</p>
+            <div class="card-foot">
+              <div class="sleep-badge">Seceda · pieszo</div>
+              <span class="extra-badge">Oszczędność vs kolejka</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-section" id="section-outro" style="justify-content:center;">
+        <div class="outro-map-card" id="outro-map-card">
+          <div class="outro-emoji">🏔️</div>
+          <h3>~3 100 km · 8 dni · Dolomity z campera</h3>
+          <p>Ferraty, trzytysięczniki i donaty Friedricha Augusta — Dolomity to nie jest zwykłe miejsce.</p>
+          <a href={`${base}/blog`} style="display:inline-block;margin-top:1.2rem;background:var(--alpine);color:#fff;padding:.65rem 1.6rem;border-radius:10px;font-weight:600;font-size:.85rem;">
+            Czytaj wpisy z trasy →
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="costs" class="solid-w">
+    <div class="sec-head">
+      <div class="sec-tag">Koszty wyprawy</div>
+      <h2 class="sec-title">Koszty wyprawy</h2>
+      <p class="sec-sub">2 osoby · własny camper · 8 dni</p>
+    </div>
+    <div class="costs-table">
+      <div class="costs-row"><span class="costs-label">Paliwo (~3 100 km)</span><span class="costs-amount">2 022 zł</span></div>
+      <div class="costs-row"><span class="costs-label">Winiety (CZ+AT)</span><span class="costs-amount">109 zł</span></div>
+      <div class="costs-row"><span class="costs-label">Autostrady (AT+IT)</span><span class="costs-amount">120 zł</span></div>
+      <div class="costs-row"><span class="costs-label">Noclegi (Tre Cime + camping)</span><span class="costs-amount">250 zł</span></div>
+      <div class="costs-row"><span class="costs-label">Parkingi</span><span class="costs-amount">164 zł</span></div>
+      <div class="costs-row"><span class="costs-label">Kolejki (Rio Gere)</span><span class="costs-amount">190 zł</span></div>
+      <div class="costs-row"><span class="costs-label">Jedzenie (sklepy)</span><span class="costs-amount">849 zł</span></div>
+      <div class="costs-row"><span class="costs-label">Restauracje</span><span class="costs-amount">1 069 zł</span></div>
+      <div class="costs-row"><span class="costs-label">QC Terme</span><span class="costs-amount">677 zł</span></div>
+      <div class="costs-row"><span class="costs-label">RAZEM</span><span class="costs-amount">5 450 zł</span></div>
+    </div>
+  </section>
+
+  <section class="solid" style="padding-top:2rem;padding-bottom:0;">
+    <div style="max-width:700px;margin:0 auto;padding:0 1.5rem;">
+      <KupTrase disabled={true} price="9.99" filename="dolomity-trasa.gpx" />
+    </div>
+  </section>
+
+  <section id="faq" class="solid">
+    <div class="sec-head">
+      <div class="sec-tag">FAQ</div>
+      <h2 class="sec-title">Najczęstsze pytania</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q">Kiedy najlepiej jechać w Dolomity camperem?</button>
+        <div class="faq-a">Sierpień to szczyt sezonu — miejsca na Tre Cime rezerwuj z kilkumiesięcznym wyprzedzeniem. Lepsze terminy to czerwiec (śnieg na ferratach!) lub wrzesień — mniej tłumów, darmowe parkingi jeszcze dostępne, ale niektóre kolejki już zamknięte.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Czy potrzebuję sprzętu ferratowego?</button>
+        <div class="faq-a">Obowiązkowo: uprząż, kask i lonża ferratowa z absorberem energii (nie improvizuj pętlą!). Rękawiczki i solidne buty to must-have. Sprzęt można wypożyczyć w Cortinie lub Sexten za ~15€/dzień/os.</div>
+      </div>
+      <div class="faq-item open">
+        <button class="faq-q">Gdzie nocować camperem?</button>
+        <div class="faq-a">Na przełęczach (Falzarego, Giau, Sella) często darmowo — ale WARUNEK: nic na zewnątrz (krzesła, markiza, podpórki — to grozi mandatem). Aplikacje Park4Night i CamperContact są nieocenione. Tydzień Ferragosto (15.08) to ekstremalne oblężenie — bookuj wcześniej.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="plan" class="solid-w">
+    <div class="sec-head">
+      <div class="sec-tag">Trasa</div>
+      <h2 class="sec-title">Plan orientacyjny</h2>
+      <p class="sec-sub">Trasa liniowa: Sesto → Tre Cime → Cadini/Sorapis → Cristallo → Fanis/Giau → Sella → Odle/Sassolungo → Val di Funes → Alpe di Siusi → Carezza</p>
+    </div>
+    <div class="plan-table-wrap">
+      <table class="plan-table">
+        <thead>
+          <tr>
+            <th>Dzień</th>
+            <th>Data</th>
+            <th>Trasa</th>
+            <th>Aktywność</th>
+            <th>Nocleg</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="plan-day-num">1</span></td><td>15.08</td><td>Dobbiaco → Braies → Misurina</td><td>Spacer Braies, obserwacja Tre Cime</td><td>Rifugio Auronzo (2320 m)</td></tr>
+          <tr><td><span class="plan-day-num">2</span></td><td>16.08</td><td>Tre Cime → Misurina</td><td>Ferrata Toblinger Knoten [C]</td><td>Koło Misurina (dziko)</td></tr>
+          <tr><td><span class="plan-day-num">3</span></td><td>17.08</td><td>Cadini di Misurina → Cortina</td><td>Ferrata Merlone [C], ~11 km/900 m</td><td>Rio Gere (dziko)</td></tr>
+          <tr><td><span class="plan-day-num">4</span></td><td>18.08</td><td>Rio Gere → Cristallo → Falzarego</td><td>Cristallino 3008 m, Ferrata Ivano Dibona</td><td>Passo Falzarego (darmowy)</td></tr>
+          <tr><td><span class="plan-day-num">5</span></td><td>19.08</td><td>Falzarego → Lagazuoi → Giau</td><td>Jaskinie WWI, Ferrara degli Alpini</td><td>Passo Giau (dziko)</td></tr>
+          <tr><td><span class="plan-day-num">6</span></td><td>20.08</td><td>Passo Sella → Friedrich August</td><td>Krótki spacer 30 min (deszcz), donaty</td><td>Okolice Sella (dziko)</td></tr>
+          <tr><td><span class="plan-day-num">7</span></td><td>21.08</td><td>QC Terme → Ortisei</td><td>Relaks w spa, spacer Ortisei</td><td>Camping Ortisei (18€)</td></tr>
+          <tr><td><span class="plan-day-num">8</span></td><td>22.08</td><td>Pra Plan → Seceda → Col Raiser</td><td>Via Pieralongia 4/4A, Seceda pieszo</td><td>Wyjazd</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer id="footer">
+    <div class="footer-logo">
+      <svg width="22" height="22" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <polygon points="14,2 26,22 2,22" fill="#D4A853" opacity=".9"/>
+        <polygon points="14,7 22,22 6,22" fill="#3A7BD5" opacity=".85"/>
+        <circle cx="14" cy="22" r="2.5" fill="#EEF4FF" opacity=".7"/>
+      </svg>
+      KB<span>&nbsp;Adventures</span>
+    </div>
+    <div class="footer-links">
+      <a href={`${base}/`}>Strona główna</a>
+      <a href={`${base}/blog`}>Blog</a>
+      <a href={`${base}/mapa`}>Mapa tras</a>
+      <a href={`${base}/o-mnie`}>O mnie</a>
+    </div>
+    <p class="footer-copy">© 2026 KB Adventures · Wszelkie prawa zastrzeżone</p>
+  </footer>
+
+</div>
+
+<script>
+const WAYPOINTS = [
+  { lat: 46.726, lng: 12.226 },
+  { lat: 46.694, lng: 12.084 },
+  { lat: 46.617, lng: 12.303 },
+  { lat: 46.580, lng: 12.257 },
+  { lat: 46.573, lng: 12.270 },
+  { lat: 46.537, lng: 12.128 },
+  { lat: 46.527, lng: 12.007 },
+  { lat: 46.536, lng: 12.137 },
+  { lat: 46.507, lng: 11.756 },
+  { lat: 46.536, lng: 11.685 },
+  { lat: 46.576, lng: 11.671 },
+  { lat: 46.587, lng: 11.697 },
+];
+const DAYS = [
+  { lat: 46.694, lng: 12.084, zoom: 13, label: "Dzień 1 — Lago di Braies" },
+  { lat: 46.617, lng: 12.303, zoom: 13, label: "Dzień 2 — Tre Cime" },
+  { lat: 46.573, lng: 12.270, zoom: 13, label: "Dzień 3 — Cadini / Cortina" },
+  { lat: 46.537, lng: 12.128, zoom: 13, label: "Dzień 4 — Cristallino" },
+  { lat: 46.527, lng: 12.007, zoom: 13, label: "Dzień 5 — Lagazuoi" },
+  { lat: 46.507, lng: 11.756, zoom: 13, label: "Dzień 6 — Friedrich August" },
+  { lat: 46.536, lng: 11.685, zoom: 13, label: "Dzień 7 — QC Terme / Ortisei" },
+  { lat: 46.587, lng: 11.697, zoom: 13, label: "Dzień 8 — Seceda" },
+];
+const OVERVIEW = { center: [46.58, 12.10], zoom: 10 };
+
+const map = L.map('map', {
+  center: OVERVIEW.center, zoom: OVERVIEW.zoom,
+  zoomControl: false, attributionControl: false,
+  scrollWheelZoom: false, dragging: false,
+  doubleClickZoom: false, keyboard: false, tap: false, touchZoom: false,
+});
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', { maxZoom: 19, subdomains: 'abcd' }).addTo(map);
+L.polyline(WAYPOINTS.map(w => [w.lat, w.lng]), { color: 'rgba(58,123,213,0.7)', weight: 3, opacity: 1, dashArray: '7 11', lineJoin: 'round', lineCap: 'round' }).addTo(map);
+
+const pinMarkers = [];
+DAYS.forEach((d, i) => {
+  const m = L.marker([d.lat, d.lng], {
+    icon: L.divIcon({ className: '', html: `<div class="day-pin" id="pin-${i}"><span>${i+1}</span></div>`, iconSize: [28,28], iconAnchor: [14,28] }),
+    zIndexOffset: 100,
+  });
+  pinMarkers.push(m);
+});
+function showPins() { pinMarkers.forEach(m => { if (!map.hasLayer(m)) m.addTo(map); }); }
+function hidePins() { pinMarkers.forEach(m => { if (map.hasLayer(m)) map.removeLayer(m); }); }
+
+const carMarker = L.marker(OVERVIEW.center, {
+  icon: L.divIcon({ className: '', html: '<div class="car-wrap">🚐</div>', iconSize: [34,34], iconAnchor: [17,17] }),
+  zIndexOffset: 500,
+}).addTo(map);
+
+let carRaf = null;
+function animateCar(toLat, toLng, ms = 1400) {
+  const { lat, lng } = carMarker.getLatLng();
+  const from = [lat, lng], to = [toLat, toLng];
+  cancelAnimationFrame(carRaf);
+  const t0 = performance.now();
+  (function step(t) {
+    const r = Math.min((t - t0) / ms, 1);
+    const e = r < .5 ? 2*r*r : -1+(4-2*r)*r;
+    carMarker.setLatLng([from[0]+(to[0]-from[0])*e, from[1]+(to[1]-from[1])*e]);
+    if (r < 1) carRaf = requestAnimationFrame(step);
+  })(t0);
+}
+
+let currentDay = -1;
+function activateDay(idx) {
+  if (idx === currentDay) return;
+  currentDay = idx;
+  showPins();
+  const d = DAYS[idx];
+  const pill = document.getElementById('day-pill');
+  pill.textContent = d.label; pill.style.opacity = '1';
+  map.flyTo([d.lat, d.lng], d.zoom, { duration: 1.5, easeLinearity: .28 });
+  animateCar(d.lat, d.lng);
+  DAYS.forEach((_, i) => { const el = document.getElementById(`pin-${i}`); if (el) el.classList.toggle('active', i === idx); });
+  document.querySelectorAll('.day-card').forEach((c, i) => c.classList.toggle('active', i === idx));
+}
+function flyOverview() {
+  map.flyTo(OVERVIEW.center, OVERVIEW.zoom, { duration: 2, easeLinearity: .3 });
+  document.getElementById('day-pill').style.opacity = '0';
+  currentDay = -1; hidePins();
+  document.querySelectorAll('.day-pin').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.day-card').forEach(el => el.classList.remove('active'));
+}
+
+const dayObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const idx = parseInt(entry.target.id.replace('section-', ''));
+    if (isNaN(idx)) return;
+    document.getElementById(`card-${idx}`)?.classList.add('visible');
+    activateDay(idx);
+  });
+}, { threshold: .45 });
+
+document.querySelectorAll('.day-section[id^="section-"]').forEach(el => {
+  if (el.id !== 'section-outro') dayObs.observe(el);
+});
+
+new IntersectionObserver(([e]) => {
+  if (!e.isIntersecting) return;
+  e.target.classList.add('visible');
+  flyOverview();
+}, { threshold: .35 }).observe(document.getElementById('outro-map-card'));
+
+new IntersectionObserver(([e]) => {
+  if (e.isIntersecting) flyOverview();
+}, { threshold: .15 }).observe(document.getElementById('hero'));
+
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('progress').style.width = (total > 0 ? window.scrollY / total * 100 : 0) + '%';
+}, { passive: true });
+
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item');
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+</script>
+</body>
+</html>

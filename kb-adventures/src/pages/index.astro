@@ -20,6 +20,17 @@ const trips = [
   },
   {
     id: 2,
+    country: 'Włochy / Austria',
+    flag: '🏔️',
+    name: 'Dolomity',
+    subtitle: '8 dni · Camperem',
+    desc: 'Ferraty B/C, Cristallino 3008 m, Tre Cime o świcie i donaty u Friedricha Augusta. Camperem przez Południowy Tyrol.',
+    img: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
+    href: `${base}/dolomity`,
+    active: true,
+  },
+  {
+    id: 3,
     country: 'Islandia',
     flag: '🇮🇸',
     name: 'Ring Road',
@@ -30,7 +41,7 @@ const trips = [
     active: false,
   },
   {
-    id: 3,
+    id: 4,
     country: 'Maroko',
     flag: '🇲🇦',
     name: 'Atlas i Sahara',
@@ -45,22 +56,14 @@ const trips = [
 
 <BaseLayout>
 
-<!-- ═══════════════════════════════════════════
-  HERO — scroll-driven video (WILD LIFE style)
-  Tall outer section (~450vh) makes page scrollable.
-  Inner sticky div stays at viewport top while user scrolls.
-  JS maps scroll progress → video.currentTime.
-═══════════════════════════════════════════ -->
 <div id="scroll-section" class="scroll-section-outer">
   <section id="hero" class="scroll-sticky-inner bg-[#0a0a0a]" aria-label="Hero">
 
-    <!-- Layer 1 — giant background title (z-1) -->
     <div class="hero-giant-text" aria-hidden="true">
       <span class="hero-giant-kb">KB</span>
       <span class="hero-giant-adv">Adventures</span>
     </div>
 
-    <!-- Layer 2 — scroll-driven video with gradient mask (z-2) -->
     <div class="hero-photo-wrap">
       <video
         id="scroll-video"
@@ -74,14 +77,9 @@ const trips = [
       <div class="hero-photo-overlay"></div>
     </div>
 
-    <!-- Layer 3 — UI content (z-3), fades out as scroll progresses -->
     <div class="hero-content-layer" id="hero-ui">
-
-      <!-- spacer to push stats to bottom -->
       <div></div>
       <div></div>
-
-      <!-- Bottom scroll hint -->
       <div class="hero-stats-bar">
         <div class="hero-stat">
           <div class="hero-stat-inner">
@@ -111,7 +109,6 @@ const trips = [
       </div>
     </div>
 
-    <!-- Layer 4 — "O mnie" overlay (z-4), slides up at end of video -->
     <div class="about-overlay" id="about-overlay" aria-hidden="true">
       <div class="about-overlay-inner">
         <p class="about-overlay-eyebrow">Za kierownicą i obiektywem</p>
@@ -142,9 +139,6 @@ const trips = [
   </section>
 </div>
 
-<!-- ═══════════════════════════════════════════
-  MOJE WYPRAWY
-═══════════════════════════════════════════ -->
 <section id="wyprawy" class="trips-section">
   <div class="trips-header fade-up">
     <p class="section-eyebrow">Każda droga ma historię</p>
@@ -200,9 +194,6 @@ const trips = [
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════
-  MAPA
-═══════════════════════════════════════════ -->
 <section class="map-section">
   <div class="map-inner">
     <div class="map-text fade-up">
@@ -224,9 +215,6 @@ const trips = [
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════
-  OSTATNIE WPISY
-═══════════════════════════════════════════ -->
 <section class="blog-section">
   <div class="trips-header fade-up">
     <p class="section-eyebrow">Blog podróżniczy</p>
@@ -265,7 +253,6 @@ const trips = [
 </BaseLayout>
 
 <style>
-/* ─────────────────── SCROLL VIDEO CONTAINER ─────────────────── */
 .scroll-section-outer {
   height: 450vh;
   position: relative;
@@ -277,7 +264,6 @@ const trips = [
   overflow: hidden;
 }
 
-/* ─────────────────── HERO ─────────────────── */
 .hero-giant-text {
   position: absolute;
   inset: 0;
@@ -365,7 +351,6 @@ const trips = [
   justify-content: space-between;
 }
 
-/* Top bar (replaces nav for hero) */
 .hero-topbar {
   display: flex;
   align-items: center;
@@ -408,7 +393,6 @@ const trips = [
 }
 .hero-nav-cta:hover { background: #c49a40; }
 
-/* Center tagline */
 .hero-tagline-wrap {
   text-align: center;
   padding: 0 2rem;
@@ -422,7 +406,6 @@ const trips = [
   letter-spacing: 0.35em;
 }
 
-/* Bottom stats bar */
 .hero-stats-bar {
   display: flex;
   align-items: stretch;
@@ -474,7 +457,6 @@ const trips = [
   color: white;
 }
 
-/* ─────────────────── ABOUT OVERLAY (end of scroll video) ─────────────────── */
 .about-overlay {
   position: absolute;
   inset: 0;
@@ -551,7 +533,6 @@ const trips = [
 }
 .about-overlay-cta:hover { background: #c49a40; }
 
-/* ─────────────────── ABOUT ─────────────────── */
 .about-strip {
   background: #111111;
   border-top: 1px solid rgba(255,255,255,0.06);
@@ -615,7 +596,6 @@ const trips = [
 .about-link:hover { gap: 0.9rem; }
 .about-link-arrow { width: 1rem; height: 1rem; }
 
-/* ─────────────────── TRIPS ─────────────────── */
 .trips-section {
   background: #0e0e0e;
   padding: 6rem 3rem 7rem;
@@ -650,13 +630,16 @@ const trips = [
 
 .trips-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
+  .trips-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
   .trips-grid { grid-template-columns: 1fr; max-width: 480px; }
 }
 
@@ -773,7 +756,6 @@ const trips = [
 .trip-card--active:hover .trip-card-cta { gap: 0.9rem; }
 .trip-card-arrow { width: 0.9rem; height: 0.9rem; }
 
-/* ─────────────────── MAP ─────────────────── */
 .map-section {
   background: #0a0a0a;
   padding: 6rem 3rem;
@@ -826,7 +808,6 @@ const trips = [
 }
 .mini-map { width: 100%; height: 320px; }
 
-/* ─────────────────── BLOG ─────────────────── */
 .blog-section {
   background: #111111;
   padding: 6rem 3rem 7rem;
@@ -914,7 +895,6 @@ const trips = [
   color: #D4A853;
 }
 
-/* ─────────────────── ANIMATIONS ─────────────────── */
 @keyframes bounce {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(5px); }
@@ -935,7 +915,6 @@ const trips = [
 </style>
 
 <script>
-  /* ── Scroll-driven video ── */
   const scrollSection = document.getElementById('scroll-section') as HTMLElement | null;
   const scrollVideo = document.getElementById('scroll-video') as HTMLVideoElement | null;
   const heroUI = document.getElementById('hero-ui') as HTMLElement | null;
@@ -954,24 +933,20 @@ const trips = [
     const scrolled = Math.max(0, -rect.top);
     const progress = Math.min(1, scrolled / totalScrollable);
 
-    // Drive video by scroll
     if (scrollVideo.readyState >= 2 && scrollVideo.duration) {
       scrollVideo.currentTime = scrollVideo.duration * progress;
     }
 
-    // Fade out hero UI in first 25% of scroll
     if (heroUI) {
       const uiOpacity = Math.max(0, 1 - progress / 0.25);
       heroUI.style.opacity = String(uiOpacity);
       heroUI.style.pointerEvents = uiOpacity < 0.05 ? 'none' : '';
     }
 
-    // Fade out giant text in first 35%
     if (heroGiant) {
       heroGiant.style.opacity = String(Math.max(0, 1 - progress / 0.35));
     }
 
-    // Slide up "O mnie" overlay starting at 72% of scroll
     if (aboutOverlay) {
       const start = 0.72;
       const end = 0.95;
@@ -985,9 +960,8 @@ const trips = [
   }
 
   window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll(); // run once on load
+  onScroll();
 
-  /* ── Mini Map ── */
   async function initMiniMap() {
     const L = (await import('leaflet')).default;
     if (!document.querySelector('link[href*="leaflet"]')) {
@@ -996,7 +970,7 @@ const trips = [
       link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
       document.head.appendChild(link);
     }
-    const map = L.map('mini-map', { zoomControl: false, scrollWheelZoom: false, attributionControl: false }).setView([40, 15], 3);
+    const map = L.map('mini-map', { zoomControl: false, scrollWheelZoom: false, attributionControl: false }).setView([44, 12], 4);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png').addTo(map);
 
     const goldIcon = L.divIcon({
@@ -1008,6 +982,7 @@ const trips = [
 
     [
       { lat: 40.7, lng: 17.1, label: 'Puglia, Włochy' },
+      { lat: 46.6, lng: 12.1, label: 'Dolomity' },
       { lat: 64.9, lng: -19.0, label: 'Islandia' },
       { lat: 31.6, lng: -8.0, label: 'Maroko' },
     ].forEach(p => {
