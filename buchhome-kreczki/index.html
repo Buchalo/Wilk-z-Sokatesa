@@ -1,0 +1,1068 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rezydencja w Kręczkach</title>
+<meta name="description" content="16 domów w zabudowie bliźniaczej przy ul. Żyznej w Kręczkach (gm. Ożarów Mazowiecki). Inwestor: BUCHHOME sp. z o.o.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: arkusz architekta — jasny papier, grafitowy tusz, linie wymiarowe jako motyw; kolory tynków z projektu kodują domy na planie */
+:root{
+  --paper:#F1F2EE; --surface:#FAFBF8; --sheet:#FFFFFF; --ink:#1B201D; --muted:#5B635D; --line:#D3D8D0;
+  --accent:#2D5A46; --accent-ink:#FFFFFF; --accent-soft:#DDE8E1; --clay:#8C5444;
+  --t1:#C6AB9A; --t2:#CEB197; --t3:#B99A7E; --t4:#AA8364; --ceramic:#F1ECE1;
+  --garden:#CFDCC8; --garden-line:#A9BDA0; --paving:#DCDCD6; --road:#C4C6C0; --shadow:#18221D;
+  --ok:#2D7A52; --warn:#B7791F; --sold:#8A8F8B;
+  --f-display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Instrument Sans", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --radius:6px; --max:1180px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#111513; --surface:#181D1A; --sheet:#F4F4F0; --ink:#E5E8E2; --muted:#9BA49C; --line:#2B332E;
+  --accent:#8CC4A6; --accent-ink:#0E1411; --accent-soft:#1F2F27; --clay:#C98670;
+  --garden:#2B3A2C; --garden-line:#3E5240; --paving:#2A2F2C; --road:#3A403C; --shadow:#000000;
+  --ok:#6BC293; --warn:#E0A84B; --sold:#7A817C; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --paper:#111513; --surface:#181D1A; --sheet:#F4F4F0; --ink:#E5E8E2; --muted:#9BA49C; --line:#2B332E;
+  --accent:#8CC4A6; --accent-ink:#0E1411; --accent-soft:#1F2F27; --clay:#C98670;
+  --garden:#2B3A2C; --garden-line:#3E5240; --paving:#2A2F2C; --road:#3A403C; --shadow:#000000;
+  --ok:#6BC293; --warn:#E0A84B; --sold:#7A817C; color-scheme:dark }
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth; scroll-padding-top:64px}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none!important; animation:none!important} }
+body{margin:0; background:var(--paper); color:var(--ink); font:16px/1.6 var(--f-body); -webkit-font-smoothing:antialiased}
+img{max-width:100%; display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+h1,h2,h3{font-family:var(--f-display); font-weight:800; line-height:1.05; letter-spacing:-.02em; text-wrap:balance; margin:0}
+h2{font-size:clamp(1.9rem,4vw,3rem)}
+h3{font-size:1.25rem; font-weight:600; letter-spacing:-.01em}
+p{margin:0}
+.mono{font-family:var(--f-mono); font-variant-numeric:tabular-nums}
+.eyebrow{font:600 .74rem/1 var(--f-mono); letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+.wrap{max-width:var(--max); margin:0 auto; padding-inline:clamp(16px,4vw,40px)}
+section{padding-block:clamp(56px,8vw,104px); border-top:1px solid var(--line)}
+.sec-head{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.1fr); gap:24px 48px; align-items:end; margin-bottom:40px}
+.sec-head p{color:var(--muted); max-width:58ch}
+@media (max-width:820px){ .sec-head{grid-template-columns:1fr} }
+.btn{display:inline-flex; align-items:center; gap:8px; border:1px solid var(--ink); background:transparent; color:var(--ink); font:600 .92rem/1 var(--f-body); padding:12px 18px; border-radius:999px; cursor:pointer; text-decoration:none; transition:background .15s,color .15s}
+.btn:hover{background:var(--ink); color:var(--paper)}
+.btn.primary{background:var(--accent); border-color:var(--accent); color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.08); background:var(--accent); color:var(--accent-ink)}
+.btn.small{padding:8px 13px; font-size:.84rem}
+.seg{display:inline-flex; border:1px solid var(--line); border-radius:999px; padding:3px; background:var(--surface); flex-wrap:wrap}
+.seg button{border:0; background:transparent; color:var(--muted); font:500 .86rem/1 var(--f-body); padding:8px 13px; border-radius:999px; cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink); color:var(--paper)}
+.tag{display:inline-flex; align-items:center; gap:6px; font:500 .74rem/1 var(--f-mono); padding:5px 8px; border:1px solid var(--line); border-radius:4px; color:var(--muted); white-space:nowrap}
+.todo{background:repeating-linear-gradient(135deg, transparent 0 6px, var(--accent-soft) 6px 12px); border:1px dashed var(--muted); border-radius:3px; padding:0 5px; font-family:var(--f-mono); font-size:.85em; color:var(--muted)}
+.est{font:600 .62rem/1 var(--f-mono); letter-spacing:.06em; text-transform:uppercase; color:var(--warn); border:1px solid currentColor; border-radius:3px; padding:2px 4px; vertical-align:middle}
+
+/* Pasek prototypu + nawigacja */
+.proto{background:var(--ink); color:var(--paper); font:500 .8rem/1.4 var(--f-mono); text-align:center; padding:8px 16px}
+.nav{position:sticky; top:env(safe-area-inset-top,0px); z-index:40; background:color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex; align-items:center; gap:20px; height:58px}
+.logo{display:flex; align-items:baseline; gap:8px; text-decoration:none; white-space:nowrap}
+.logo b{font:800 1.05rem/1 var(--f-display); letter-spacing:.04em}
+.logo span{font:500 .7rem/1 var(--f-mono); color:var(--muted)}
+.nav nav{display:flex; gap:2px; overflow-x:auto; scrollbar-width:none; flex:1; min-width:0}
+.nav nav::-webkit-scrollbar{display:none}
+.nav nav a{font-size:.86rem; text-decoration:none; color:var(--muted); padding:8px 10px; border-radius:6px; white-space:nowrap}
+.nav nav a:hover,.nav nav a.on{color:var(--ink); background:var(--surface)}
+.fav-btn{white-space:nowrap}
+@media (max-width:640px){ .logo span{display:none} .nav .wrap{gap:10px} .fav-btn .lbl{display:none} }
+
+/* Hero */
+.hero{padding-block:clamp(36px,6vw,72px) clamp(40px,6vw,80px); border-top:0}
+.hero-grid{display:grid; grid-template-columns:minmax(0,.9fr) minmax(0,1.25fr); gap:clamp(24px,5vw,64px); align-items:center}
+@media (max-width:900px){ .hero-grid{grid-template-columns:1fr} }
+.hero h1{font-size:clamp(2.7rem,7vw,5.4rem); margin:14px 0 20px}
+.hero h1 em{font-style:normal; color:var(--accent)}
+.hero .lede{font-size:1.12rem; color:var(--muted); max-width:44ch}
+.hero .cta{display:flex; gap:10px; flex-wrap:wrap; margin-top:28px}
+.drawing{position:relative; background:var(--sheet); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(28px,4vw,44px) clamp(14px,3vw,40px) clamp(14px,2vw,22px) clamp(36px,4vw,56px)}
+.drawing img{width:100%; height:auto}
+.dim{position:absolute; font:500 .7rem/1 var(--f-mono); color:#4A524C; display:flex; align-items:center; gap:6px}
+.dim.top{top:10px; left:clamp(36px,4vw,56px); right:clamp(14px,3vw,40px); justify-content:center}
+.dim.top::before,.dim.top::after{content:""; flex:1; height:1px; background:#4A524C}
+.dim.left{left:8px; top:clamp(28px,4vw,44px); bottom:clamp(14px,2vw,22px); flex-direction:column; justify-content:center; writing-mode:vertical-rl; transform:rotate(180deg)}
+.dim.left::before,.dim.left::after{content:""; flex:1; width:1px; background:#4A524C}
+.drawing figcaption{margin-top:10px; font:500 .72rem/1.4 var(--f-mono); color:#6A716C; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.facts{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:0; margin-top:clamp(36px,5vw,56px); border-top:1px solid var(--ink)}
+.facts div{padding:18px 18px 0 0}
+.facts b{display:block; font:800 clamp(1.7rem,3.4vw,2.6rem)/1 var(--f-display); letter-spacing:-.02em}
+.facts span{display:block; margin-top:8px; color:var(--muted); font-size:.88rem}
+@media (max-width:700px){ .facts{grid-template-columns:repeat(2,minmax(0,1fr))} }
+
+/* Masterplan */
+.mp{display:grid; grid-template-columns:minmax(0,1.55fr) minmax(0,1fr); gap:24px; align-items:start}
+@media (max-width:960px){ .mp{grid-template-columns:1fr} }
+.filters{display:flex; gap:10px 14px; flex-wrap:wrap; align-items:center; margin-bottom:16px}
+.filters .count{margin-left:auto; font:500 .82rem var(--f-mono); color:var(--muted)}
+.site-box{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:10px; position:relative}
+.site-box svg{width:100%; height:auto; display:block}
+.legend{display:flex; gap:14px; flex-wrap:wrap; padding:10px 6px 2px; font-size:.78rem; color:var(--muted)}
+.legend i{display:inline-block; width:12px; height:12px; border-radius:2px; vertical-align:-2px; margin-right:6px; border:1px solid var(--line)}
+svg .unit{cursor:pointer; transition:opacity .2s}
+svg .unit rect.body{stroke:var(--ink); stroke-width:.18}
+svg .unit:hover rect.body, svg .unit:focus rect.body{stroke-width:.5}
+svg .unit.sel rect.body{stroke:var(--accent); stroke-width:.75}
+svg .unit.faded{opacity:.18}
+#sunSvg .unit{cursor:default}
+svg .unit:focus{outline:none}
+svg text{font-family:var(--f-mono)}
+.tip{position:absolute; pointer-events:none; background:var(--ink); color:var(--paper); font:500 .76rem/1.35 var(--f-mono); padding:7px 9px; border-radius:4px; white-space:nowrap; transform:translate(-50%,-115%); opacity:0; transition:opacity .12s}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:22px; position:sticky; top:76px}
+@media (max-width:960px){ .panel{position:static} }
+.panel h3{font-size:1.9rem; font-weight:800}
+.panel .tags{display:flex; gap:6px; flex-wrap:wrap; margin:12px 0 16px}
+.spec{width:100%; border-collapse:collapse; font-size:.92rem}
+.spec td{padding:8px 0; border-bottom:1px solid var(--line); vertical-align:top}
+.spec td:last-child{text-align:right; font-family:var(--f-mono); font-variant-numeric:tabular-nums}
+.swatch{display:inline-block; width:14px; height:14px; border-radius:2px; border:1px solid rgba(0,0,0,.2); vertical-align:-2px; margin-right:6px}
+.status{display:inline-flex; align-items:center; gap:6px; font-weight:600}
+.status::before{content:""; width:8px; height:8px; border-radius:50%; background:currentColor}
+.st-dostepny{color:var(--ok)} .st-rezerwacja{color:var(--warn)} .st-sprzedany{color:var(--sold)}
+.panel .actions{display:flex; gap:8px; flex-wrap:wrap; margin-top:18px}
+.unit-list{margin-top:18px; overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); background:var(--surface)}
+.unit-list table{width:100%; border-collapse:collapse; font-size:.86rem; min-width:620px}
+.unit-list th{font:600 .68rem/1 var(--f-mono); letter-spacing:.1em; text-transform:uppercase; color:var(--muted); text-align:left; padding:12px 14px; border-bottom:1px solid var(--line)}
+.unit-list td{padding:10px 14px; border-bottom:1px solid var(--line); font-variant-numeric:tabular-nums}
+.unit-list tr:last-child td{border-bottom:0}
+.unit-list tbody tr{cursor:pointer}
+.unit-list tbody tr:hover,.unit-list tbody tr.sel{background:var(--accent-soft)}
+.unit-list td.num{font-family:var(--f-mono); text-align:right}
+
+/* Architektura */
+.arch-tabs{display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:16px}
+.elev{background:var(--sheet); border:1px solid var(--line); border-radius:var(--radius); padding:clamp(12px,3vw,32px); cursor:zoom-in}
+.palette{display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:10px; margin-top:16px}
+@media (max-width:700px){ .palette{grid-template-columns:repeat(3,minmax(0,1fr))} }
+.palette div{border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; background:var(--surface)}
+.palette i{display:block; height:54px}
+.palette span{display:block; padding:8px 10px; font-size:.78rem; line-height:1.3}
+.palette span small{display:block; color:var(--muted); font-family:var(--f-mono); font-size:.7rem}
+.arch-facts{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:28px 40px; margin-top:44px}
+@media (max-width:820px){ .arch-facts{grid-template-columns:1fr} }
+.arch-facts h3{margin-bottom:8px}
+.arch-facts p{color:var(--muted); font-size:.95rem}
+.kv{display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); border:1px solid var(--line); border-radius:var(--radius); margin-top:28px; background:var(--surface)}
+.kv div{padding:16px; border-right:1px solid var(--line)}
+.kv div:last-child{border-right:0}
+.kv b{display:block; font:600 1.3rem/1.1 var(--f-mono)}
+.kv span{font-size:.8rem; color:var(--muted)}
+@media (max-width:820px){ .kv{grid-template-columns:repeat(2,minmax(0,1fr))} .kv div{border-bottom:1px solid var(--line)} }
+
+/* Rzuty */
+.plans{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); gap:28px; align-items:start}
+@media (max-width:900px){ .plans{grid-template-columns:1fr} }
+.plan-sheet{background:var(--sheet); border:1px solid var(--line); border-radius:var(--radius); padding:16px; display:flex; justify-content:center}
+.plan-img{position:relative; width:100%; max-width:340px}
+.plan-img img{width:100%; height:auto}
+.hot{position:absolute; border:2px solid transparent; border-radius:2px; transition:background .15s,border-color .15s; cursor:pointer}
+.hot.on{background:color-mix(in srgb, var(--accent) 22%, transparent); border-color:var(--accent)}
+.plan-ctrl{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px}
+.rooms{width:100%; border-collapse:collapse}
+.rooms th{font:600 .68rem/1 var(--f-mono); letter-spacing:.1em; text-transform:uppercase; color:var(--muted); text-align:left; padding:10px 8px; border-bottom:1px solid var(--ink)}
+.rooms td{padding:10px 8px; border-bottom:1px solid var(--line)}
+.rooms td.n{font-family:var(--f-mono); color:var(--muted); width:52px}
+.rooms td.a{font-family:var(--f-mono); text-align:right; font-variant-numeric:tabular-nums}
+.rooms tbody tr{cursor:pointer}
+.rooms tbody tr.on{background:var(--accent-soft)}
+.rooms tfoot td{font-weight:600; border-bottom:0; padding-top:14px}
+.plan-note{margin-top:14px; font-size:.84rem; color:var(--muted)}
+.totals{display:flex; gap:24px; flex-wrap:wrap; margin-top:18px; padding-top:18px; border-top:1px solid var(--line)}
+.totals b{display:block; font:800 1.9rem/1 var(--f-display)}
+.totals span{font-size:.8rem; color:var(--muted)}
+
+/* Słońce */
+.sun{display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); gap:28px; align-items:start}
+@media (max-width:900px){ .sun{grid-template-columns:1fr} }
+.ctrl{display:grid; gap:18px}
+.ctrl label{display:block; font:600 .7rem/1 var(--f-mono); letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:8px}
+input[type=range]{width:100%; accent-color:var(--accent)}
+select,input[type=number],input[type=text],input[type=email],input[type=tel],textarea{width:100%; font:inherit; color:var(--ink); background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:10px 12px}
+.readout{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border:1px solid var(--line); border-radius:var(--radius); background:var(--surface)}
+.readout div{padding:14px 16px; border-bottom:1px solid var(--line)}
+.readout div:nth-child(odd){border-right:1px solid var(--line)}
+.readout div:nth-last-child(-n+2){border-bottom:0}
+.readout b{display:block; font:600 1.35rem/1.1 var(--f-mono)}
+.readout span{font-size:.78rem; color:var(--muted)}
+.sun-note{font-size:.84rem; color:var(--muted)}
+
+/* Lokalizacja */
+.loc{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:28px; align-items:start}
+@media (max-width:900px){ .loc{grid-template-columns:1fr} }
+.radial{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:10px}
+.radial svg{width:100%; height:auto; display:block}
+.dest{list-style:none; margin:0; padding:0; border-top:1px solid var(--ink)}
+.dest li{display:grid; grid-template-columns:minmax(0,1fr) auto auto; gap:16px; align-items:baseline; padding:14px 2px; border-bottom:1px solid var(--line); cursor:default}
+.dest li.on{background:var(--accent-soft)}
+.dest .km,.dest .min{font-family:var(--f-mono); font-variant-numeric:tabular-nums; text-align:right}
+.dest .min{color:var(--muted); min-width:64px}
+
+/* Standard */
+.std{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden}
+@media (max-width:900px){ .std{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:560px){ .std{grid-template-columns:1fr} }
+.std > div{background:var(--surface); padding:22px}
+.std .val{font:600 .8rem/1.2 var(--f-mono); color:var(--accent); margin-bottom:10px}
+.std h3{font-size:1.08rem; margin-bottom:6px}
+.std p{font-size:.9rem; color:var(--muted)}
+.std-group{margin:36px 0 14px}
+
+/* Harmonogram */
+.timeline{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:0; counter-reset:t}
+@media (max-width:900px){ .timeline{grid-template-columns:1fr} }
+.timeline li{position:relative; padding:28px 18px 0 0; border-top:2px solid var(--line)}
+.timeline li.done{border-top-color:var(--accent)}
+.timeline li::before{content:""; position:absolute; top:-7px; left:0; width:12px; height:12px; border-radius:50%; background:var(--paper); border:2px solid var(--line)}
+.timeline li.done::before{background:var(--accent); border-color:var(--accent)}
+.timeline li.now::before{border-color:var(--accent)}
+.timeline .d{font:600 .78rem var(--f-mono); color:var(--muted)}
+.timeline h3{font-size:1.05rem; margin:6px 0}
+.timeline p{font-size:.88rem; color:var(--muted)}
+@media (max-width:900px){ .timeline li{padding:0 0 22px 26px; border-top:0; border-left:2px solid var(--line)} .timeline li.done{border-left-color:var(--accent)} .timeline li::before{top:0; left:-7px} }
+
+/* Kalkulator */
+.calc{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:28px; align-items:start}
+@media (max-width:900px){ .calc{grid-template-columns:1fr} }
+.calc .row{display:grid; grid-template-columns:minmax(0,1fr) 120px; gap:12px; align-items:center}
+.calc output{font-family:var(--f-mono)}
+.result{background:var(--ink); color:var(--paper); border-radius:var(--radius); padding:28px}
+.result .big{font:800 clamp(2.4rem,5vw,3.6rem)/1 var(--f-display); letter-spacing:-.02em; margin:8px 0 6px}
+.result .eyebrow{color:color-mix(in srgb, var(--paper) 65%, transparent)}
+.result dl{display:grid; grid-template-columns:auto auto; gap:8px 16px; margin:22px 0 0; font-size:.9rem}
+.result dd{margin:0; text-align:right; font-family:var(--f-mono)}
+.bar{display:flex; height:10px; border-radius:5px; overflow:hidden; margin-top:20px; background:color-mix(in srgb, var(--paper) 20%, transparent)}
+.bar i:first-child{background:var(--accent)} .bar i:last-child{background:var(--t4)}
+.bar-l{display:flex; justify-content:space-between; font-size:.75rem; margin-top:6px; color:color-mix(in srgb, var(--paper) 70%, transparent)}
+
+/* FAQ + kontakt */
+.faq details{border-bottom:1px solid var(--line); padding:4px 0}
+.faq summary{cursor:pointer; list-style:none; display:flex; justify-content:space-between; gap:16px; padding:16px 0; font:600 1.06rem/1.35 var(--f-body)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+"; font:400 1.4rem/1 var(--f-mono); color:var(--muted)}
+.faq details[open] summary::after{content:"–"}
+.faq details p{padding:0 0 18px; color:var(--muted); max-width:70ch}
+.contact{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.2fr); gap:40px}
+@media (max-width:900px){ .contact{grid-template-columns:1fr} }
+.form{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+.form .full{grid-column:1/-1}
+@media (max-width:560px){ .form{grid-template-columns:1fr} }
+.form label{display:block; font-size:.82rem; color:var(--muted); margin-bottom:6px}
+.form .chk{display:flex; gap:10px; align-items:flex-start; font-size:.82rem; color:var(--muted)}
+.form .chk input{margin-top:4px}
+.form-msg{grid-column:1/-1; padding:14px; border-radius:var(--radius); background:var(--accent-soft); font-size:.9rem}
+.co dl{display:grid; grid-template-columns:110px minmax(0,1fr); gap:10px 16px; margin:24px 0 0}
+.co dt{font:600 .7rem/1.8 var(--f-mono); letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+.co dd{margin:0}
+footer{border-top:1px solid var(--line); padding-block:36px; font-size:.82rem; color:var(--muted)}
+footer .wrap{display:grid; gap:12px}
+
+/* Ulubione + lightbox */
+.drawer{position:fixed; inset:auto 0 0 0; z-index:60; background:var(--surface); border-top:1px solid var(--ink); max-height:70vh; overflow:auto; padding:20px 0 calc(20px + env(safe-area-inset-bottom,0px)); box-shadow:0 -12px 40px rgba(0,0,0,.18)}
+.drawer .head{display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:14px}
+.cmp{overflow-x:auto}
+.cmp table{border-collapse:collapse; font-size:.86rem; min-width:100%}
+.cmp th,.cmp td{padding:8px 14px; border-bottom:1px solid var(--line); text-align:left; white-space:nowrap}
+.cmp td{font-family:var(--f-mono)}
+.lb{position:fixed; inset:0; z-index:80; background:rgba(12,15,13,.92); display:flex; flex-direction:column}
+.lb-bar{display:flex; gap:8px; justify-content:space-between; align-items:center; padding:calc(12px + env(safe-area-inset-top,0px)) 16px 12px; color:#EEE}
+.lb-bar .btn{border-color:#EEE; color:#EEE}
+.lb-bar .btn:hover{background:#EEE; color:#111}
+.lb-stage{flex:1; overflow:hidden; position:relative; touch-action:none; cursor:grab}
+.lb-stage img{position:absolute; left:0; top:0; transform-origin:0 0; max-width:none; background:#fff; user-select:none; -webkit-user-drag:none}
+</style>
+</head>
+<body>
+
+<div class="proto">Prototyp strony · dane z projektu budowlanego (wrzesień 2026) · pola oznaczone kreskowaniem do uzupełnienia</div>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top"><b>BUCHHOME</b><span>Kręczki · ul. Żyzna</span></a>
+    <nav id="mainnav" aria-label="Sekcje">
+      <a href="#osiedle">Wybierz dom</a>
+      <a href="#architektura">Architektura</a>
+      <a href="#rzuty">Rzuty</a>
+      <a href="#slonce">Słońce</a>
+      <a href="#lokalizacja">Lokalizacja</a>
+      <a href="#standard">Standard</a>
+      <a href="#harmonogram">Harmonogram</a>
+      <a href="#finansowanie">Kalkulator</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+    <button class="btn small fav-btn" id="favOpen" type="button">♡ <span class="lbl">Ulubione</span> <span id="favCount" class="mono">0</span></button>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">BUCHHOME sp. z o.o. · Kręczki, gm. Ożarów Mazowiecki</div>
+        <h1>Rezydencja w&nbsp;<em>Kręczkach</em></h1>
+        <p class="lede">Szesnaście domów w zabudowie bliźniaczej przy ul. Żyznej, tuż za granicą Warszawy. Każdy ma własny garaż, ogród i pompę ciepła. Ogrodzone osiedle z prywatną drogą.</p>
+        <div class="cta">
+          <a class="btn primary" href="#osiedle">Wybierz dom na planie</a>
+          <a class="btn" href="#kontakt">Umów prezentację</a>
+        </div>
+      </div>
+      <figure class="drawing" style="margin:0">
+        <div class="dim top">23,84 m · cztery domy w rzędzie</div>
+        <div class="dim left">9,60 m</div>
+        <img src="assets/elev-front.jpg" alt="Elewacja frontowa rzędu czterech domów: dwuspadowe dachy 45°, tynki w czterech odcieniach ziemi, białe bryły garaży" width="1635" height="724">
+        <figcaption><span>Rys. 006 · Elewacja frontowa · 1:100</span><span>dach 45° · blacha na rąbek stojący</span></figcaption>
+      </figure>
+    </div>
+    <div class="facts">
+      <div><b>16</b><span>domów w 2 etapach</span></div>
+      <div><b class="mono" style="font-family:var(--f-display)">99,7–103</b><span>m² powierzchni użytkowej</span></div>
+      <div><b>54,5%</b><span>terenu biologicznie czynnego</span></div>
+      <div><b>4 542</b><span>m² terenu inwestycji</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MASTERPLAN -->
+<section id="osiedle">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow">Plan osiedla</div><h2>Wybierz swój dom</h2></div>
+      <p>Cztery rzędy po cztery domy po obu stronach prywatnej drogi. Domy skrajne mają dodatkowy ogród z boku, rząd południowy ma ogrody od południa. Kliknij dom, żeby zobaczyć szczegóły.</p>
+    </div>
+    <div class="filters" role="group" aria-label="Filtry">
+      <div class="seg" data-filter="etap"><button type="button" aria-pressed="true" data-v="all">Oba etapy</button><button type="button" aria-pressed="false" data-v="1">Etap I</button><button type="button" aria-pressed="false" data-v="2">Etap II</button></div>
+      <div class="seg" data-filter="typ"><button type="button" aria-pressed="true" data-v="all">Każdy typ</button><button type="button" aria-pressed="false" data-v="a">Skrajny</button><button type="button" aria-pressed="false" data-v="b">Środkowy</button></div>
+      <div class="seg" data-filter="ogrod"><button type="button" aria-pressed="true" data-v="all">Każdy ogród</button><button type="button" aria-pressed="false" data-v="S">Od południa</button><button type="button" aria-pressed="false" data-v="N">Od północy</button></div>
+      <span class="count" id="mpCount">16 domów</span>
+    </div>
+    <div class="mp">
+      <div>
+        <div class="site-box" id="siteBox">
+          <svg id="site" viewBox="-17 -42 94 85" role="img" aria-label="Plan osiedla z 16 domami"></svg>
+          <div class="tip" id="tip"></div>
+          <div class="legend">
+            <span><i style="background:var(--garden)"></i>ogród</span>
+            <span><i style="background:var(--paving)"></i>podjazd / dojście</span>
+            <span><i style="background:var(--road)"></i>droga wewnętrzna (dz. 7/23)</span>
+            <span><i style="background:var(--t1)"></i><i style="background:var(--t2);margin-left:-4px"></i><i style="background:var(--t3);margin-left:-4px"></i><i style="background:var(--t4);margin-left:-4px"></i>kolor tynku domu</span>
+            <span class="mono">plan poglądowy wg PZT 01A</span>
+          </div>
+        </div>
+      </div>
+      <aside class="panel" id="panel" aria-live="polite"></aside>
+    </div>
+    <div class="unit-list">
+      <table>
+        <thead><tr><th>Dom</th><th>Etap</th><th>Typ</th><th>Ogród</th><th style="text-align:right">Pow. użytk.</th><th style="text-align:right">Garaż</th><th>Status</th><th>Cena</th></tr></thead>
+        <tbody id="unitRows"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITEKTURA -->
+<section id="architektura">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow">Architektura · tomcat.arch.design</div><h2>Cztery odcienie ziemi, jeden spójny rytm</h2></div>
+      <p>Proste bryły z dachami o spadku 45° i białą, ceramiczną bryłą garażu. Każdy dom w rzędzie ma inny kolor tynku, więc swój rozpoznasz od bramy. Wejścia są zadaszone, a salon otwiera się na ogród przeszklonymi drzwiami przesuwnymi.</p>
+    </div>
+    <div class="arch-tabs">
+      <div class="seg" id="elevTabs">
+        <button type="button" aria-pressed="true" data-src="assets/elev-front.jpg" data-cap="Rys. 006 · Elewacja frontowa (od drogi)">Od drogi</button>
+        <button type="button" aria-pressed="false" data-src="assets/elev-garden.jpg" data-cap="Rys. 007 · Elewacja od ogrodu">Od ogrodu</button>
+        <button type="button" aria-pressed="false" data-src="assets/elev-side.jpg" data-cap="Rys. 009 · Elewacja szczytowa">Szczytowa</button>
+      </div>
+      <span class="tag" id="elevCap">Rys. 006 · Elewacja frontowa (od drogi)</span>
+    </div>
+    <div class="elev" id="elevBox" title="Kliknij, aby powiększyć"><img id="elevImg" src="assets/elev-front.jpg" alt="Elewacja rzędu czterech domów" width="1635" height="724"></div>
+    <div class="palette">
+      <div><i style="background:var(--t1)"></i><span>Tynk 1<small>róż gliniany</small></span></div>
+      <div><i style="background:var(--t2)"></i><span>Tynk 2<small>piasek</small></span></div>
+      <div><i style="background:var(--t3)"></i><span>Tynk 3<small>ochra jasna</small></span></div>
+      <div><i style="background:var(--t4)"></i><span>Tynk 4<small>glina</small></span></div>
+      <div><i style="background:var(--ceramic)"></i><span>Garaż<small>okładzina ceramiczna</small></span></div>
+      <div><i style="background:#8C5444"></i><span>Podcień wejścia<small>cegła / klinkier</small></span></div>
+    </div>
+    <div class="kv">
+      <div><b>45°</b><span>spadek dachu</span></div>
+      <div><b>9,60 m</b><span>wysokość od ±0,00</span></div>
+      <div><b>2 + strych</b><span>kondygnacje, poddasze nieużytkowe</span></div>
+      <div><b>+30–60 cm</b><span>parter ponad terenem</span></div>
+      <div><b>1 141 m³</b><span>kubatura budynku (2 domy)</span></div>
+    </div>
+    <div class="arch-facts">
+      <div><h3>Parter dla dnia</h3><p>Wiatrołap, WC i korytarz od strony wejścia. Z tyłu salon z aneksem kuchennym przez całą szerokość domu, z wyjściem do ogrodu.</p></div>
+      <div><h3>Piętro dla nocy</h3><p>Dwa pokoje, dwie łazienki i dwie garderoby, w tym jedna 12,4 m². Schody zabiegowe z betonu architektonicznego.</p></div>
+      <div><h3>Garaż w bryle domu</h3><p>Garaż na jedno auto z bezpośrednim przejściem do domu. W garażu stoi centrala rekuperacji i pompa ciepła, więc nie zabierają miejsca w części mieszkalnej.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- RZUTY -->
+<section id="rzuty">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow">Rzuty · skala 1:100</div><h2>Zajrzyj do środka</h2></div>
+      <p>Oba typy domów mają ten sam układ pomieszczeń. Dom skrajny ma szerszy parter (6,56 m w osiach zamiast 5,37 m), więc większy salon i garaż. Najedź na pomieszczenie w tabeli albo na rysunku.</p>
+    </div>
+    <div class="plan-ctrl">
+      <div class="seg" id="typeSeg"><button type="button" aria-pressed="true" data-v="a">Dom skrajny · 102,98 m²</button><button type="button" aria-pressed="false" data-v="b">Dom środkowy · 99,68 m²</button></div>
+      <div class="seg" id="lvlSeg"><button type="button" aria-pressed="true" data-v="parter">Parter</button><button type="button" aria-pressed="false" data-v="pietro">Piętro</button></div>
+    </div>
+    <div class="plans">
+      <div>
+        <div class="plan-sheet"><div class="plan-img" id="planImg"><img id="planPic" src="assets/unitA-parter.png" alt="Rzut parteru domu skrajnego" width="435" height="1000"></div></div>
+        <p class="plan-note">Front domu (wejście, garaż) jest na dole rysunku, ogród na górze. <a href="#" id="planFull">Otwórz cały arkusz z czterema domami</a></p>
+      </div>
+      <div>
+        <table class="rooms">
+          <thead><tr><th>Nr</th><th>Pomieszczenie</th><th style="text-align:right">m²</th></tr></thead>
+          <tbody id="roomRows"></tbody>
+          <tfoot><tr><td></td><td id="roomSumLbl">Razem kondygnacja</td><td class="a" id="roomSum"></td></tr></tfoot>
+        </table>
+        <div class="totals">
+          <div><b id="totPU">102,98</b><span>m² pow. użytkowej</span></div>
+          <div><b id="totNetto">127,48</b><span>m² pow. netto (z garażem i komunikacją)</span></div>
+          <div><b id="totGar">18,47</b><span>m² garaż</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SŁOŃCE -->
+<section id="slonce">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow">Symulacja nasłonecznienia · 52,2° N</div><h2>Gdzie będzie słońce o 17:00 w czerwcu?</h2></div>
+      <p>Wybierz miesiąc i godzinę. Pozycja słońca jest liczona dla Kręczek, a cienie budynków rzucane na plan osiedla. Rząd południowy ma ogrody od południa, rząd północny dostaje wieczorne słońce latem.</p>
+    </div>
+    <div class="sun">
+      <div class="site-box"><svg id="sunSvg" viewBox="-22 -52 104 98" role="img" aria-label="Plan osiedla z cieniami budynków"></svg></div>
+      <div class="ctrl">
+        <div><label for="sunMonth">Dzień</label>
+          <select id="sunMonth"></select></div>
+        <div><label for="sunTime">Godzina: <span id="sunTimeLbl" class="mono">17:00</span></label>
+          <input type="range" id="sunTime" min="240" max="1320" step="5" value="1020"></div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap">
+          <button class="btn small" id="sunPlay" type="button">▶ Odtwórz dzień</button>
+          <button class="btn small" type="button" data-preset="171,540">21 czerwca, 9:00</button>
+          <button class="btn small" type="button" data-preset="355,780">21 grudnia, 13:00</button>
+        </div>
+        <div class="readout">
+          <div><b id="rElev">–</b><span>wysokość słońca</span></div>
+          <div><b id="rAz">–</b><span>azymut (kierunek)</span></div>
+          <div><b id="rRise">–</b><span>wschód</span></div>
+          <div><b id="rSet">–</b><span>zachód</span></div>
+        </div>
+        <p class="sun-note">Symulacja poglądowa: budynki jako bryły o średniej wysokości 8 m, bez drzew i ogrodzeń. Projekt zawiera formalną analizę nasłonecznienia (rys. 01B i 01C).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOKALIZACJA -->
+<section id="lokalizacja">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow">Lokalizacja · ul. Żyzna, 05-850 Kręczki</div><h2>Spokojna ulica, Warszawa za miedzą</h2></div>
+      <p>Osiedle powstaje wśród zabudowy jednorodzinnej: szeregowej, bliźniaczej i wolnostojącej. Wjazd od ul. Żyznej przez bramę, dalej prywatną drogą wewnętrzną.</p>
+    </div>
+    <div class="loc">
+      <div class="radial"><svg id="radial" viewBox="-140 -108 280 216" role="img" aria-label="Odległości od osiedla do ważnych miejsc"></svg></div>
+      <div>
+        <ul class="dest" id="destList"></ul>
+        <p class="sun-note" style="margin-top:14px"><span class="est">szac.</span> Odległości i czasy dojazdu samochodem poza szczytem są szacunkowe, do weryfikacji przed publikacją.</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:18px">
+          <a class="btn primary" href="https://www.google.com/maps/search/?api=1&amp;query=ul.%20%C5%BByzna%2C%2005-850%20Kr%C4%99czki" target="_blank" rel="noopener">Otwórz w Mapach Google ↗</a>
+          <button class="btn" type="button" id="pztOpen">Rysunek PZT 1:500</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STANDARD -->
+<section id="standard">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow">Technologia i standard</div><h2>Ciepły dom, niskie rachunki</h2></div>
+      <p>Murowana konstrukcja z bloczków silikatowych, gruba izolacja i ogrzewanie z pompy ciepła w każdym domu osobno. Parametry pochodzą z projektu architektoniczno-budowlanego.</p>
+    </div>
+    <div class="eyebrow std-group">Dom</div>
+    <div class="std">
+      <div><div class="val">osobna w każdym domu</div><h3>Pompa ciepła</h3><p>Ogrzewa dom i przygotowuje ciepłą wodę. Każdy dom ma własne urządzenie i własne rachunki.</p></div>
+      <div><div class="val">z odzyskiem ciepła</div><h3>Rekuperacja</h3><p>Wentylacja mechaniczna z centralą w garażu. Świeże powietrze w pokojach bez otwierania okien.</p></div>
+      <div><div class="val">niskotemperaturowe</div><h3>Ogrzewanie podłogowe</h3><p>Na obu kondygnacjach, ze sterowaniem pogodowym i termostatami w pomieszczeniach. W łazienkach dodatkowe grzejniki elektryczne.</p></div>
+      <div><div class="val">Silka 18 cm + EPS 20 cm</div><h3>Ściany</h3><p>Bloczki silikatowe i grafitowy styropian. Współczynnik U ścian zewnętrznych 0,20 W/m²K.</p></div>
+      <div><div class="val">Silka 24 cm · REI 60</div><h3>Cisza za ścianą</h3><p>Ściany między domami z grubszych bloczków silikatowych, z podwyższoną izolacyjnością akustyczną.</p></div>
+      <div><div class="val">U okien 0,9 · U dachu 0,15</div><h3>Okna i dach</h3><p>Stolarka o podwyższonej izolacyjności, dach kryty blachą na rąbek stojący, z instalacją odgromową.</p></div>
+    </div>
+    <div class="eyebrow std-group">Osiedle</div>
+    <div class="std">
+      <div><div class="val">brama wjazdowa</div><h3>Ogrodzone osiedle</h3><p>Dostęp ograniczony bramą. Ogródki oddzielone ażurowym ogrodzeniem 150–180 cm.</p></div>
+      <div><div class="val">dz. 7/23 · 460 m²</div><h3>Prywatna droga</h3><p>Wewnętrzna droga dojazdowa, utwardzone podjazdy i dojścia z kostki betonowej.</p></div>
+      <div><div class="val">1 garaż + 2 miejsca gości</div><h3>Parkowanie</h3><p>Garaż w każdym domu oraz dwa miejsca dla gości przy bramie wjazdowej.</p></div>
+      <div><div class="val">woda · prąd · światłowód</div><h3>Media</h3><p>Woda i prąd z sieci w ul. Żyznej. Internet światłowodowy lub radiowy LTE/5G.</p></div>
+      <div><div class="val">rodzime gatunki</div><h3>Zieleń</h3><p>Nowe drzewa przy bramie i na końcu drogi. Ponad połowa terenu pozostaje biologicznie czynna.</p></div>
+      <div><div class="val">4 altany</div><h3>Altany śmietnikowe</h3><p>Zadaszone miejsca na pojemniki, dostępne z podjazdów przy domach.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- HARMONOGRAM -->
+<section id="harmonogram">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow">Harmonogram</div><h2>Gdzie jesteśmy</h2></div>
+      <p>Projekt budowlany jest gotowy dla obu etapów. Etap I obejmuje rząd północny (działki 7/20, 7/21), etap II rząd południowy (działki 7/24, 7/25).</p>
+    </div>
+    <ol class="timeline">
+      <li class="done"><div class="d">08.2026</div><h3>Projekt zagospodarowania</h3><p>Plan całego osiedla, 8 budynków, 16 domów.</p></li>
+      <li class="done"><div class="d">09.2026</div><h3>Projekt budowlany</h3><p>Etap I i etap II, część architektoniczno-budowlana.</p></li>
+      <li class="now"><div class="d"><span class="todo">data</span></div><h3>Pozwolenie na budowę</h3><p>Wnioski dla obu etapów. <span class="todo">status</span></p></li>
+      <li><div class="d"><span class="todo">kwartał</span></div><h3>Start budowy etapu I</h3><p>Rząd północny, domy A1–A4.</p></li>
+      <li><div class="d"><span class="todo">kwartał</span></div><h3>Przekazanie kluczy</h3><p>Odbiory i akty notarialne.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- KALKULATOR -->
+<section id="finansowanie">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow">Kalkulator raty</div><h2>Policz miesięczną ratę</h2></div>
+      <p>Rata stała (annuitetowa), wyliczenie orientacyjne. Wpisz cenę z oferty i parametry ze swojego banku.</p>
+    </div>
+    <div class="calc">
+      <div class="ctrl">
+        <div><label for="cPrice">Cena domu (zł)</label><input type="number" id="cPrice" value="1150000" step="10000" min="100000"><p class="sun-note" style="margin-top:6px">Cena przykładowa do obliczeń, nie pochodzi z oferty.</p></div>
+        <div><label for="cOwn">Wkład własny: <output id="cOwnO">20%</output></label><input type="range" id="cOwn" min="10" max="60" step="1" value="20"></div>
+        <div><label for="cYears">Okres kredytu: <output id="cYearsO">30 lat</output></label><input type="range" id="cYears" min="5" max="35" step="1" value="30"></div>
+        <div><label for="cRate">Oprocentowanie roczne: <output id="cRateO">6,9%</output></label><input type="range" id="cRate" min="3" max="10" step="0.05" value="6.9"></div>
+      </div>
+      <div class="result" aria-live="polite">
+        <div class="eyebrow">Miesięczna rata</div>
+        <div class="big mono" id="cRata" style="font-family:var(--f-display)">–</div>
+        <dl>
+          <dt>Kwota kredytu</dt><dd id="cKwota">–</dd>
+          <dt>Wkład własny</dt><dd id="cWklad">–</dd>
+          <dt>Suma odsetek</dt><dd id="cOds">–</dd>
+          <dt>Łącznie do spłaty</dt><dd id="cTotal">–</dd>
+        </dl>
+        <div class="bar"><i id="cBarK"></i><i id="cBarO"></i></div>
+        <div class="bar-l"><span>kapitał</span><span>odsetki</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow">Pytania</div><h2>Najczęściej pytacie</h2></div>
+      <p>Odpowiedzi na podstawie projektu budowlanego. Pozostałe pytania chętnie omówimy na spotkaniu.</p>
+    </div>
+    <div class="faq">
+      <details><summary>Czym różni się dom skrajny od środkowego?</summary><p>Układ pomieszczeń jest taki sam. Dom skrajny jest szerszy na parterze: salon ma 37,74 m² zamiast 35,38 m², garaż 18,47 m² zamiast 17,93 m². Ma też dodatkowy ogród z boku domu i więcej okien. Piętro jest identyczne w obu typach.</p></details>
+      <details><summary>Gdzie zaparkuję?</summary><p>Każdy dom ma garaż na jedno auto oraz podjazd przed nim. Przy bramie wjazdowej są dwa miejsca dla gości.</p></details>
+      <details><summary>Jak dom jest ogrzewany?</summary><p>Pompa ciepła w każdym domu osobno zasila ogrzewanie podłogowe i przygotowuje ciepłą wodę. W łazienkach są dodatkowe grzejniki elektryczne. Wentylacja jest mechaniczna z odzyskiem ciepła.</p></details>
+      <details><summary>Jakie media są doprowadzone?</summary><p>Woda z sieci wodociągowej i prąd z sieci w ul. Żyznej. Internet przez światłowód lub LTE/5G. Ulica nie ma sieci kanalizacyjnej, dlatego ścieki trafiają do szczelnego zbiornika bezodpływowego przy podjeździe każdego domu.</p></details>
+      <details><summary>Czy osiedle jest ogrodzone?</summary><p>Tak. Wjazd prowadzi przez bramę, a ogródki są oddzielone ażurowym ogrodzeniem o wysokości około 150–180 cm. Dojścia do drzwi i miejsca przed garażami pozostają otwarte.</p></details>
+      <details><summary>Co jest na poddaszu?</summary><p>Poddasze jest nieużytkowe, ocieplone, z wyłazem z korytarza na piętrze. Można je wykorzystać jako schowek.</p></details>
+      <details><summary>Kiedy przeprowadzka?</summary><p>Harmonogram budowy podamy po uzyskaniu pozwolenia na budowę. <span class="todo">termin</span></p></details>
+    </div>
+  </div>
+</section>
+
+<!-- KONTAKT -->
+<section id="kontakt">
+  <div class="wrap contact">
+    <div class="co">
+      <div class="eyebrow">Kontakt</div>
+      <h2 style="margin-top:12px">Umów prezentację domu</h2>
+      <p style="color:var(--muted); margin-top:14px; max-width:44ch">Pokażemy plan osiedla, rzuty i działkę na miejscu. Odpowiadamy w ciągu jednego dnia roboczego.</p>
+      <dl>
+        <dt>Inwestor</dt><dd>BUCHHOME sp. z o.o.</dd>
+        <dt>Adres</dt><dd>ul. Josepha Conrada 13<br>01-922 Warszawa</dd>
+        <dt>Telefon</dt><dd><span class="todo">+48 000 000 000</span></dd>
+        <dt>E-mail</dt><dd><span class="todo">sprzedaz@…</span></dd>
+        <dt>Inwestycja</dt><dd>ul. Żyzna, 05-850 Kręczki</dd>
+      </dl>
+    </div>
+    <form class="form" id="form" novalidate>
+      <div><label for="fName">Imię i nazwisko</label><input type="text" id="fName" required autocomplete="name"></div>
+      <div><label for="fPhone">Telefon</label><input type="tel" id="fPhone" autocomplete="tel"></div>
+      <div class="full"><label for="fMail">E-mail</label><input type="email" id="fMail" required autocomplete="email"></div>
+      <div class="full"><label for="fUnit">Interesuje mnie</label><select id="fUnit"><option value="">Dowolny dom</option></select></div>
+      <div class="full"><label for="fMsg">Wiadomość</label><textarea id="fMsg" rows="4"></textarea></div>
+      <label class="chk full" for="fOk"><input type="checkbox" id="fOk" required> Zgadzam się na kontakt w sprawie oferty i przetwarzanie moich danych przez BUCHHOME sp. z o.o.</label>
+      <div class="full"><button class="btn primary" type="submit">Wyślij zapytanie</button></div>
+      <div class="form-msg" id="formMsg" hidden></div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><b style="color:var(--ink)">BUCHHOME sp. z o.o.</b> · ul. Josepha Conrada 13, 01-922 Warszawa</div>
+    <div>Projekt architektoniczny: tomcat.arch.design, dr hab. inż. arch. Marcin Benon Goncikowski. Rysunki pochodzą z projektu budowlanego (09.2026) i mają charakter poglądowy.</div>
+    <div>Materiały na stronie nie stanowią oferty w rozumieniu Kodeksu cywilnego.</div>
+  </div>
+</footer>
+
+<div class="drawer" id="drawer" hidden>
+  <div class="wrap">
+    <div class="head"><h3>Ulubione domy</h3><div style="display:flex; gap:8px"><button class="btn small" type="button" id="favClear">Wyczyść</button><button class="btn small" type="button" id="favClose">Zamknij</button></div></div>
+    <div class="cmp" id="favBody"></div>
+  </div>
+</div>
+
+<div class="lb" id="lb" hidden>
+  <div class="lb-bar">
+    <span class="mono" id="lbCap" style="font-size:.8rem"></span>
+    <div style="display:flex; gap:6px">
+      <button class="btn small" type="button" id="lbIn" aria-label="Powiększ">+</button>
+      <button class="btn small" type="button" id="lbOut" aria-label="Pomniejsz">−</button>
+      <button class="btn small" type="button" id="lbFit">Dopasuj</button>
+      <button class="btn small" type="button" id="lbClose">Zamknij ✕</button>
+    </div>
+  </div>
+  <div class="lb-stage" id="lbStage"><img id="lbImg" alt=""></div>
+</div>
+
+<script>
+/* ============ DANE (edytuj tutaj) ============ */
+const TONES = ['var(--t1)','var(--t2)','var(--t3)','var(--t4)'];
+const TONE_NAMES = ['róż gliniany','piasek','ochra jasna','glina'];
+const TYPES = {
+  a:{name:'skrajny', pu:102.98, netto:127.48, garaz:18.47, salon:37.74, w:6.56},
+  b:{name:'środkowy', pu:99.68, netto:123.64, garaz:17.93, salon:35.38, w:5.37}
+};
+// Status: 'dostepny' | 'rezerwacja' | 'sprzedany'; cena: liczba w zł lub null (= "Zapytaj")
+const STATUS_OVERRIDES = { /* np. 'A1a': {status:'rezerwacja', cena:1190000} */ };
+const BLOCKS = [
+  {id:'NW', etap:1, dz:'7/20', b:['A1','A2'], x0:11.7, y0:-22.5, row:'N'},
+  {id:'NE', etap:1, dz:'7/21', b:['A3','A4'], x0:42.8, y0:-20.3, row:'N'},
+  {id:'SW', etap:2, dz:'7/24', b:['A5','A6'], x0:7.6,  y0:10.5,  row:'S'},
+  {id:'SE', etap:2, dz:'7/25', b:['A7','A8'], x0:38.3, y0:12.5,  row:'S'}
+];
+const DEPTH = 14.47;
+// Granica terenu (metry, układ wzdłuż drogi), wg PZT 01A
+const BND = {P1:[2.8,-34.7], B:[49.6,-30.2], C:[71.2,-20.9], D:[66.6,22.0], E:[67.8,36.1], F:[-3.3,32.1]};
+const ROT = 2.4; // obrót układu względem północy
+const DEST = [
+  {n:'Granica Warszawy (Bemowo)', s:'Bemowo', km:2, min:4, brg:75},
+  {n:'Węzeł Konotopa (A2 / S8)', s:'A2 / S8', km:5, min:8, brg:215},
+  {n:'Ożarów Mazowiecki, centrum', s:'Ożarów Maz.', km:5, min:9, brg:250},
+  {n:'Stare Babice', s:'Stare Babice', km:8, min:12, brg:10},
+  {n:'Lotnisko Chopina', s:'Lotnisko', km:16, min:25, brg:135},
+  {n:'Centrum Warszawy (Rondo ONZ)', s:'Centrum', km:16, min:30, brg:95}
+];
+const ROOMS = {
+  parter:[
+    {n:'01', name:'Wiatrołap', a:4.48, b:4.03, ha:[60,70,35,13.5], hb:[60,72,36,12]},
+    {n:'02', name:'Garaż', a:18.47, b:17.93, ha:[8,56,51,42], hb:[5,56,54,43], tech:true},
+    {n:'03', name:'Korytarz', a:2.56, b:2.07, ha:[60,56,18,14], hb:[60,55.5,16,16.5]},
+    {n:'04', name:'WC', a:1.51, b:1.51, ha:[78,55.5,17,14.5], hb:[76,55.5,20,14.5]},
+    {n:'05', name:'Salon z aneksem kuchennym', a:37.74, b:35.38, ha:[8,4,87,51], hb:[5,6.5,91,48.5]}
+  ],
+  pietro:[
+    {n:'06', name:'Schody', a:6.03, b:6.03, ha:[79,30,16.5,38], hb:[76,30,20,38], tech:true},
+    {n:'07', name:'Korytarz', a:6.83, b:6.83, ha:[46,30,33,8], hb:[45,30,31,8]},
+    {n:'08', name:'Pokój 1', a:10.04, b:10.04, ha:[49,5,46,25], hb:[45,5.5,51,24.5]},
+    {n:'09', name:'Pokój 2', a:11.75, b:11.75, ha:[12.5,5,33.5,32.5], hb:[5,5.5,40,32.5]},
+    {n:'10', name:'Łazienka 1', a:5.25, b:5.25, ha:[12.5,38,46,13.5], hb:[5,38.5,50,13.5]},
+    {n:'11', name:'Łazienka 2', a:3.47, b:3.47, ha:[12.5,52.5,33.5,10.5], hb:[5,52.5,36,10.5]},
+    {n:'12', name:'Garderoba 1', a:12.40, b:12.40, ha:[12.5,63,47,28.5], hb:[5,63,49,28.5]},
+    {n:'13', name:'Garderoba 2', a:6.95, b:6.95, ha:[60,69,35,22.5], hb:[54,69,42,22.5]}
+  ]
+};
+
+/* ============ POMOCNICZE ============ */
+const $ = s => document.querySelector(s);
+const NS = 'http://www.w3.org/2000/svg';
+const el = (tag, attrs={}, parent) => { const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(parent) parent.appendChild(e); return e; };
+const fmt = (n,d=2) => n.toLocaleString('pl-PL',{minimumFractionDigits:d, maximumFractionDigits:d});
+const zl = n => Math.round(n).toLocaleString('pl-PL') + ' zł';
+const store = { get(k,d){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; } }, set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} } };
+const lerp = (p,q,x) => p[1] + (q[1]-p[1])*(x-p[0])/(q[0]-p[0]);
+const topY = x => x <= BND.B[0] ? lerp(BND.P1,BND.B,x) : lerp(BND.B,BND.C,x);
+const botY = x => lerp(BND.F,BND.E,x);
+
+/* ============ MODEL DOMÓW ============ */
+const UNITS = [];
+BLOCKS.forEach(bl => {
+  const widths=[6.56,5.37,5.37,6.56], types=['a','b','b','a'];
+  let x = bl.x0;
+  widths.forEach((w,i) => {
+    const bld = bl.b[i<2?0:1], t = types[i];
+    const tone = bl.row==='N' ? i : 3-i;
+    const id = bld + t;
+    const ov = STATUS_OVERRIDES[id] || {};
+    const yb = bl.y0, yf = bl.y0 + DEPTH;
+    UNITS.push({ id, bld, t, etap:bl.etap, dz:bl.dz, row:bl.row, ogrod: bl.row==='N'?'N':'S',
+      x, w, y:bl.y0, h:DEPTH, tone, pos:i, block:bl.id,
+      status: ov.status || 'dostepny', cena: ov.cena ?? null });
+    x += w;
+  });
+});
+// Ogrody: od tyłu domu do granicy działki; domy skrajne dodatkowo z boku
+function gardenPoly(u){
+  const bl = BLOCKS.find(b=>b.id===u.block);
+  const west = u.pos===0, east = u.pos===3;
+  const gapMid = {NW_e:39.25, NE_w:39.25, SW_e:34.95, SE_w:34.95};
+  let xa = u.x, xb = u.x+u.w;
+  if(west) xa = (bl.id==='NW') ? 1.0 : (bl.id==='SW' ? -2.0 : gapMid[bl.id+'_w']);
+  if(east) xb = (bl.id==='NE') ? 70.4 : (bl.id==='SE' ? 66.9 : gapMid[bl.id+'_e']);
+  const pts = [];
+  if(u.row==='N'){
+    const back=u.y, front=u.y+u.h;
+    const edge=[xa]; if(xa<BND.B[0] && xb>BND.B[0]) edge.push(BND.B[0]); edge.push(xb);
+    if(west){ pts.push([xa,front],[u.x,front],[u.x,back]); } else pts.push([xa,back]);
+    if(east){ pts.push([u.x+u.w,back],[u.x+u.w,front],[xb,front]); } else pts.push([xb,back]);
+    edge.reverse().forEach(x=>pts.push([x,topY(x)]));
+  } else {
+    const front=u.y, back=u.y+u.h;
+    if(west){ pts.push([xa,front],[u.x,front],[u.x,back]); } else pts.push([xa,back]);
+    if(east){ pts.push([u.x+u.w,back],[u.x+u.w,front],[xb,front]); } else pts.push([xb,back]);
+    pts.push([xb,botY(xb)],[xa,botY(xa)]);
+  }
+  return pts.map(p=>p.map(v=>v.toFixed(2)).join(',')).join(' ');
+}
+
+/* ============ RYSOWANIE PLANU ============ */
+function drawSite(svg, {interactive=false, labels=true}={}){
+  const g = el('g',{transform:`rotate(${ROT} 30 0)`},svg);
+  // ul. Żyzna
+  el('rect',{x:-15,y:-46,width:8,height:90,fill:'var(--road)'},g);
+  const zt = el('text',{x:-11,y:22,'font-size':2.4,fill:'var(--muted)','text-anchor':'middle',transform:'rotate(-90 -11 22)'},g); zt.textContent='ul. Żyzna';
+  // teren inwestycji
+  const b = BND, poly=[b.P1,b.B,b.C,b.D,b.E,b.F].map(p=>p.join(',')).join(' ');
+  el('polygon',{points:poly, fill:'var(--surface)', stroke:'var(--muted)', 'stroke-width':.3, 'stroke-dasharray':'1.2 .8'},g);
+  // ogrody
+  const gardens = el('g',{},g);
+  UNITS.forEach(u=> el('polygon',{points:gardenPoly(u), fill:'var(--garden)', stroke:'var(--garden-line)', 'stroke-width':.15, 'data-id':u.id},gardens));
+  // droga + podjazdy
+  el('rect',{x:-7,y:-3.2,width:71.6,height:7.5,fill:'var(--road)'},g);
+  el('line',{x1:-7,y1:.55,x2:64,y2:.55,stroke:'var(--surface)','stroke-width':.15,'stroke-dasharray':'1.5 1.5'},g);
+  UNITS.forEach(u=>{
+    if(u.row==='N') el('rect',{x:u.x+.3,y:u.y+u.h,width:u.w-.6,height:(-3.2)-(u.y+u.h),fill:'var(--paving)'},g);
+    else el('rect',{x:u.x+.3,y:4.3,width:u.w-.6,height:u.y-4.3,fill:'var(--paving)'},g);
+  });
+  // miejsca dla gości przy bramie
+  [2.6,5.2].forEach(x=>el('rect',{x, y:-8.2, width:2.5, height:5, fill:'var(--paving)', stroke:'var(--muted)','stroke-width':.12},g));
+  const p = el('text',{x:5.1,y:-9,'font-size':1.6,fill:'var(--muted)','text-anchor':'middle'},g); p.textContent='goście';
+  // brama
+  el('line',{x1:-.2,y1:-3.2,x2:-.2,y2:4.3,stroke:'var(--ink)','stroke-width':.5},g);
+  const br = el('text',{x:-1.2,y:7.4,'font-size':1.7,fill:'var(--muted)','text-anchor':'end'},g); br.textContent='brama';
+  // drzewa
+  [[2.5,-14],[1,10],[66.3,.5],[64,-8],[63.5,8],[30,-29],[20,29.5],[48,32]].forEach(([x,y])=>{
+    el('circle',{cx:x,cy:y,r:2.1,fill:'var(--garden-line)',opacity:.75},g);
+  });
+  // domy
+  const houses = el('g',{},g);
+  UNITS.forEach(u=>{
+    const ug = el('g',{class:'unit','data-id':u.id},houses);
+    if(interactive){ ug.setAttribute('tabindex','0'); ug.setAttribute('role','button'); ug.setAttribute('aria-label',`Dom ${u.id}, ${TYPES[u.t].name}, etap ${u.etap}`); }
+    el('rect',{class:'body',x:u.x,y:u.y,width:u.w,height:u.h,fill:TONES[u.tone]},ug);
+    // biała bryła garażu od frontu
+    const gy = u.row==='N' ? u.y+u.h-6.2 : u.y;
+    el('rect',{x:u.x+.25,y:gy,width:u.w*0.58,height:6.2,fill:'var(--ceramic)',stroke:'var(--ink)','stroke-width':.08,'pointer-events':'none'},ug);
+    // kalenica (dachy szczytem do drogi)
+    el('line',{x1:u.x+u.w/2,y1:u.y+.4,x2:u.x+u.w/2,y2:u.y+u.h-.4,stroke:'var(--ink)','stroke-width':.08,opacity:.5,'pointer-events':'none'},ug);
+    if(labels){
+      const ty = u.row==='N' ? u.y+3.6 : u.y+u.h-2.6;
+      const t = el('text',{x:u.x+u.w/2,y:ty,'font-size':1.9,'text-anchor':'middle',fill:'#1B201D','font-weight':600,'pointer-events':'none'},ug);
+      t.textContent = u.id;
+      if(u.status!=='dostepny') el('circle',{cx:u.x+u.w/2,cy:ty+2.2,r:.8,fill:u.status==='sprzedany'?'var(--sold)':'var(--warn)','pointer-events':'none'},ug);
+    }
+  });
+  // etykiety etapów
+  if(labels){
+    [['ETAP I · dz. 7/20, 7/21',36,-37.5],['ETAP II · dz. 7/24, 7/25',33,40.5]].forEach(([s,x,y])=>{ const t=el('text',{x,y,'font-size':2,'text-anchor':'middle',fill:'var(--muted)','letter-spacing':.3},g); t.textContent=s; });
+  }
+  // północ + skala (poza obrotem)
+  const n = el('g',{transform:'translate(71 -36)'},svg);
+  el('circle',{r:3.2,fill:'none',stroke:'var(--ink)','stroke-width':.2},n);
+  el('path',{d:'M0 -2.6 L1.3 1.6 L0 .8 L-1.3 1.6 Z',fill:'var(--ink)'},n);
+  const nt = el('text',{y:-4.2,'font-size':2,'text-anchor':'middle',fill:'var(--ink)','font-weight':600},n); nt.textContent='N';
+  const sc = el('g',{transform:'translate(-14 36)'},svg);
+  el('rect',{width:5,height:.8,fill:'var(--ink)'},sc); el('rect',{x:5,width:5,height:.8,fill:'none',stroke:'var(--ink)','stroke-width':.15},sc);
+  const st = el('text',{x:10.8,y:.9,'font-size':1.8,fill:'var(--muted)'},sc); st.textContent='10 m';
+  return g;
+}
+
+/* ============ MASTERPLAN INTERAKTYWNY ============ */
+const filt = {etap:'all', typ:'all', ogrod:'all'};
+let selected = store.get('kreczki-sel','A1a');
+let favs = store.get('kreczki-fav',[]);
+const site = $('#site');
+drawSite(site,{interactive:true});
+const tip = $('#tip'), box = $('#siteBox');
+const matches = u => (filt.etap==='all'||String(u.etap)===filt.etap) && (filt.typ==='all'||u.t===filt.typ) && (filt.ogrod==='all'||u.ogrod===filt.ogrod);
+const statusLbl = s => ({dostepny:'Dostępny', rezerwacja:'Rezerwacja', sprzedany:'Sprzedany'})[s];
+const priceLbl = u => u.cena ? zl(u.cena) : 'Zapytaj o cenę';
+const ogrodLbl = u => (u.ogrod==='S'?'od południa':'od północy') + (u.t==='a'?' + boczny':'');
+
+function renderSite(){
+  let n=0;
+  site.querySelectorAll('.unit').forEach(g=>{
+    const u = UNITS.find(x=>x.id===g.dataset.id), m = matches(u);
+    if(m) n++;
+    g.classList.toggle('faded',!m); g.classList.toggle('sel',u.id===selected);
+  });
+  $('#mpCount').textContent = n + (n===1?' dom':(n>=2&&n<=4?' domy':' domów'));
+  const rows = UNITS.filter(matches).map(u=>`<tr data-id="${u.id}" class="${u.id===selected?'sel':''}"><td><span class="swatch" style="background:${TONES[u.tone]}"></span><b>${u.id}</b></td><td>${u.etap===1?'I':'II'}</td><td>${TYPES[u.t].name}</td><td>${ogrodLbl(u)}</td><td class="num">${fmt(TYPES[u.t].pu)} m²</td><td class="num">${fmt(TYPES[u.t].garaz)} m²</td><td><span class="status st-${u.status}">${statusLbl(u.status)}</span></td><td>${priceLbl(u)}</td></tr>`).join('');
+  $('#unitRows').innerHTML = rows || '<tr><td colspan="8" style="color:var(--muted)">Żaden dom nie spełnia filtrów. Zmień etap, typ albo ogród.</td></tr>';
+  renderPanel();
+}
+function renderPanel(){
+  const u = UNITS.find(x=>x.id===selected), T = TYPES[u.t], fav = favs.includes(u.id);
+  $('#panel').innerHTML = `
+    <div class="eyebrow">Dom ${u.bld} · lokal ${T.name}</div>
+    <h3 style="margin-top:8px">${u.id}</h3>
+    <div class="tags"><span class="tag">Etap ${u.etap===1?'I':'II'}</span><span class="tag">dz. ${u.dz}</span><span class="tag">ogród ${ogrodLbl(u)}</span></div>
+    <table class="spec">
+      <tr><td>Status</td><td><span class="status st-${u.status}">${statusLbl(u.status)}</span></td></tr>
+      <tr><td>Cena</td><td>${priceLbl(u)}</td></tr>
+      <tr><td>Powierzchnia użytkowa</td><td>${fmt(T.pu)} m²</td></tr>
+      <tr><td>Powierzchnia netto</td><td>${fmt(T.netto)} m²</td></tr>
+      <tr><td>Salon z aneksem</td><td>${fmt(T.salon)} m²</td></tr>
+      <tr><td>Garaż</td><td>${fmt(T.garaz)} m²</td></tr>
+      <tr><td>Pokoje · łazienki · garderoby</td><td>2 · 2 · 2</td></tr>
+      <tr><td>Kolor tynku</td><td><span class="swatch" style="background:${TONES[u.tone]}"></span>${TONE_NAMES[u.tone]}</td></tr>
+      <tr><td>Powierzchnia ogrodu</td><td><span class="todo">wg podziału</span></td></tr>
+    </table>
+    <div class="actions">
+      <a class="btn primary small" href="#kontakt" data-ask="${u.id}">Zapytaj o ten dom</a>
+      <a class="btn small" href="#rzuty" data-plan="${u.t}">Zobacz rzut</a>
+      <button class="btn small" type="button" data-fav="${u.id}" aria-pressed="${fav}">${fav?'♥ W ulubionych':'♡ Do ulubionych'}</button>
+    </div>`;
+}
+function select(id){ selected=id; store.set('kreczki-sel',id); renderSite(); }
+site.addEventListener('click',e=>{ const g=e.target.closest('.unit'); if(g) select(g.dataset.id); });
+site.addEventListener('keydown',e=>{ const g=e.target.closest('.unit'); if(g&&(e.key==='Enter'||e.key===' ')){ e.preventDefault(); select(g.dataset.id); } });
+site.addEventListener('mousemove',e=>{
+  const g=e.target.closest('.unit'); if(!g){ tip.style.opacity=0; return; }
+  const u=UNITS.find(x=>x.id===g.dataset.id), r=box.getBoundingClientRect();
+  tip.innerHTML=`${u.id} · ${TYPES[u.t].name} · ${fmt(TYPES[u.t].pu)} m²<br>ogród ${ogrodLbl(u)} · ${statusLbl(u.status)}`;
+  tip.style.left=(e.clientX-r.left)+'px'; tip.style.top=(e.clientY-r.top)+'px'; tip.style.opacity=1;
+});
+site.addEventListener('mouseleave',()=>tip.style.opacity=0);
+$('#unitRows').addEventListener('click',e=>{ const tr=e.target.closest('tr[data-id]'); if(tr) select(tr.dataset.id); });
+document.querySelectorAll('.filters .seg').forEach(seg=>seg.addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  seg.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  filt[seg.dataset.filter]=b.dataset.v; renderSite();
+}));
+
+/* ============ ULUBIONE ============ */
+function renderFavs(){
+  $('#favCount').textContent = favs.length;
+  if(!favs.length){ $('#favBody').innerHTML='<p style="color:var(--muted)">Nie masz jeszcze ulubionych. Na planie osiedla wybierz dom i kliknij „Do ulubionych”, aby porównać kilka domów obok siebie.</p>'; return; }
+  const us = favs.map(id=>UNITS.find(u=>u.id===id)).filter(Boolean);
+  const row = (lbl,f) => `<tr><th>${lbl}</th>${us.map(u=>`<td>${f(u)}</td>`).join('')}</tr>`;
+  $('#favBody').innerHTML = `<table>
+    ${row('Dom',u=>`<span class="swatch" style="background:${TONES[u.tone]}"></span><b>${u.id}</b>`)}
+    ${row('Etap',u=>u.etap===1?'I':'II')}${row('Typ',u=>TYPES[u.t].name)}${row('Ogród',ogrodLbl)}
+    ${row('Pow. użytkowa',u=>fmt(TYPES[u.t].pu)+' m²')}${row('Salon',u=>fmt(TYPES[u.t].salon)+' m²')}${row('Garaż',u=>fmt(TYPES[u.t].garaz)+' m²')}
+    ${row('Status',u=>statusLbl(u.status))}${row('Cena',priceLbl)}
+    ${row('',u=>`<button class="btn small" type="button" data-fav="${u.id}">Usuń</button>`)}</table>`;
+}
+function toggleFav(id){ favs = favs.includes(id) ? favs.filter(x=>x!==id) : [...favs,id]; store.set('kreczki-fav',favs); renderFavs(); renderPanel(); }
+document.addEventListener('click',e=>{
+  const f=e.target.closest('[data-fav]'); if(f){ toggleFav(f.dataset.fav); return; }
+  const a=e.target.closest('[data-ask]'); if(a){ $('#fUnit').value=a.dataset.ask; }
+  const p=e.target.closest('[data-plan]'); if(p){ setPlan(p.dataset.plan, plan.lvl); }
+});
+$('#favOpen').addEventListener('click',()=>{ $('#drawer').hidden=false; });
+$('#favClose').addEventListener('click',()=>{ $('#drawer').hidden=true; });
+$('#favClear').addEventListener('click',()=>{ favs=[]; store.set('kreczki-fav',favs); renderFavs(); renderPanel(); });
+
+/* ============ ELEWACJE ============ */
+$('#elevTabs').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  $('#elevTabs').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  $('#elevImg').src=b.dataset.src; $('#elevCap').textContent=b.dataset.cap;
+});
+$('#elevBox').addEventListener('click',()=>openLB($('#elevImg').src,$('#elevCap').textContent));
+
+/* ============ RZUTY ============ */
+const plan = {t:'a', lvl:'parter'};
+function setPlan(t,lvl){
+  plan.t=t; plan.lvl=lvl;
+  $('#typeSeg').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.v===t));
+  $('#lvlSeg').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.v===lvl));
+  const pic=$('#planPic');
+  pic.src=`assets/unit${t.toUpperCase()}-${lvl}.png`;
+  pic.width = t==='a'?435:400;
+  pic.alt=`Rzut ${lvl==='parter'?'parteru':'piętra'} domu ${TYPES[t].name}`;
+  $('#planImg').querySelectorAll('.hot').forEach(h=>h.remove());
+  const rooms=ROOMS[lvl]; let sum=0;
+  $('#roomRows').innerHTML = rooms.map(r=>{ const a=r[t]; if(!r.tech) sum+=a; return `<tr data-n="${r.n}"><td class="n">${r.n}${t.toUpperCase()}</td><td>${r.name}${r.tech?' <span class="tag" style="padding:2px 5px">poza PU</span>':''}</td><td class="a">${fmt(a)}</td></tr>`; }).join('');
+  rooms.forEach(r=>{ const [l,tp,w,h]=r['h'+t]; const d=document.createElement('div'); d.className='hot'; d.dataset.n=r.n; d.title=r.name; d.style.cssText=`left:${l}%;top:${tp}%;width:${w}%;height:${h}%`; $('#planImg').appendChild(d); });
+  $('#roomSum').textContent=fmt(sum); $('#roomSumLbl').textContent=`Pow. użytkowa ${lvl==='parter'?'parteru':'piętra'}`;
+  const T=TYPES[t]; $('#totPU').textContent=fmt(T.pu); $('#totNetto').textContent=fmt(T.netto); $('#totGar').textContent=fmt(T.garaz);
+}
+function hl(n){ document.querySelectorAll('#roomRows tr, #planImg .hot').forEach(x=>x.classList.toggle('on',x.dataset.n===n)); }
+$('#roomRows').addEventListener('mouseover',e=>{ const tr=e.target.closest('tr'); if(tr) hl(tr.dataset.n); });
+$('#roomRows').addEventListener('click',e=>{ const tr=e.target.closest('tr'); if(tr) hl(tr.dataset.n); });
+$('#planImg').addEventListener('mouseover',e=>{ const h=e.target.closest('.hot'); if(h) hl(h.dataset.n); });
+$('#planImg').addEventListener('click',e=>{ const h=e.target.closest('.hot'); if(h) hl(h.dataset.n); });
+$('#planImg').addEventListener('mouseleave',()=>hl(null));
+$('#roomRows').addEventListener('mouseleave',()=>hl(null));
+$('#typeSeg').addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) setPlan(b.dataset.v,plan.lvl); });
+$('#lvlSeg').addEventListener('click',e=>{ const b=e.target.closest('button'); if(b) setPlan(plan.t,b.dataset.v); });
+$('#planFull').addEventListener('click',e=>{ e.preventDefault(); openLB(`assets/plan-${plan.lvl}.png`, `Rzut ${plan.lvl==='parter'?'parteru':'piętra'} · cały rząd: skrajny | środkowy | środkowy | skrajny`); });
+
+/* ============ SŁOŃCE ============ */
+const LAT=52.233, LON=20.83;
+const MONTHS=['stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sierpnia','września','października','listopada','grudnia'];
+const DOY=[21,52,80,111,141,172,202,233,264,294,325,355];
+$('#sunMonth').innerHTML = DOY.map((d,i)=>`<option value="${d}" ${i===5?'selected':''}>21 ${MONTHS[i]}</option>`).join('');
+function sunPos(n, minLocal){
+  const r=Math.PI/180, dst = (n>=91 && n<=300) ? 1 : 0; // kwiecień–październik: czas letni
+  const tz = 1 + dst;
+  const B=2*Math.PI*(n-81)/365, eot=9.87*Math.sin(2*B)-7.53*Math.cos(B)-1.5*Math.sin(B);
+  const lst = minLocal - tz*60 + 4*LON + eot;
+  const H=(lst/60-12)*15*r, dec=23.44*Math.sin(2*Math.PI*(284+n)/365)*r, phi=LAT*r;
+  const el = Math.asin(Math.sin(phi)*Math.sin(dec)+Math.cos(phi)*Math.cos(dec)*Math.cos(H));
+  let az = Math.atan2(Math.sin(H), Math.cos(H)*Math.sin(phi)-Math.tan(dec)*Math.cos(phi)) + Math.PI;
+  return {el:el/r, az:az/r};
+}
+const hhmm = m => `${String(Math.floor(m/60)).padStart(2,'0')}:${String(Math.round(m%60)).padStart(2,'0')}`;
+const sunSvg=$('#sunSvg');
+drawSite(sunSvg,{interactive:false, labels:false});
+const sunG = sunSvg.firstChild; // obrócona grupa
+const shadowG = el('g',{fill:'var(--shadow)',opacity:.32},sunG);
+sunG.insertBefore(shadowG, sunG.querySelector('.unit').parentNode);
+const ring = el('g',{},sunSvg);
+el('circle',{cx:30,cy:-3,r:46,fill:'none',stroke:'var(--line)','stroke-width':.3,'stroke-dasharray':'1 1'},ring);
+const sunDot = el('circle',{r:2.6,fill:'#E8A33D',stroke:'var(--surface)','stroke-width':.5},sunSvg);
+const sunRay = el('line',{stroke:'#E8A33D','stroke-width':.35,'stroke-dasharray':'1.4 .8'},sunSvg);
+const night = el('rect',{x:-22,y:-52,width:104,height:98,fill:'var(--shadow)',opacity:0,'pointer-events':'none'},sunSvg);
+function hull(pts){ pts=pts.slice().sort((a,b)=>a[0]-b[0]||a[1]-b[1]); const cr=(o,a,b)=>(a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0]); const lo=[],up=[]; for(const p of pts){ while(lo.length>=2&&cr(lo[lo.length-2],lo[lo.length-1],p)<=0) lo.pop(); lo.push(p);} for(const p of pts.reverse()){ while(up.length>=2&&cr(up[up.length-2],up[up.length-1],p)<=0) up.pop(); up.push(p);} return lo.slice(0,-1).concat(up.slice(0,-1)); }
+function renderSun(){
+  const n=+$('#sunMonth').value, m=+$('#sunTime').value, s=sunPos(n,m), r=Math.PI/180;
+  $('#sunTimeLbl').textContent=hhmm(m);
+  // wschód / zachód
+  let rise=null,set=null,prev=sunPos(n,0).el;
+  for(let t=1;t<1440;t++){ const e=sunPos(n,t).el; if(prev< -0.833 && e>=-0.833) rise=t; if(prev>=-0.833 && e< -0.833) set=t; prev=e; }
+  $('#rRise').textContent=rise?hhmm(rise):'–'; $('#rSet').textContent=set?hhmm(set):'–';
+  $('#rElev').textContent=fmt(s.el,1)+'°';
+  const dirs=['N','NE','E','SE','S','SW','W','NW']; $('#rAz').textContent=`${Math.round(s.az)}° ${dirs[Math.round(s.az/45)%8]}`;
+  const sx=30+46*Math.sin(s.az*r), sy=-3-46*Math.cos(s.az*r);
+  sunDot.setAttribute('cx',sx); sunDot.setAttribute('cy',sy);
+  sunRay.setAttribute('x1',sx); sunRay.setAttribute('y1',sy); sunRay.setAttribute('x2',30); sunRay.setAttribute('y2',-3);
+  sunDot.setAttribute('opacity', s.el>0?1:.35); sunRay.setAttribute('opacity', s.el>0?1:0);
+  shadowG.innerHTML='';
+  if(s.el<=0.5){ night.setAttribute('opacity',.35); return; }
+  night.setAttribute('opacity',0);
+  const L=Math.min(8/Math.tan(s.el*r),70), a=(s.az-ROT)*r;
+  const v=[-Math.sin(a)*L, Math.cos(a)*L];
+  BLOCKS.forEach(bl=>{
+    [[0,11.93],[11.93,23.86]].forEach(([o,e])=>{
+      const x0=bl.x0+o, x1=bl.x0+e, y0=bl.y0, y1=bl.y0+DEPTH;
+      const c=[[x0,y0],[x1,y0],[x1,y1],[x0,y1]];
+      const h=hull(c.concat(c.map(p=>[p[0]+v[0],p[1]+v[1]])));
+      el('polygon',{points:h.map(p=>p.join(',')).join(' ')},shadowG);
+    });
+  });
+}
+['input','change'].forEach(ev=>{ $('#sunTime').addEventListener(ev,renderSun); $('#sunMonth').addEventListener(ev,renderSun); });
+document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>{ const [d,t]=b.dataset.preset.split(','); $('#sunMonth').value=d; $('#sunTime').value=t; renderSun(); }));
+let playT=null;
+$('#sunPlay').addEventListener('click',()=>{
+  if(playT){ clearInterval(playT); playT=null; $('#sunPlay').textContent='▶ Odtwórz dzień'; return; }
+  $('#sunPlay').textContent='❚❚ Zatrzymaj';
+  const inp=$('#sunTime'); if(+inp.value>=1310) inp.value=240;
+  playT=setInterval(()=>{ inp.value=+inp.value+10; renderSun(); if(+inp.value>=1320){ clearInterval(playT); playT=null; $('#sunPlay').textContent='▶ Odtwórz dzień'; } },60);
+});
+
+/* ============ LOKALIZACJA ============ */
+(function(){
+  const svg=$('#radial'), maxKm=20, R=92, sc=R/maxKm;
+  [5,10,15,20].forEach(k=>{ el('circle',{r:k*sc,fill:'none',stroke:'var(--line)','stroke-width':.6},svg); const t=el('text',{x:3,y:-k*sc+5,'font-size':6,fill:'var(--muted)'},svg); t.textContent=k+' km'; });
+  el('line',{x1:0,y1:-R-4,x2:0,y2:R+4,stroke:'var(--line)','stroke-width':.4},svg); el('line',{x1:-R-4,y1:0,x2:R+4,y2:0,stroke:'var(--line)','stroke-width':.4},svg);
+  const nt=el('text',{y:-R-6,'font-size':7,'text-anchor':'middle',fill:'var(--ink)','font-weight':600},svg); nt.textContent='N';
+  const pts=el('g',{},svg);
+  DEST.forEach((d,i)=>{
+    const a=d.brg*Math.PI/180, x=Math.sin(a)*d.km*sc, y=-Math.cos(a)*d.km*sc;
+    const g=el('g',{'data-i':i,style:'cursor:pointer'},pts);
+    el('line',{x1:0,y1:0,x2:x,y2:y,stroke:'var(--accent)','stroke-width':.6,opacity:.5},g);
+    el('circle',{cx:x,cy:y,r:3.4,fill:'var(--accent)'},g);
+    const t=el('text',{x:x+(x>=0?5:-5),y:y+2,'font-size':6.2,'text-anchor':x>=0?'start':'end',fill:'var(--ink)'},g); t.textContent=d.s;
+  });
+  el('circle',{r:4.5,fill:'var(--clay)',stroke:'var(--surface)','stroke-width':1.2},svg);
+  const me=el('text',{y:-8,'font-size':6.5,'text-anchor':'middle',fill:'var(--ink)','font-weight':600},svg); me.textContent='Kręczki';
+  $('#destList').innerHTML=DEST.map((d,i)=>`<li data-i="${i}"><span>${d.n}</span><span class="km">${d.km} km</span><span class="min">${d.min} min <span class="est">szac.</span></span></li>`).join('');
+  const hi=i=>{ document.querySelectorAll('#destList li').forEach(li=>li.classList.toggle('on',li.dataset.i===i)); pts.querySelectorAll('g').forEach(g=>g.setAttribute('opacity', i==null||g.dataset.i===i?1:.25)); };
+  $('#destList').addEventListener('mouseover',e=>{ const li=e.target.closest('li'); if(li) hi(li.dataset.i); });
+  $('#destList').addEventListener('mouseleave',()=>hi(null));
+  pts.addEventListener('mouseover',e=>{ const g=e.target.closest('g[data-i]'); if(g) hi(g.dataset.i); });
+  pts.addEventListener('mouseleave',()=>hi(null));
+})();
+$('#pztOpen').addEventListener('click',()=>openLB('assets/pzt-01a.jpg','Rys. 01A · Projekt zagospodarowania terenu · 1:500 (fragment)'));
+
+/* ============ KALKULATOR ============ */
+function calc(){
+  const price=Math.max(0,+$('#cPrice').value||0), own=+$('#cOwn').value, yrs=+$('#cYears').value, rate=+$('#cRate').value;
+  $('#cOwnO').textContent=own+'%'; $('#cYearsO').textContent=yrs+' lat'; $('#cRateO').textContent=fmt(rate,2).replace(/,?0+$/,'')+'%';
+  const K=price*(1-own/100), r=rate/1200, n=yrs*12, rata = r? K*r/(1-Math.pow(1+r,-n)) : K/n, total=rata*n, ods=total-K;
+  $('#cRata').textContent=zl(rata); $('#cKwota').textContent=zl(K); $('#cWklad').textContent=zl(price-K); $('#cOds').textContent=zl(ods); $('#cTotal').textContent=zl(total);
+  $('#cBarK').style.width=(total?K/total*100:0)+'%'; $('#cBarO').style.width=(total?ods/total*100:0)+'%';
+}
+['cPrice','cOwn','cYears','cRate'].forEach(id=>$('#'+id).addEventListener('input',calc));
+
+/* ============ FORMULARZ ============ */
+$('#fUnit').insertAdjacentHTML('beforeend', UNITS.map(u=>`<option value="${u.id}">Dom ${u.id} · ${TYPES[u.t].name} · etap ${u.etap===1?'I':'II'}</option>`).join(''));
+$('#form').addEventListener('submit',e=>{
+  e.preventDefault();
+  const msg=$('#formMsg'); msg.hidden=false;
+  if(!$('#fName').value.trim() || !/^\S+@\S+\.\S+$/.test($('#fMail').value) || !$('#fOk').checked){
+    msg.textContent='Uzupełnij imię i nazwisko, poprawny adres e-mail i zaznacz zgodę na kontakt.'; return;
+  }
+  msg.textContent='To jest prototyp: formularz nie jest jeszcze podłączony do skrzynki sprzedaży, więc wiadomość nie została wysłana.';
+});
+
+/* ============ LIGHTBOX (pan + zoom) ============ */
+const lb={s:1,x:0,y:0};
+function lbApply(){ $('#lbImg').style.transform=`translate(${lb.x}px,${lb.y}px) scale(${lb.s})`; }
+function lbFit(){ const st=$('#lbStage').getBoundingClientRect(), im=$('#lbImg'); const s=Math.min(st.width/im.naturalWidth, st.height/im.naturalHeight)*.95; lb.s=s; lb.x=(st.width-im.naturalWidth*s)/2; lb.y=(st.height-im.naturalHeight*s)/2; lbApply(); }
+function lbZoom(f,cx,cy){ const st=$('#lbStage').getBoundingClientRect(); cx=cx??st.width/2; cy=cy??st.height/2; const ns=Math.min(Math.max(lb.s*f,.1),6); lb.x=cx-(cx-lb.x)*ns/lb.s; lb.y=cy-(cy-lb.y)*ns/lb.s; lb.s=ns; lbApply(); }
+function openLB(src,cap){ const im=$('#lbImg'); $('#lb').hidden=false; $('#lbCap').textContent=cap; im.onload=lbFit; im.src=src; if(im.complete&&im.naturalWidth) lbFit(); }
+$('#lbClose').addEventListener('click',()=>$('#lb').hidden=true);
+$('#lbIn').addEventListener('click',()=>lbZoom(1.4)); $('#lbOut').addEventListener('click',()=>lbZoom(1/1.4)); $('#lbFit').addEventListener('click',lbFit);
+$('#lbStage').addEventListener('wheel',e=>{ e.preventDefault(); const r=$('#lbStage').getBoundingClientRect(); lbZoom(e.deltaY<0?1.15:1/1.15,e.clientX-r.left,e.clientY-r.top); },{passive:false});
+let drag=null;
+$('#lbStage').addEventListener('pointerdown',e=>{ drag={x:e.clientX-lb.x,y:e.clientY-lb.y}; e.currentTarget.setPointerCapture(e.pointerId); });
+$('#lbStage').addEventListener('pointermove',e=>{ if(!drag) return; lb.x=e.clientX-drag.x; lb.y=e.clientY-drag.y; lbApply(); });
+$('#lbStage').addEventListener('pointerup',()=>drag=null);
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ $('#lb').hidden=true; $('#drawer').hidden=true; } });
+
+/* ============ NAWIGACJA: aktywna sekcja ============ */
+const navLinks=[...document.querySelectorAll('#mainnav a')];
+const io=new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting) navLinks.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+en.target.id)); }),{rootMargin:'-45% 0px -50% 0px'});
+document.querySelectorAll('main section[id]').forEach(s=>io.observe(s));
+
+/* ============ START ============ */
+if(!UNITS.some(u=>u.id===selected)) selected='A1a';
+renderSite(); renderFavs(); setPlan('a','parter'); renderSun(); calc();
+</script>
+</body>
+</html>
